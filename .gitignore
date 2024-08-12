@@ -1,0 +1,14 @@
+logs
+*.log
+npm-debug.log*
+
+.env
+*.local
+
+dist
+node_modules
+.eslintcache
+
+.vscode/*
+
+.DS_Store
