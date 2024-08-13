@@ -12,7 +12,7 @@ function Home() {
         </button>
       </div>
       <div className="flex justify-center items-center w-1/2">
-        <img src={DeliLogo} className="size-3/5" alt="Deli logo" />
+        <img src={DeliLogo} className="size-3/5" alt="DeliOrder logo" />
       </div>
     </div>
   );
