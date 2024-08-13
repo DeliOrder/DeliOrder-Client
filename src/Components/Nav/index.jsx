@@ -2,38 +2,37 @@ import DeliLogo from "../../assets/images/logo.png";
 
 function Nav() {
   return (
-    <nav className="flex items-center justify-between flex-wrap bg-blue-700 p-6">
-      <div className="flex items-center flex-shrink-0 text-white mr-6">
+    <nav className="flex flex-wrap items-center justify-between bg-blue-700 p-6">
+      <div className="mr-6 flex flex-shrink-0 items-center text-white">
         <a
           href="/"
-          className="flex items-center font-semibold text-xl tracking-tight"
+          className="flex items-center text-xl font-semibold tracking-tight"
         >
           <img src={DeliLogo} className="logo size-10" alt="DeliOrder logo" />
           DELIORDER
         </a>
       </div>
       <div className="block lg:hidden">
-        <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white"></button>
+        <button className="flex items-center rounded border border-teal-400 px-3 py-2 text-teal-200 hover:border-white hover:text-white"></button>
       </div>
-      <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+      <div className="block w-full flex-grow lg:flex lg:w-auto lg:items-center">
         <div className="text-sm lg:flex-grow">
           <a
             href="/"
-            className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
+            className="mr-4 mt-4 block text-teal-200 hover:text-white lg:mt-0 lg:inline-block"
           >
             소개
           </a>
           <a
-            //TODO: 추후 보내기 페이지 연결
-            href="#"
-            className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
+            href="/package/new"
+            className="mr-4 mt-4 block text-teal-200 hover:text-white lg:mt-0 lg:inline-block"
           >
             보내기
           </a>
           <a
             //TODO: 추후 받기 페이지 연결
             href="#"
-            className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
+            className="mt-4 block text-teal-200 hover:text-white lg:mt-0 lg:inline-block"
           >
             받기
           </a>
@@ -42,14 +41,14 @@ function Nav() {
           <a
             //TODO: 추후 내 소포함 페이지 연결
             href="#"
-            className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0 mr-6"
+            className="mr-6 mt-4 inline-block rounded border border-white px-4 py-2 text-sm leading-none text-white hover:border-transparent hover:bg-white hover:text-teal-500 lg:mt-0"
           >
             내 소포함
           </a>
           <a
             //TODO: 추후 로그인 페이지 연결 및 로그아웃 로직 구현
             href="/login"
-            className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
+            className="mt-4 inline-block rounded border border-white px-4 py-2 text-sm leading-none text-white hover:border-transparent hover:bg-white hover:text-teal-500 lg:mt-0"
           >
             로그인/로그아웃
           </a>
