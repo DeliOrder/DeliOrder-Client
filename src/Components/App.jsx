@@ -5,6 +5,7 @@ import Nav from "./Nav";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import PackagingOrders from "./PackagingOrders";
+import Receiving from "./Receving";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/package/new" element={<PackagingOrders />} />
+          <Route path="/receiving" element={<Receiving />} />
         </Routes>
       </div>
     </div>

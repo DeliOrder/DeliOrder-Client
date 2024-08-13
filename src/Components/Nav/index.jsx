@@ -30,8 +30,7 @@ function Nav() {
             보내기
           </a>
           <a
-            //TODO: 추후 받기 페이지 연결
-            href="#"
+            href="/receiving"
             className="mt-4 block text-teal-200 hover:text-white lg:mt-0 lg:inline-block"
           >
             받기
@@ -46,7 +45,7 @@ function Nav() {
             내 소포함
           </a>
           <a
-            //TODO: 추후 로그인 페이지 연결 및 로그아웃 로직 구현
+            //TODO: 추후 및 로그아웃 로직 구현
             href="/login"
             className="mt-4 inline-block rounded border border-white px-4 py-2 text-sm leading-none text-white hover:border-transparent hover:bg-white hover:text-teal-500 lg:mt-0"
           >
