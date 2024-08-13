@@ -8,15 +8,15 @@ function Login() {
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="username"
+            htmlFor="user-mail"
           >
             이메일
           </label>
           <input
             className="w-full h-12 shadow border rounded p-3 text-gray-700 leading-tight focus:border-gray-700"
-            id="username"
+            id="user-mail"
+            name="user-mail"
             type="email"
-            placeholder="user@email.com"
           />
         </div>
         <div className="mb-6">
@@ -29,11 +29,11 @@ function Login() {
           <input
             className="w-full h-12 shadow border rounded p-3 text-gray-700 leading-tight focus:border-gray-700"
             id="password"
+            name="password"
             type="password"
-            placeholder="***************"
           />
         </div>
-        <div className="flex items-center justify-center mb-2">
+        <div className="flex items-center justify-center">
           <button
             className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-8 rounded-md focus:shadow-outline"
             type="button"
@@ -41,6 +41,7 @@ function Login() {
             이메일 로그인
           </button>
         </div>
+        <div className="border-b border-slate-300 mb-8" />
         <div className="flex flex-col items-center justify-around mb-4">
           <button
             className="flex items-center justify-center w-full bg-slate-200 hover:bg-slate-300 text-black font-bold py-2 px-4 mb-4 rounded-md focus:shadow-outline"
