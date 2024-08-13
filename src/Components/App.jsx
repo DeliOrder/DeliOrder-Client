@@ -20,7 +20,7 @@ function App() {
           <Route path="/receiving" element={<Receiving />} />
         </Routes>
       </div>
-    </div>
+    </>
   );
 }
 
