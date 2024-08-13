@@ -1,23 +1,23 @@
 function BookmarkToolbar() {
   return (
     <>
-      <span class="block content-center pb-1 pt-3 text-lg font-bold text-gray-700">
+      <span className="block content-center pb-1 pt-3 text-lg font-bold text-gray-700">
         즐겨찾기
       </span>
-      <div class="flex flex-row justify-around py-1">
-        <div class="flex flex-row">
-          <span class="block content-center px-3 text-sm text-gray-500">
+      <div className="flex flex-row justify-around py-1">
+        <div className="flex flex-row">
+          <span className="block content-center px-3 text-sm text-gray-500">
             추가하기
           </span>
           <button
             type="button"
-            class="inline-flex h-10 w-10 items-center justify-center rounded-full border-none bg-blue-600 outline-none hover:bg-blue-700 active:bg-blue-600"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border-none bg-blue-600 outline-none hover:bg-blue-700 active:bg-blue-600"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="14px"
               fill="#fff"
-              class="inline"
+              className="inline"
               viewBox="0 0 512 512"
               alt="add-bookmark-icon"
             >
@@ -28,19 +28,19 @@ function BookmarkToolbar() {
             </svg>
           </button>
         </div>
-        <div class="flex flex-row">
-          <span class="block content-center px-3 text-sm text-gray-500">
+        <div className="flex flex-row">
+          <span className="block content-center px-3 text-sm text-gray-500">
             가져오기
           </span>
           <button
             type="button"
-            class="inline-flex h-10 w-10 items-center justify-center rounded border-none bg-yellow-400 outline-none hover:bg-yellow-600 active:bg-yellow-500"
+            className="inline-flex h-10 w-10 items-center justify-center rounded border-none bg-yellow-400 outline-none hover:bg-yellow-600 active:bg-yellow-500"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16px"
               fill="#fff"
-              class="inline"
+              className="inline"
               viewBox="0 0 24 24"
               alt="bookmark icon"
             >
