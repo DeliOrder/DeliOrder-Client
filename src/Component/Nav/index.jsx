@@ -5,6 +5,7 @@ function Nav() {
     <nav className="flex items-center justify-between flex-wrap bg-blue-700 p-6">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
         <a
+          //TODO: 추후 메인 페이지 연결 
           href="#"
           className="flex items-center font-semibold text-xl tracking-tight"
         >
