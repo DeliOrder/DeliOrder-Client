@@ -17,10 +17,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/package/new" element={<PackagingOrders />} />
-          <Route path="/receiving" element={<Receiving />} />
+          <Route path="/package/receiving" element={<Receiving />} />
         </Routes>
       </div>
-    </>
+    </div>
   );
 }
 
