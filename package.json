@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "src/main.cjs",
+  "main": "src/main/index.cjs",
   "scripts": {
     "start": "concurrently \"vite\" \"npm run lint\" \"npm run electron\" ",
     "build": "vite build",
