@@ -1,5 +1,5 @@
-import addingIcon from "../../assets/images/addingIcon.svg";
-import downloadIcon from "../../assets/images/downloadIcon.svg";
+import addingIcon from "../../../assets/images/addingIcon.svg";
+import downloadIcon from "../../../assets/images/downloadIcon.svg";
 
 function BookmarkToolbar() {
   return (
