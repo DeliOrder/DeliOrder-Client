@@ -1,4 +1,4 @@
-function Orders() {
+function Order() {
   return (
     <div className="item-center container flex justify-items-start">
       <div className="flex items-center p-2">
@@ -22,4 +22,4 @@ function Orders() {
   );
 }
 
-export default Orders;
+export default Order;
