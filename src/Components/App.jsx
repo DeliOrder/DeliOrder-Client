@@ -4,8 +4,8 @@ import Home from "./Home";
 import Nav from "./Nav";
 import Login from "./Login";
 import SignUp from "./SignUp";
-import PackagingOrders from "./PackagingOrders";
-import Receiving from "./Receving";
+import ReceivingPackage from "./RecevingPackage";
+import CreatingPackage from "./CreatingPackage";
 
 function App() {
   return (
@@ -16,8 +16,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />
-          <Route path="/package/new" element={<PackagingOrders />} />
-          <Route path="/package/receiving" element={<Receiving />} />
+          <Route path="/package/new" element={<CreatingPackage />} />
+          <Route path="/package/receiving" element={<ReceivingPackage />} />
         </Routes>
       </div>
     </div>
