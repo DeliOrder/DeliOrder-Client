@@ -6,14 +6,17 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import ReceivingPackage from "./RecevingPackage";
 import CreatingPackage from "./CreatingPackage";
+import { useState } from "react";
 
 function App() {
+  const [isLogIn, setIsLogIn] = useState(false);
+
   return (
     <div className="flex min-h-screen flex-col">
-      <Nav />
+      <Nav isLogIn={isLogIn} setIsLogIn={setIsLogIn} />
       <div className="flex-grow">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home setIsLogIn={setIsLogIn} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/package/new" element={<CreatingPackage />} />
