@@ -8,7 +8,7 @@ function FolderPicker({ isOptional }) {
     usePackageStore();
   const currentOrder = getOrder();
 
-  const savingPathName = isOptional ? "originalPath" : "destinationPath";
+  const savingPathName = isOptional ? "sourcePath" : "executionPath";
   const description = isOptional ? "출발" : "목적";
 
   useEffect(() => {

@@ -15,8 +15,8 @@ const initialOrder = {
   action: "",
   attachmentName: "",
   attachmentUrl: "",
-  originalPath: "",
-  destinationPath: "",
+  sourcePath: "",
+  executionPath: "",
   editingName: "",
 };
 
