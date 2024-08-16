@@ -1,9 +1,37 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+import PropTypes from "prop-types";
+import axios from "axios";
 
 import DeliLogo from "../../assets/images/logo.png";
 
-function Home() {
+function Home({ setIsLogIn }) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getJwtToken = async () => {
+      try {
+        const authCode = searchParams.get("code");
+        const { data } = await axios.post(
+          `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/kakao`,
+          { authCode },
+        );
+
+        const userData = JSON.stringify(data);
+
+        window.localStorage.setItem("userData", userData);
+        setIsLogIn(true);
+      } catch (error) {
+        // TODO: 추후 에러관련 처리
+        throw new Error(error);
+      }
+    };
+
+    if (searchParams.get("code")) {
+      getJwtToken();
+    }
+  }, [searchParams, setIsLogIn]);
 
   const navigateToRecevingPage = () => {
     navigate("/package/receiving");
@@ -35,5 +63,9 @@ function Home() {
     </div>
   );
 }
+
+Home.propTypes = {
+  setIsLogIn: PropTypes.func.isRequired,
+};
 
 export default Home;

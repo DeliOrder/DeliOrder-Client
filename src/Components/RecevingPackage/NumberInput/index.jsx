@@ -13,8 +13,8 @@ function NumberInput({ validateNumber, handleMoveNextInput }) {
 }
 
 NumberInput.propTypes = {
-  validateNumber: PropTypes.func,
-  handleMoveNextInput: PropTypes.func,
+  validateNumber: PropTypes.func.isRequired,
+  handleMoveNextInput: PropTypes.func.isRequired,
 };
 
 export default NumberInput;
