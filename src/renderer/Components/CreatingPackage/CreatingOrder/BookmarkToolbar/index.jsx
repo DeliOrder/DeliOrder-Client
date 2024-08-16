@@ -4,9 +4,7 @@ import downloadIcon from "@images/downloadIcon.svg";
 function BookmarkToolbar() {
   return (
     <>
-      <span className="block content-center pb-1 pt-3 text-lg font-bold text-gray-700">
-        즐겨찾기
-      </span>
+      <span className="label-large">즐겨찾기</span>
       <div className="flex flex-row justify-around py-1">
         <div className="flex flex-row">
           <span className="block content-center px-3 text-sm text-gray-500">

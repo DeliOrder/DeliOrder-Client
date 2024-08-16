@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "src/main.cjs",
+  "main": "src/main/index.cjs",
+  "preload": "src/preload/index.cjs",
   "scripts": {
     "start": "concurrently \"vite\" \"npm run lint\" \"npm run electron\" ",
     "build": "vite build",
@@ -20,7 +21,8 @@
     "react-dom": "^18.3.1",
     "react-router": "^6.26.0",
     "react-router-dom": "^6.26.0",
-    "wait-on": "^7.2.0"
+    "wait-on": "^7.2.0",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",

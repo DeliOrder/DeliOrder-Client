@@ -12,7 +12,11 @@ export default defineConfig({
     alias: [
       {
         find: "@images",
-        replacement: path.resolve(__dirname, "src/assets/images"),
+        replacement: path.resolve(__dirname, "src/renderer/assets/images"),
+      },
+      {
+        find: "@renderer",
+        replacement: path.resolve(__dirname, "src/renderer"),
       },
     ],
   },
