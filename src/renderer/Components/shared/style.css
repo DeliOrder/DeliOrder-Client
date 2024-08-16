@@ -34,6 +34,14 @@
   @apply mt-2 text-xs text-gray-400;
 }
 
+.text-xs-red {
+  @apply mt-2 text-xs text-red-400;
+}
+
 .text-base-gray {
   @apply block justify-items-start text-base text-gray-500;
+}
+
+.text-block-blue {
+  @apply min-h-10 min-w-8 rounded bg-sky-300 px-4 py-2 text-sm;
 }
