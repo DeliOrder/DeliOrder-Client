@@ -19,13 +19,16 @@ const createWindow = () => {
   win.loadURL(BASE_URL);
 };
 
-app.whenReady().then(() => {
+async function createAppWindow() {
+  await app.whenReady();
   createWindow();
 
   app.on("active", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
-});
+}
+
+createAppWindow();
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
@@ -36,7 +39,6 @@ ipcMain.handle("open-file-dialog", async () => {
     const result = await dialog.showOpenDialog({
       properties: ["openDirectory"],
     });
-    console.log("main filePaths", result);
     return result;
   } catch (error) {
     console.error("open-file-dialog handler:", error);
