@@ -1,9 +1,21 @@
 import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import Modal from "../../Modal";
+
 import usePackageStore from "@renderer/store";
 import Order from "./Order";
 
 function PackagePreview() {
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   const { orders } = usePackageStore();
   const { getOrders } = usePackageStore();
   const s3 = new S3Client({
@@ -44,12 +56,17 @@ function PackagePreview() {
           'Content-Type': 'application/json',
         },
       });
-
+      // TODO: 서버에서 링크 및 일련번호 받아오는 로직 필요
+      openModal()
     } catch (err) {
       console.error("파일 업로드 중 오류 발생:", err);
     }
   };
-
+  const navigateToMainPage = () => {
+    setIsModalOpen(false);
+    navigate("/");
+  };
+  // TODO: 링크 및 일련번호 생성 후 모달창에 동적으로 값부여 및 복사버튼에 기능부여 필요
   return (
     <div className="relative w-3/5 bg-white px-6 pb-8 pt-10 shadow-sm ring-1 ring-gray-900/5 sm:mr-3 sm:max-w-full sm:rounded-lg sm:px-10">
       <label className="mb-2 block text-xl font-bold text-gray-700">
@@ -65,6 +82,35 @@ function PackagePreview() {
         onClick={handleFileUpload}>
         패키징하기
       </button>
+      <Modal isOpen={isModalOpen} onClose={navigateToMainPage}>
+        <div>
+          <h2 className="text-xl font-semibold mb-4 text-center">DELIORDER</h2>
+          <div className="mb-4">
+            <p>일련번호</p>
+            <div className="flex">
+              <input type="text" defaultValue="777777" className="flex-grow border px-2 py-1 rounded-l-md" readOnly />
+              <button className="px-4 py-1 bg-blue-400 hover:bg-blue-500 text-white rounded-r-md">복사</button>
+            </div>
+          </div>
+          <div className="mb-4">
+            <p>링크주소</p>
+            <div className="flex">
+              <input type="text" defaultValue="https://www.naver.com" className="flex-grow border px-2 py-1 rounded-l-md" readOnly />
+              <button className="px-4 py-1 bg-blue-400 hover:bg-blue-500 text-white rounded-r-md">복사</button>
+            </div>
+          </div>
+          <p className="mt-4">이 일련번호와 링크주소는 10분 뒤({new Date().toLocaleTimeString().slice(0, -3)})까지 유효합니다</p>
+          <div className="flex justify-center">
+            <button
+              className="mt-4 px-4 py-2 bg-blue-400 hover:bg-blue-500 text-white font-bold rounded-md focus:outline-none"
+              onClick={navigateToMainPage}
+            >
+              메인으로
+            </button>
+          </div>
+        </div>
+      </Modal>
+
     </div>
   );
 }
