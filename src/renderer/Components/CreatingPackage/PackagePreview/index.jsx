@@ -1,5 +1,5 @@
 import Order from "./Order";
-import usePackageStore from "../../../store";
+import usePackageStore from "@renderer/store";
 
 function PackagePreview() {
   const { orders } = usePackageStore();

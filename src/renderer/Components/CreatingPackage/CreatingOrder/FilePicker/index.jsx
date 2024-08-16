@@ -1,7 +1,7 @@
 import { useState } from "react";
-import usePackageStore from "../../../../store";
 
-import { GUIDE_MESSAGES } from "../../../../constants/messages";
+import usePackageStore from "@renderer/store";
+import { GUIDE_MESSAGES } from "@renderer/constants/messages";
 
 function FilePicker() {
   const [isPickOptionDefault, setIsPickOptionDefault] = useState(true);
