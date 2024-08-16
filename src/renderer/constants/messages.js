@@ -1,6 +1,6 @@
 import { MAXIMUM_ORDER_NUMBER } from "./config";
 
-export const ALERT_MESSAGES = {
+export const VALIDATION_MESSAGES = {
   MAX_ORDER_LIMIT: `조합 최대 갯수는 ${MAXIMUM_ORDER_NUMBER}개 입니다.`,
 };
 

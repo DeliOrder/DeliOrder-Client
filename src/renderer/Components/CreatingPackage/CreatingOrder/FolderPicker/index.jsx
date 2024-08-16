@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import usePackageStore from "../../../../store";
 import PropTypes from "prop-types";
+
+import usePackageStore from "@renderer/store";
 
 function FolderPicker({ isOptional }) {
   const [filePath, setFilePath] = useState("");
