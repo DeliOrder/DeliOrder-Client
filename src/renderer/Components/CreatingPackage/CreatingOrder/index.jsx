@@ -1,45 +1,75 @@
 import { useState } from "react";
+import usePackageStore from "../../../store";
+
 import BookmarkToolbar from "./BookmarkToolbar";
-import FilePicker from "../../shared/FilePicker";
-import FolderPicker from "../../shared/FolderPicker";
+import ActionPicker from "./ActionPicker";
+import FilePicker from "./FilePicker";
+import FolderPicker from "./FolderPicker";
+
+import { ALERT_MESSAGES } from "../../../constants/messages";
+
 import "../../shared/style.css";
 
 function CreatingOrder() {
-  const [selectedAction, setSelectedAction] = useState("");
+  const {
+    setClientStatus,
+    updateOrder,
+    getOrder,
+    clearOrder,
+    addOrder,
+    orders,
+  } = usePackageStore();
+  const currentOrder = getOrder();
+  const [message, setMessage] = useState("");
 
-  const handleChange = (event) => {
-    setSelectedAction(event.target.value);
+  const handleInput = (event) => {
+    updateOrder({ editingName: event.target.value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const MAXIMUM_ORDER_NUMBER = 5;
+    const isOverMaxOrders = orders.length >= MAXIMUM_ORDER_NUMBER;
+
+    setMessage(isOverMaxOrders ? ALERT_MESSAGES.MAX_ORDER_LIMIT : "");
+
+    if (!isOverMaxOrders) {
+      addOrder(currentOrder);
+    }
+
+    setClientStatus({ isSubmitted: true });
+    clearOrder();
   };
 
   return (
     <div className="container-small">
       <label className="label-large">제조하기</label>
       <form onSubmit={handleSubmit}>
-        <label className="label-small">행동 선택하기</label>
-        <select
-          name="action"
-          className="input-base focus:shadow-outline"
-          value={selectedAction}
-          onChange={handleChange}
-        >
-          <option value="">행동을 선택해주세요.</option>
-          <option>생성하기</option>
-          <option>이동하기</option>
-          <option>삭제하기</option>
-          <option>실행하기</option>
-          <option>수정하기</option>
-        </select>
+        <ActionPicker />
         <div className="mx-auto max-w-md">
           <FilePicker />
-          <FolderPicker />
+          {currentOrder.action === "이동하기" && (
+            <FolderPicker isOptional={true} />
+          )}
+          <FolderPicker isOptional={false} />
+          {currentOrder.action === "수정하기" && (
+            <div className="my-3">
+              <label className="label-small">편집할 이름 지정하기</label>
+              <input
+                type="text"
+                className="input-text focus:shadow-outline"
+                placeholder="변경할 파일명을 적어주세요."
+                onChange={handleInput}
+                required
+              />
+            </div>
+          )}
         </div>
+        <p className="text-xs-red">{message} </p>
         <button className="button-base-blue">조합하기</button>
-        <BookmarkToolbar />
       </form>
+      <BookmarkToolbar />
     </div>
   );
 }
