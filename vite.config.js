@@ -14,6 +14,10 @@ export default defineConfig({
         find: "@images",
         replacement: path.resolve(__dirname, "src/renderer/assets/images"),
       },
+      {
+        find: "@renderer",
+        replacement: path.resolve(__dirname, "src/renderer"),
+      },
     ],
   },
 });

@@ -1,4 +1,4 @@
-import usePackageStore from "../../../../store";
+import usePackageStore from "@renderer/store";
 
 function ActionPicker() {
   const { updateOrder, getOrder } = usePackageStore();

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import usePackageStore from "../../../store";
 
 import BookmarkToolbar from "./BookmarkToolbar";
 import ActionPicker from "./ActionPicker";
 import FilePicker from "./FilePicker";
 import FolderPicker from "./FolderPicker";
 
-import { ALERT_MESSAGES } from "../../../constants/messages";
+import usePackageStore from "@renderer/store";
+import { VALIDATION_MESSAGES } from "@renderer/constants/messages";
 
 import "../../shared/style.css";
 
@@ -32,7 +32,7 @@ function CreatingOrder() {
     const MAXIMUM_ORDER_NUMBER = 5;
     const isOverMaxOrders = orders.length >= MAXIMUM_ORDER_NUMBER;
 
-    setMessage(isOverMaxOrders ? ALERT_MESSAGES.MAX_ORDER_LIMIT : "");
+    setMessage(isOverMaxOrders ? VALIDATION_MESSAGES.MAX_ORDER_LIMIT : "");
 
     if (!isOverMaxOrders) {
       addOrder(currentOrder);
