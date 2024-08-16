@@ -1,13 +1,17 @@
 import { useState } from "react";
-//filePicker
+import usePackageStore from "../../../../store";
+
+import { GUIDE_MESSAGES } from "../../../../constants/messages";
+
 function FilePicker() {
   const [isPickOptionDefault, setIsPickOptionDefault] = useState(true);
-  const [fileName, setFileName] = useState("");
+  const { updateOrder, getOrder } = usePackageStore();
+  const currentOrder = getOrder();
 
-  const getFileName = (event) => {
+  const setFileName = (event) => {
     isPickOptionDefault
-      ? setFileName(event.target.files[0].name)
-      : setFileName(event.target.value);
+      ? updateOrder({ attachmentName: event.target.files[0].name })
+      : updateOrder({ attachmentName: event.target.value });
   };
 
   return (
@@ -33,21 +37,17 @@ function FilePicker() {
         </label>
       </p>
       {isPickOptionDefault ? (
-        <>
-          <input type="file" className="file-input" onChange={getFileName} />
-        </>
+        <input type="file" className="file-input" onChange={setFileName} />
       ) : (
         <input
           type="text"
           className="input-text focus:shadow-outline file:bg-gray-00"
           placeholder="파일명 입력하기 (예: dog.gif)"
-          onChange={getFileName}
+          onChange={setFileName}
         />
       )}
-      <p className="text-xs-gray">
-        여러개의 파일이 필요할 경우 하나의 파일로 압축하여 사용해 주세요
-      </p>
-      <p className="text-base-gray">File Name: {fileName}</p>
+      <p className="text-xs-gray">{GUIDE_MESSAGES.COMPRESSION_NOTICE}</p>
+      <p className="text-base-gray">File Name: {currentOrder.attachmentName}</p>
     </div>
   );
 }
