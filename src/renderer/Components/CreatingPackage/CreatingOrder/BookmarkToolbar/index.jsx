@@ -1,7 +1,22 @@
+import axios from "axios";
+
+import usePackageStore from "@renderer/store";
+
 import addingIcon from "@images/addingIcon.svg";
 import downloadIcon from "@images/downloadIcon.svg";
 
 function BookmarkToolbar() {
+  const getOrder = usePackageStore((state) => state.getOrder);
+  const BookmarkTarget = getOrder()
+
+  const handleAddBookmark = () => {
+    // TODO: 유저아이디 받아오는 로직 추가 구현 필요
+    axios.post(`${import.meta.env.VITE_SERVER_URL}/${"user-id"}/bookmark`, BookmarkTarget, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
   return (
     <>
       <span className="label-large">즐겨찾기</span>
@@ -13,6 +28,7 @@ function BookmarkToolbar() {
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border-none bg-blue-600 outline-none hover:bg-blue-700 active:bg-blue-600"
+            onClick={handleAddBookmark}
           >
             <img src={addingIcon} alt="adding Icon" />
           </button>
