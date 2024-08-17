@@ -9,15 +9,9 @@ function FilePicker() {
   const currentOrder = getOrder();
 
   const setFileName = (event) => {
-    const fileSizeInByte = event.target.files[0]?.size;
-    const fileSizeInGigaByte = fileSizeInByte / (1024 * 1024 * 1024);
-    if (fileSizeInGigaByte > 3) {
-      event.target.value = "";
-      return;
-    }
     isPickOptionDefault
-      ? updateOrder({ attachmentName: event.target.files[0].name })
-      : updateOrder({ attachmentName: event.target.value });
+      ? updateOrder({ attachmentName: event.target.files[0].name, attachmentType: "file" })
+      : updateOrder({ attachmentName: event.target.value, attachmentType: "string" });
   };
 
   return (
