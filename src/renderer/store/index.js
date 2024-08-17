@@ -14,6 +14,7 @@ const createClientStatusSlice = (set, get) => ({
 const initialOrder = {
   action: "",
   attachmentName: "",
+  attachmentType: "",
   attachmentUrl: "",
   sourcePath: "",
   executionPath: "",
