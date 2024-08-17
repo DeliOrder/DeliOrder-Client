@@ -15,7 +15,7 @@ function PackagePreview() {
   });
 
   const handleFileUpload = async () => {
-    const orderPackage = getOrders()
+    const orderPackage = getOrders();
     const filesList = orderPackage
       .map((actionsList) => actionsList.attachmentName)
       .filter(attachmentName => attachmentName);
