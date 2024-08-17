@@ -5,7 +5,7 @@ import Order from "./Order";
 
 function PackagePreview() {
   const { orders } = usePackageStore();
-  const getOrders = usePackageStore((state) => state.getOrders);
+  const { getOrders } = usePackageStore();
   const s3 = new S3Client({
     region: import.meta.env.VITE_AWS_REGION,
     credentials: {
