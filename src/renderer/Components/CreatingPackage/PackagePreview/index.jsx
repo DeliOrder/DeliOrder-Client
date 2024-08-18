@@ -17,6 +17,7 @@ import Order from "./Order";
 function PackagePreview() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { orders } = usePackageStore();
   const { getOrders } = usePackageStore();
 
@@ -33,6 +34,7 @@ function PackagePreview() {
   });
 
   const handleFilePackage = async () => {
+    setIsLoading(true);
     const orderPackage = getOrders();
 
     const fileList = orderPackage.filter(
@@ -87,6 +89,8 @@ function PackagePreview() {
       openModal();
     } catch (err) {
       console.error("파일 업로드 중 오류 발생:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
   const navigateToMainPage = () => {
@@ -107,6 +111,7 @@ function PackagePreview() {
       <button
         className="absolute bottom-3 right-5 my-3 rounded bg-blue-500 px-6 py-3 text-xl font-bold text-white hover:bg-blue-700"
         onClick={handleFilePackage}
+        disabled={isLoading}
       >
         패키징하기
       </button>
