@@ -39,13 +39,14 @@ function PackagePreview() {
       (action) =>
         action.attachmentType === "file" && action.action === "생성하기",
     );
-
+    // TODO:: console.error 관련 사용자에게 직접 표시되도록 개선 필요
     if (!fileList || fileList.length === 0) {
       console.error("파일이 선택되지 않았습니다.");
       return;
     }
 
     try {
+      // TODO: 대용량 파일 전송을 대비한 Promise.allSettled 사용 고려 및 트랜잭션을 고려한 로직 개선 필요
       await Promise.all(
         fileList.map(async (file) => {
           const uploadParams = {
