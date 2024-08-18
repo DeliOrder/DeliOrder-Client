@@ -10,8 +10,8 @@ function FilePicker() {
 
   const setFileName = (event) => {
     isPickOptionDefault
-      ? updateOrder({ attachmentName: event.target.files[0].name })
-      : updateOrder({ attachmentName: event.target.value });
+      ? updateOrder({ attachmentName: event.target.files[0].name, attachmentType: "file" })
+      : updateOrder({ attachmentName: event.target.value, attachmentType: "string" });
   };
 
   return (
