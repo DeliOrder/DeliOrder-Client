@@ -4,10 +4,13 @@ import axios from "axios";
 
 import Modal from "../Modal";
 import NumberInput from "./NumberInput";
+import { SERIAL_NUMBER_LENGTH } from "../../constants/config";
 
 function ReceivingPackage() {
   const [isModalOpen, setIsModalOpen] = useState();
-  const [numbers, setNumbers] = useState(["", "", "", "", "", ""]);
+  const [inputNumbers, setInputNumbers] = useState(
+    Array(SERIAL_NUMBER_LENGTH).fill(""),
+  );
   const [modalMessage, setModalMessage] = useState("");
 
   const navigate = useNavigate();
@@ -34,13 +37,13 @@ function ReceivingPackage() {
   };
   const updateInputNumbers = (event, index) => {
     if (!isNaN(event.key) && event.key.trim() !== "") {
-      const newNumbers = [...numbers];
-      newNumbers[index] = event.key;
-      setNumbers(newNumbers);
+      const tempNumbers = [...inputNumbers];
+      tempNumbers[index] = event.key;
+      setInputNumbers(tempNumbers);
     }
   };
 
-  const handleMoveNextInput = (event) => {
+  const handleFocusShift = (event) => {
     if (event.nativeEvent.data === null) {
       event.target.previousSibling?.focus();
       return;
@@ -56,10 +59,10 @@ function ReceivingPackage() {
     navigate("/");
   };
 
-  const handleReceiveResult = async (event) => {
+  const handleReceivePackage = async (event) => {
     event.preventDefault();
     try {
-      const serialNumber = numbers.join("");
+      const serialNumber = inputNumbers.join("");
       const response = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/packages/${serialNumber}`,
       );
@@ -113,7 +116,7 @@ function ReceivingPackage() {
           일련번호
         </label>
         <div className="flex justify-center">
-          {Array(6)
+          {Array(SERIAL_NUMBER_LENGTH)
             .fill()
             .map((_, index) => (
               <NumberInput
@@ -122,13 +125,13 @@ function ReceivingPackage() {
                   validateNumber(event, index);
                   updateInputNumbers(event, index);
                 }}
-                OnChangeFunc={handleMoveNextInput}
+                OnChangeFunc={handleFocusShift}
               />
             ))}
         </div>
         <button
           type="submit"
-          onClick={handleReceiveResult}
+          onClick={handleReceivePackage}
           className="m-5 w-1/3 transform rounded-full bg-slate-200 p-5 text-3xl shadow-lg transition duration-300 hover:scale-105"
         >
           받기
