@@ -8,10 +8,17 @@ function FilePicker() {
   const { updateOrder, getOrder } = usePackageStore();
   const currentOrder = getOrder();
 
-  const setFileName = (event) => {
+  const setFileInfo = (event) => {
     isPickOptionDefault
-      ? updateOrder({ attachmentName: event.target.files[0].name, attachmentType: "file" })
-      : updateOrder({ attachmentName: event.target.value, attachmentType: "string" });
+      ? updateOrder({
+          attachmentName: event.target.files[0].name,
+          attachmentFile: event.target.files[0],
+          attachmentType: "file",
+        })
+      : updateOrder({
+          attachmentName: event.target.value,
+          attachmentType: "string",
+        });
   };
 
   return (
@@ -37,13 +44,13 @@ function FilePicker() {
         </label>
       </p>
       {isPickOptionDefault ? (
-        <input type="file" className="file-input" onChange={setFileName} />
+        <input type="file" className="file-input" onChange={setFileInfo} />
       ) : (
         <input
           type="text"
           className="input-text focus:shadow-outline file:bg-gray-00"
           placeholder="파일명 입력하기 (예: dog.gif)"
-          onChange={setFileName}
+          onChange={setFileInfo}
         />
       )}
       <p className="text-xs-gray">{GUIDE_MESSAGES.COMPRESSION_NOTICE}</p>

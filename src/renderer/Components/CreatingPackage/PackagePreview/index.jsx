@@ -18,8 +18,7 @@ function PackagePreview() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { orders } = usePackageStore();
-  const { getOrders } = usePackageStore();
+  const { orders, getOrders, clearOrders } = usePackageStore();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -33,17 +32,18 @@ function PackagePreview() {
     },
   });
 
+  //TODO: 해당 handleFilePackage 함수 추후 2개의 함수로 분리 필요
   const handleFilePackage = async () => {
     setIsLoading(true);
     const orderPackage = getOrders();
-
     const fileList = orderPackage.filter(
-      (action) =>
-        action.attachmentType === "file" && action.action === "생성하기",
+      (action) => action.action === "생성하기",
     );
+
     // TODO:: console.error 관련 사용자에게 직접 표시되도록 개선 필요
-    if (!fileList || fileList.length === 0) {
+    if (!fileList.every((action) => action.attachmentType === "file")) {
       console.error("파일이 선택되지 않았습니다.");
+      setIsLoading(false);
       return;
     }
 
@@ -54,7 +54,7 @@ function PackagePreview() {
           const uploadParams = {
             Bucket: import.meta.env.VITE_AWS_BUCKET,
             Key: file.attachmentName,
-            Body: file.attachmentName,
+            Body: file.attachmentFile,
             ACL: "public-read",
           };
 
@@ -76,23 +76,56 @@ function PackagePreview() {
         }),
       );
 
+      const jwtToken = window.localStorage.getItem("jwtToken");
+      const authorization = "Bearer " + jwtToken;
+
       await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/packages/new`,
-        orderPackage,
+        { orders: orderPackage },
         {
           headers: {
             "Content-Type": "application/json",
+            ...(jwtToken && { authorization }),
           },
         },
       );
 
       openModal();
-    } catch (err) {
-      console.error("파일 업로드 중 오류 발생:", err);
+    } catch (error) {
+      try {
+        if (error.response.data.error === "Token expired") {
+          const userRefreshToken = window.localStorage.getItem("refreshToken");
+          const userId = window.localStorage.getItem("userID");
+          const authorization = "Bearer " + userRefreshToken;
+
+          const { jwtToken, refreshToken } = await axios.post(
+            `${import.meta.env.VITE_SERVER_URL}/auth/refresh/kakao`,
+            { userId },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                authorization,
+              },
+            },
+          );
+
+          if (refreshToken) {
+            localStorage.setItem("refreshToken", refreshToken);
+          }
+
+          localStorage.setItem("jwtToken", jwtToken);
+          handleFilePackage();
+        }
+      } catch (refreshError) {
+        console.error("토큰 재발급 중 오류 발생", refreshError);
+      }
+      console.error("파일 업로드 중 오류 발생:", error);
     } finally {
+      clearOrders();
       setIsLoading(false);
     }
   };
+
   const navigateToMainPage = () => {
     closeModal();
     navigate("/");
