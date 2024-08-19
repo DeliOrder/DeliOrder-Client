@@ -7,16 +7,20 @@ import downloadIcon from "@images/downloadIcon.svg";
 
 function BookmarkToolbar() {
   const getOrder = usePackageStore((state) => state.getOrder);
-  const BookmarkTarget = getOrder()
+  const BookmarkTarget = getOrder();
 
   const handleAddBookmark = () => {
     // TODO: 유저아이디 받아오는 로직 추가 구현 필요
-    axios.post(`${import.meta.env.VITE_SERVER_URL}/${"user-id"}/bookmark`, BookmarkTarget, {
-      headers: {
-        'Content-Type': 'application/json',
+    axios.post(
+      `${import.meta.env.VITE_SERVER_URL}/${"user-id"}/bookmark`,
+      BookmarkTarget,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
-  }
+    );
+  };
   return (
     <>
       <span className="label-large">즐겨찾기</span>
