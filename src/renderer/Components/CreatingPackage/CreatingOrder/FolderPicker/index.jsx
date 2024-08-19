@@ -9,7 +9,7 @@ function FolderPicker({ isOptional }) {
     usePackageStore();
   const currentOrder = getOrder();
 
-  const savingPathName = isOptional ? "sourcePath" : "executionPath";
+  const pathType = isOptional ? "sourcePath" : "executionPath";
   const description = isOptional ? "출발" : "목적";
 
   useEffect(() => {
@@ -22,12 +22,20 @@ function FolderPicker({ isOptional }) {
   const openFolderPicker = async () => {
     try {
       const { canceled, filePaths } = await window.electronAPI.openFileDialog();
-      if (!canceled && filePaths.length > 0) {
-        const selectedPath = filePaths[0];
 
-        setFilePath(selectedPath);
-        updateOrder({ [savingPathName]: selectedPath });
+      if (canceled) {
+        throw new Error("canceled");
       }
+
+      if (filePaths.length === 0) {
+        throw new Error("there's no path selected");
+      }
+
+      const selectedPath = filePaths;
+
+      setFilePath(selectedPath);
+
+      updateOrder({ [pathType]: selectedPath });
     } catch (error) {
       console.error("Error opening file dialog:", error);
     }
@@ -35,10 +43,10 @@ function FolderPicker({ isOptional }) {
 
   const appendUserPath = (event) => {
     const userDefinedPath = event.target.value;
-    updateOrder({ [savingPathName]: filePath + userDefinedPath });
+    updateOrder({ [pathType]: filePath + userDefinedPath });
   };
 
-  const displayedPath = currentOrder[savingPathName] || filePath;
+  const displayedPath = currentOrder[pathType] || filePath;
 
   return (
     <div className="my-3">
@@ -57,7 +65,7 @@ function FolderPicker({ isOptional }) {
         onChange={appendUserPath}
       />
       <p className="text-base-gray">
-        {savingPathName} : {displayedPath}
+        {pathType} : {displayedPath}
       </p>
     </div>
   );
