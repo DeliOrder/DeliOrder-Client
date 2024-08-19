@@ -13,18 +13,22 @@ function Home({ setIsLogIn }) {
     const getJwtToken = async () => {
       try {
         const authCode = searchParams.get("code");
-        const { data } = await axios.post(
+        const {
+          data: { jwtToken, refresh_token, target_id, _id },
+        } = await axios.post(
           `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/kakao`,
           { authCode },
         );
 
-        const userData = JSON.stringify(data);
-
-        window.localStorage.setItem("userData", userData);
-        setIsLogIn(true);
+        window.localStorage.setItem("jwtToken", jwtToken);
+        window.localStorage.setItem("refreshToken", refresh_token);
+        window.localStorage.setItem("targetId", target_id);
+        window.localStorage.setItem("userId", _id);
       } catch (error) {
         // TODO: 추후 에러관련 처리
         throw new Error(error);
+      } finally {
+        setIsLogIn(true);
       }
     };
 
