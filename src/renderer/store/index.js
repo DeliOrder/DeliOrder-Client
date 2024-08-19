@@ -43,6 +43,10 @@ const createOrdersSlice = (set, get) => ({
       orders: state.orders.filter((value, index) => index !== targetIndex),
     })),
   getOrders: () => get().orders,
+  clearOrders: () =>
+    set(() => ({
+      orders: [],
+    })),
 });
 
 const usePackageStore = create((set, get) => ({
