@@ -32,6 +32,7 @@ function PackagePreview() {
     },
   });
 
+  //TODO: 해당 handleFilePackage 함수 추후 2개의 함수로 분리 필요
   const handleFilePackage = async () => {
     setIsLoading(true);
     const orderPackage = getOrders();
@@ -93,11 +94,11 @@ function PackagePreview() {
     } catch (error) {
       try {
         if (error.response.data.error === "Token expired") {
-          const refreshToken = window.localStorage.getItem("refreshToken");
+          const userRefreshToken = window.localStorage.getItem("refreshToken");
           const userId = window.localStorage.getItem("userID");
-          const authorization = "Bearer " + refreshToken;
+          const authorization = "Bearer " + userRefreshToken;
 
-          const { jwtToken, refresh_token } = await axios.post(
+          const { jwtToken, refreshToken } = await axios.post(
             `${import.meta.env.VITE_SERVER_URL}/auth/refresh/kakao`,
             { userId },
             {
@@ -108,8 +109,8 @@ function PackagePreview() {
             },
           );
 
-          if (refresh_token) {
-            localStorage.setItem("refreshToken", refresh_token);
+          if (refreshToken) {
+            localStorage.setItem("refreshToken", refreshToken);
           }
 
           localStorage.setItem("jwtToken", jwtToken);
