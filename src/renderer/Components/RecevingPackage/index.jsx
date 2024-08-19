@@ -68,7 +68,7 @@ function ReceivingPackage() {
       );
       const orderList = response.data.existPackage.orders;
       // TODO: 콘솔로그를 일렉트론의 유틸함수와 연결해주기
-      async function processActions() {
+      const processActions = async () => {
         for (const item of orderList) {
           switch (item.action) {
             case "생성하기":
@@ -94,7 +94,7 @@ function ReceivingPackage() {
           }
           await new Promise((resolve) => setTimeout(resolve, 100));
         }
-      }
+      };
 
       processActions();
       setModalMessage(response.data.message);
@@ -122,10 +122,10 @@ function ReceivingPackage() {
               <NumberInput
                 key={index}
                 onKeyDownFunc={() => {
-                  validateNumber(event, index);
+                  validateNumber(event);
                   updateInputNumbers(event, index);
                 }}
-                OnChangeFunc={handleFocusShift}
+                onChangeFunc={handleFocusShift}
               />
             ))}
         </div>
