@@ -76,23 +76,55 @@ function PackagePreview() {
         }),
       );
 
+      const jwtToken = window.localStorage.getItem("jwtToken");
+      const authorization = "Bearer " + jwtToken;
+
       await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/packages/new`,
-        orderPackage,
+        { orders: orderPackage },
         {
           headers: {
             "Content-Type": "application/json",
+            ...(jwtToken && { authorization }),
           },
         },
       );
 
       openModal();
-    } catch (err) {
-      console.error("파일 업로드 중 오류 발생:", err);
+    } catch (error) {
+      try {
+        if (error.response.data.error === "Token expired") {
+          const refreshToken = window.localStorage.getItem("refreshToken");
+          const userId = window.localStorage.getItem("userID");
+          const authorization = "Bearer " + refreshToken;
+
+          const { jwtToken, refresh_token } = await axios.post(
+            `${import.meta.env.VITE_SERVER_URL}/auth/refresh/kakao`,
+            { userId },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                authorization,
+              },
+            },
+          );
+
+          if (refresh_token) {
+            localStorage.setItem("refreshToken", refresh_token);
+          }
+
+          localStorage.setItem("jwtToken", jwtToken);
+          handleFilePackage();
+        }
+      } catch (refreshError) {
+        console.error("토큰 재발급 중 오류 발생", refreshError);
+      }
+      console.error("파일 업로드 중 오류 발생:", error);
     } finally {
       setIsLoading(false);
     }
   };
+
   const navigateToMainPage = () => {
     closeModal();
     navigate("/");
