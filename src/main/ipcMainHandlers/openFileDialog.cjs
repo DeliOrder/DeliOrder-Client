@@ -16,10 +16,6 @@ const openFileDialog = () => {
       const selectedFilePath = result.filePaths[0];
       const relativePath = path.relative(homeDir, selectedFilePath);
 
-      const testPath = convertPath(relativePath);
-      console.log("relativePath", relativePath);
-      console.log("test", testPath);
-
       return {
         canceled: result.canceled,
         filePaths: relativePath,
