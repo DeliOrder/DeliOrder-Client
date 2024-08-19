@@ -53,7 +53,7 @@ function PackagePreview() {
           const uploadParams = {
             Bucket: import.meta.env.VITE_AWS_BUCKET,
             Key: file.attachmentName,
-            Body: file.attachmentName,
+            Body: file.attachmentFile,
             ACL: "public-read",
           };
 
