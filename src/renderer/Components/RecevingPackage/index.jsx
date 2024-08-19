@@ -12,7 +12,7 @@ function ReceivingPackage() {
 
   const navigate = useNavigate();
 
-  const validateNumber = (event, index) => {
+  const validateNumber = (event) => {
     const VALID_KEY = [
       "Tab",
       "Backspace",
@@ -31,6 +31,8 @@ function ReceivingPackage() {
     if (!VALID_KEY.includes(event.key) || event.key === " ") {
       event.preventDefault();
     }
+  };
+  const updateInputNumbers = (event, index) => {
     if (!isNaN(event.key) && event.key.trim() !== "") {
       const newNumbers = [...numbers];
       newNumbers[index] = event.key;
@@ -116,8 +118,11 @@ function ReceivingPackage() {
             .map((_, index) => (
               <NumberInput
                 key={index}
-                validateNumber={() => validateNumber(event, index)}
-                handleMoveNextInput={handleMoveNextInput}
+                onKeyDownFunc={() => {
+                  validateNumber(event, index);
+                  updateInputNumbers(event, index);
+                }}
+                OnChangeFunc={handleMoveNextInput}
               />
             ))}
         </div>
