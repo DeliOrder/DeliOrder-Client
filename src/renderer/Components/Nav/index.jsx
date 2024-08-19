@@ -7,7 +7,7 @@ import DeliLogo from "../../assets/images/logo.png";
 function Nav({ isLogIn, setIsLogIn }) {
   const handleLogOut = async () => {
     try {
-      const { target_id } = JSON.parse(window.localStorage.getItem("userData"));
+      const target_id = window.localStorage.getItem("targetId");
 
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/auth/sign-out/kakao`,
@@ -17,7 +17,10 @@ function Nav({ isLogIn, setIsLogIn }) {
       );
 
       if (response.statusText === "OK") {
-        window.localStorage.removeItem("userData");
+        window.localStorage.removeItem("jwtToken");
+        window.localStorage.removeItem("refreshToken");
+        window.localStorage.removeItem("targetId");
+        window.localStorage.removeItem("userId");
         setIsLogIn(false);
       }
     } catch (error) {
