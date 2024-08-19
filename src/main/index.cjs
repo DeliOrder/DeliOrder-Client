@@ -3,7 +3,7 @@ require("dotenv").config();
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
-const { openFileDialog } = require("./ipcMainHandler.cjs");
+const { openFileDialog } = require("./ipcMainHandlers/openFileDialog.cjs");
 
 const createWindow = () => {
   const BASE_URL = process.env.VITE_BASE_URL;
