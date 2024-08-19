@@ -18,8 +18,7 @@ function PackagePreview() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { orders } = usePackageStore();
-  const { getOrders } = usePackageStore();
+  const { orders, getOrders, clearOrders } = usePackageStore();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -121,6 +120,7 @@ function PackagePreview() {
       }
       console.error("파일 업로드 중 오류 발생:", error);
     } finally {
+      clearOrders();
       setIsLoading(false);
     }
   };
