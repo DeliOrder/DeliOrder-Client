@@ -14,14 +14,14 @@ function Home({ setIsLogIn }) {
       try {
         const authCode = searchParams.get("code");
         const {
-          data: { jwtToken, refresh_token, target_id, _id },
+          data: { jwtToken, refreshToken, target_id, _id },
         } = await axios.post(
           `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/kakao`,
           { authCode },
         );
 
         window.localStorage.setItem("jwtToken", jwtToken);
-        window.localStorage.setItem("refreshToken", refresh_token);
+        window.localStorage.setItem("refreshToken", refreshToken);
         window.localStorage.setItem("targetId", target_id);
         window.localStorage.setItem("userId", _id);
       } catch (error) {

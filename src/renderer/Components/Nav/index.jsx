@@ -9,20 +9,18 @@ function Nav({ isLogIn, setIsLogIn }) {
     try {
       const target_id = window.localStorage.getItem("targetId");
 
-      const response = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/auth/sign-out/kakao`,
         {
           target_id,
         },
       );
 
-      if (response.statusText === "OK") {
-        window.localStorage.removeItem("jwtToken");
-        window.localStorage.removeItem("refreshToken");
-        window.localStorage.removeItem("targetId");
-        window.localStorage.removeItem("userId");
-        setIsLogIn(false);
-      }
+      window.localStorage.removeItem("jwtToken");
+      window.localStorage.removeItem("refreshToken");
+      window.localStorage.removeItem("targetId");
+      window.localStorage.removeItem("userId");
+      setIsLogIn(false);
     } catch (error) {
       // TODO: 추후 에러처리 관련 구현
       alert(error.message);
