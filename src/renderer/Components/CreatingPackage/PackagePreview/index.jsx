@@ -35,14 +35,14 @@ function PackagePreview() {
   const handleFilePackage = async () => {
     setIsLoading(true);
     const orderPackage = getOrders();
-
     const fileList = orderPackage.filter(
-      (action) =>
-        action.attachmentType === "file" && action.action === "생성하기",
+      (action) => action.action === "생성하기",
     );
+
     // TODO:: console.error 관련 사용자에게 직접 표시되도록 개선 필요
-    if (!fileList || fileList.length === 0) {
+    if (!fileList.every((action) => action.attachmentType === "file")) {
       console.error("파일이 선택되지 않았습니다.");
+      setIsLoading(false);
       return;
     }
 
