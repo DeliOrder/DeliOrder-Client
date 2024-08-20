@@ -65,7 +65,7 @@ function Nav({ isLogIn, setIsLogIn }) {
         <div>
           <Link
             //TODO: 추후 내 소포함 페이지 연결 && 백엔드 verify 함수 사용
-            to="#"
+            to="/myPackages"
             className="mr-6 mt-4 inline-block rounded border border-white px-4 py-2 text-sm leading-none text-white hover:border-transparent hover:bg-white hover:text-teal-500 lg:mt-0"
           >
             내 소포함
