@@ -14,4 +14,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
       };
     }
   },
+  delete: async (item) => {
+    const result = await ipcRenderer.invoke("delete", item);
+    return result;
+  },
 });

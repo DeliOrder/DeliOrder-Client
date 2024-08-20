@@ -69,8 +69,8 @@ function ReceivingPackage() {
       const orderList = response.data.existPackage.orders;
       // TODO: 콘솔로그를 일렉트론의 유틸함수와 연결해주기
       const processActions = async () => {
-        for (const item of orderList) {
-          switch (item.action) {
+        for (const order of orderList) {
+          switch (order.action) {
             case "생성하기":
               console.log("파일을 생성합니다");
               break;
@@ -87,6 +87,7 @@ function ReceivingPackage() {
               console.log("파일을 실행합니다");
               break;
             case "삭제하기":
+              await window.electronAPI.delete(item);
               console.log("파일을 삭제합니다");
               break;
             default:
