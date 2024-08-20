@@ -6,6 +6,7 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import ReceivingPackage from "./RecevingPackage";
 import CreatingPackage from "./CreatingPackage";
+import MyPackages from "./MyPackages";
 import { useState } from "react";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/package/new" element={<CreatingPackage />} />
           <Route path="/package/receiving" element={<ReceivingPackage />} />
+          <Route path="/myPackages" element={<MyPackages />} />
         </Routes>
       </div>
     </div>
