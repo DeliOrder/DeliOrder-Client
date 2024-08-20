@@ -1,0 +1,166 @@
+{
+  "_id": {
+    "$oid": "fakeMongooseObjectId"
+  },
+  "nickname": "K",
+  "email": "fakeUserK@gmail.com",
+  "history": [
+    {
+      "_id": {
+        "$oid": "fakeMongooseObjectId"
+      },
+      "serialNumber": 395624,
+      "orders": [
+        {
+          "action": "생성하기",
+          "attachmentName": "dogrun.gif",
+          "attachmentType": "file",
+          "attachmentUrl": "https://fakeAWSUrl",
+          "sourcePath": "",
+          "executionPath": "C:\\Users\\userK\\Downloads",
+          "editingName": "",
+          "_id": {
+            "$oid": "fakeMongooseObjectId"
+          },
+          "createdAt": {
+            "$date": "2024-08-19T12:34:56.789Z"
+          },
+          "updatedAt": {
+            "$date": "2024-08-19T12:34:56.789Z"
+          }
+        }
+      ],
+      "expireAt": {
+        "$date": "2024-08-19T12:44:56.788Z"
+      },
+      "createdAt": {
+        "$date": "2024-08-19T12:34:56.789Z"
+      },
+      "updatedAt": {
+        "$date": "2024-08-19T12:34:56.789Z"
+      },
+      "__v": 0
+    },
+    {
+      "_id": {
+        "$oid": "fakeMongooseObjectId"
+      },
+      "serialNumber": 764320,
+      "orders": [
+        {
+          "action": "이동하기",
+          "attachmentName": "dogwalk.gif",
+          "attachmentType": "file",
+          "attachmentUrl": "",
+          "sourcePath": "C:\\Users\\userK\\Documents",
+          "executionPath": "C:\\Users\\userK\\Pictures",
+          "editingName": "",
+          "_id": {
+            "$oid": "fakeMongooseObjectId"
+          },
+          "createdAt": {
+            "$date": "2024-08-20T14:25:39.900Z"
+          },
+          "updatedAt": {
+            "$date": "2024-08-20T14:25:39.900Z"
+          }
+        },
+        {
+          "action": "삭제하기",
+          "attachmentName": "dogrun.gif",
+          "attachmentType": "file",
+          "attachmentUrl": "",
+          "sourcePath": "C:\\Users\\userK\\Downloads",
+          "executionPath": "",
+          "editingName": "",
+          "_id": {
+            "$oid": "fakeMongooseObjectId"
+          },
+          "createdAt": {
+            "$date": "2024-08-20T14:25:39.901Z"
+          },
+          "updatedAt": {
+            "$date": "2024-08-20T14:25:39.901Z"
+          }
+        }
+      ],
+      "expireAt": {
+        "$date": "2024-08-20T14:35:39.899Z"
+      },
+      "createdAt": {
+        "$date": "2024-08-20T14:25:39.900Z"
+      },
+      "updatedAt": {
+        "$date": "2024-08-20T14:25:39.900Z"
+      },
+      "__v": 0
+    },
+    {
+      "_id": {
+        "$oid": "fakeMongooseObjectId"
+      },
+      "serialNumber": 983724,
+      "orders": [
+        {
+          "action": "생성하기",
+          "attachmentName": "image (2).png",
+          "attachmentType": "file",
+          "attachmentUrl": "https://fakeSAWSUrl2",
+          "sourcePath": "",
+          "executionPath": "C:\\Users\\userK\\Downloads",
+          "editingName": "",
+          "_id": {
+            "$oid": "fakeMongooseObjectId"
+          },
+          "createdAt": {
+            "$date": "2024-08-20T16:38:47.895Z"
+          },
+          "updatedAt": {
+            "$date": "2024-08-20T16:38:47.895Z"
+          }
+        },
+        {
+          "action": "이동하기",
+          "attachmentName": "dogpung.gif",
+          "attachmentType": "file",
+          "attachmentUrl": "",
+          "sourcePath": "C:\\Users\\userK\\Pictures",
+          "executionPath": "C:\\Users\\userK\\Documents",
+          "editingName": "",
+          "_id": {
+            "$oid": "fakeMongooseObjectId"
+          },
+          "createdAt": {
+            "$date": "2024-08-20T16:38:47.896Z"
+          },
+          "updatedAt": {
+            "$date": "2024-08-20T16:38:47.896Z"
+          }
+        }
+      ],
+      "author": {
+        "$oid": "fakeMongooseObjectId"
+      },
+      "expireAt": {
+        "$date": "2024-08-20T16:48:47.894Z"
+      },
+      "createdAt": {
+        "$date": "2024-08-20T16:38:47.897Z"
+      },
+      "updatedAt": {
+        "$date": "2024-08-20T16:38:47.897Z"
+      },
+      "__v": 0
+    }
+  ],
+  "bookmark": [],
+  "loginType": "google",
+  "refreshToken": "fakeToken",
+  "createdAt": {
+    "$date": "2024-08-20T12:28:58.564Z"
+  },
+  "updatedAt": {
+    "$date": "2024-08-20T12:28:58.564Z"
+  },
+  "__v": 0
+}
