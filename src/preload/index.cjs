@@ -17,7 +17,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   deleteFile: async (order) => {
     try {
       await ipcRenderer.invoke("delete-file", order);
-      return;
     } catch (error) {
       console.error("delete-file renderer error:", error);
     }
@@ -25,20 +24,22 @@ contextBridge.exposeInMainWorld("electronAPI", {
   editFileName: async (order) => {
     try {
       await ipcRenderer.invoke("edit-file-name", order);
-      return;
     } catch (error) {
       console.error("edit-file-name renderer error:", error);
     }
   },
   downloadFile: async (order) => {
     try {
-      const result = await ipcRenderer.invoke("download-file", order);
-      return result;
+      await ipcRenderer.invoke("download-file", order);
     } catch (error) {
       console.error("Error in downloadFile: ", error);
-      return {
-        message: "download error",
-      };
+    }
+  },
+  moveFile: async (order) => {
+    try {
+      await ipcRenderer.invoke("move-file", order);
+    } catch (error) {
+      console.error("Error in moveFile: ", error);
     }
   },
 });
