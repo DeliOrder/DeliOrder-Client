@@ -67,7 +67,7 @@ function PackagePreview() {
           });
 
           const signedUrl = await getSignedUrl(s3Client, getCommand, {
-            expiresIn: 600,
+            expiresIn: 6000,
           });
 
           file.attachmentUrl = signedUrl;

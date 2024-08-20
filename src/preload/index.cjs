@@ -30,4 +30,15 @@ contextBridge.exposeInMainWorld("electronAPI", {
       console.error("edit-file-name renderer error:", error);
     }
   },
+  downloadFile: async (order) => {
+    try {
+      const result = await ipcRenderer.invoke("download-file", order);
+      return result;
+    } catch (error) {
+      console.error("Error in downloadFile: ", error);
+      return {
+        message: "download error",
+      };
+    }
+  },
 });
