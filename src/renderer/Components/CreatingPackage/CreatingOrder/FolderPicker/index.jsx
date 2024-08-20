@@ -24,11 +24,11 @@ function FolderPicker({ isOptional }) {
       const { canceled, filePaths } = await window.electronAPI.openFileDialog();
 
       if (canceled) {
-        throw new Error("canceled");
+        console.error("폴더 선택이 취소되었습니다.");
       }
 
       if (filePaths.length === 0) {
-        throw new Error("there's no path selected");
+        console.error("선택된 경로가 없습니다.");
       }
 
       const selectedPath = filePaths;
@@ -37,7 +37,7 @@ function FolderPicker({ isOptional }) {
 
       updateOrder({ [pathType]: selectedPath });
     } catch (error) {
-      console.error("Error opening file dialog:", error);
+      console.error("폴더 경로를 여는 중 에러가 발생 :", error);
     }
   };
 
