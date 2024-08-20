@@ -65,6 +65,7 @@ function MyPackages() {
             <div className="space-y-2">
               {userPackage.orders.map((order, orderIndex) => (
                 <div key={order.createdAt.$date} className="text-gray-700">
+                  {/* TODO: 행동의 타입뿐만 아니라 더욱 구체적인 정보를 불러오도록 추가 구현 필요 */}
                   {orderIndex + 1}. {order.action}
                 </div>
               ))}
