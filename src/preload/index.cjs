@@ -18,7 +18,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     try {
       await ipcRenderer.invoke("delete-file", order);
       return;
-    } catch {
+    } catch (error) {
       console.error("delete-file renderer error:", error);
     }
   },
@@ -26,7 +26,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     try {
       await ipcRenderer.invoke("edit-file-name", order);
       return;
-    } catch {
+    } catch (error) {
       console.error("edit-file-name renderer error:", error);
     }
   },
