@@ -47,9 +47,8 @@ function MyPackages() {
                 Package {index + 1}
               </span>
               <time className="text-sm text-gray-500">
-                만료일시:{" "}
-                {new Date(userPackage.expireAt.$date).toLocaleDateString()}{" "}
-                {new Date(userPackage.expireAt.$date).toLocaleTimeString()} /{" "}
+                {"만료일시: "}
+                {new Date(userPackage.expireAt.$date).toLocaleString() + " / "}
                 <span
                   className={`font-bold ${
                     new Date(userPackage.expireAt.$date) > new Date()
