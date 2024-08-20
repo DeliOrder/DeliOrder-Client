@@ -5,6 +5,7 @@ const path = require("path");
 
 require("./ipcMainHandlers/openFileDialog.cjs");
 require("./ipcMainHandlers/downloadFile.cjs");
+require("./ipcMainHandlers/moveFile.cjs");
 require("./ipcMainHandlers/deleteFile.cjs");
 require("./ipcMainHandlers/editFileName.cjs");
 

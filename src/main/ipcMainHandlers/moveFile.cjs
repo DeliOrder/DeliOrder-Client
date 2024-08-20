@@ -1,27 +1,28 @@
 const { ipcMain } = require("electron");
 const path = require("path");
-const fs = require("fs").promises;
+const fs = require("fs");
+
 const { convertPath } = require("../utils/convertPath.cjs");
 
 const moveFile = async () => {
-  ipcMain.handle(
-    "move-file",
-    async (event, sourcePath, executionPath, orderFileName) => {
-      const oldFullPath = path.join(sourcePath, orderFileName);
-      const newFullPath = path.join(executionPath, orderFileName);
-      const newFileDirectory = convertPath(executionPath);
+  ipcMain.handle("move-file", async (event, order) => {
+    try {
+      const oldFullPath = path.join(order.sourcePath, order.attachmentName);
+      const newFullPath = path.join(order.executionPath, order.attachmentName);
+      const convertedFolderPath = convertPath(order.executionPath);
       const convertedOldFullPath = convertPath(oldFullPath);
       const convertedNewFullPath = convertPath(newFullPath);
 
-      try {
-        await fs.mkdir(newFileDirectory, { recursive: true });
-        await fs.copyFile(convertedOldFullPath, convertedNewFullPath);
-        await fs.unlink(convertedOldFullPath);
-      } catch (error) {
-        console.error("Error moving file:", error);
+      if (!fs.existsSync(convertedFolderPath)) {
+        // TODO: 해당 폴더가 없는 경우 수신자에게 처리 선택 보여주는 화면 추가 제시 필요
+        fs.mkdirSync(convertedFolderPath, { recursive: true });
       }
-    },
-  );
+
+      await fs.promises.rename(convertedOldFullPath, convertedNewFullPath);
+    } catch (error) {
+      console.error("moving-file main handler 에러:", error);
+    }
+  });
 };
 
-module.exports = { moveFile };
+moveFile();
