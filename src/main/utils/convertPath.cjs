@@ -2,6 +2,15 @@ const os = require("os");
 const path = require("path");
 
 const convertPath = (targetPath) => {
+  const onlyInMacOs = "../../Library";
+  const onlyInWindows = "AppData";
+
+  if (
+    targetPath.startsWith(onlyInMacOs) ||
+    targetPath.startsWith(onlyInWindows)
+  )
+    return;
+
   const platform = os.platform();
   const homeDir = os.homedir();
 
@@ -23,6 +32,11 @@ const convertPath = (targetPath) => {
       if (targetPath.startsWith("..\\..\\Program Files\\")) {
         convertedPath = targetPath.replace(
           "..\\..\\Program Files\\",
+          "../../Applications/",
+        );
+      } else if (targetPath.startsWith("..\\..\\Program Files (x86)\\")) {
+        convertedPath = targetPath.replace(
+          "..\\..\\Program Files (x86)\\",
           "../../Applications/",
         );
       } else {
