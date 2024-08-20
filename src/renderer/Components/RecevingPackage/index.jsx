@@ -87,7 +87,7 @@ function ReceivingPackage() {
               console.log("파일을 실행합니다");
               break;
             case "삭제하기":
-              await window.electronAPI.delete(item);
+              await window.electronAPI.delete(order);
               console.log("파일을 삭제합니다");
               break;
             default:
