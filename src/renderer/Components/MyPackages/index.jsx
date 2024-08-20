@@ -10,7 +10,7 @@ function MyPackages() {
         {/* <div className="text-lg font-bold text-gray-700">▽ 과거행동순</div> */}
         {latestOrderUserHistory.map((userPackage, index) => (
           <div
-            key={index}
+            key={userPackage.serialNumber}
             className="rounded-lg border border-gray-300 bg-white p-6 shadow-md transition-shadow duration-300 hover:shadow-lg"
           >
             <div className="mb-4 flex items-center justify-between border-b pb-4">
@@ -36,7 +36,7 @@ function MyPackages() {
             </div>
             <div className="space-y-2">
               {userPackage.orders.map((order, orderIndex) => (
-                <div key={orderIndex} className="text-gray-700">
+                <div key={order.createdAt} className="text-gray-700">
                   {orderIndex + 1}. {order.action}
                 </div>
               ))}
