@@ -8,7 +8,7 @@ import DeliLogo from "../../assets/images/logo.png";
 function Home({ setIsLogIn }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-
+  const dodo = "dododong";
   useEffect(() => {
     const getJwtToken = async () => {
       try {
@@ -19,7 +19,7 @@ function Home({ setIsLogIn }) {
           `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/kakao`,
           { authCode },
         );
-
+        const dodo = "dododong";
         window.localStorage.setItem("jwtToken", jwtToken);
         window.localStorage.setItem("refreshToken", refreshToken);
         window.localStorage.setItem("targetId", target_id);
