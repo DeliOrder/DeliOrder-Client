@@ -4,7 +4,8 @@ const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
 const { openFileDialog } = require("./ipcMainHandlers/openFileDialog.cjs");
-const { executeDelete } = require("./ipcMainHandlers/executeDelete.cjs");
+const { deleteFile } = require("./ipcMainHandlers/deleteFile.cjs");
+const { editFileName } = require("./ipcMainHandlers/editFileName.cjs");
 
 const createWindow = () => {
   const BASE_URL = process.env.VITE_BASE_URL;
@@ -38,4 +39,5 @@ app.on("window-all-closed", () => {
 });
 
 openFileDialog();
-executeDelete();
+deleteFile();
+editFileName();
