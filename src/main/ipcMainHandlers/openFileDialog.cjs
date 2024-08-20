@@ -2,8 +2,6 @@ const { ipcMain, dialog } = require("electron");
 const path = require("path");
 const os = require("os");
 
-const { convertPath } = require("../utils/convertPath.cjs");
-
 const homeDir = os.homedir();
 
 const openFileDialog = () => {
