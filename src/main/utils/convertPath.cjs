@@ -2,20 +2,19 @@ const os = require("os");
 const path = require("path");
 
 const convertPath = (targetPath) => {
+  const platform = os.platform();
+  const homeDir = os.homedir();
+
   const onlyInMacOs = "../../Library";
   const onlyInWindows = "AppData";
 
   if (
-    targetPath.startsWith(onlyInMacOs) ||
-    targetPath.startsWith(onlyInWindows)
+    (targetPath.startsWith(onlyInMacOs) && platform !== "darwin") ||
+    (targetPath.startsWith(onlyInWindows) && platform !== "win32")
   )
-    return;
-
-  const platform = os.platform();
-  const homeDir = os.homedir();
+    return { error: true };
 
   let convertedPath;
-
   switch (platform) {
     case "win32":
       if (targetPath.startsWith("../../Applications/")) {
