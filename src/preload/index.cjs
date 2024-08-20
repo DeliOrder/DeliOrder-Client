@@ -8,7 +8,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
       return result;
     } catch (error) {
       console.error("Error in openFileDialog:", error);
-      return { canceled: true, filePaths: [] };
+      return {
+        canceled: true,
+        filePaths: "",
+      };
     }
   },
 });
