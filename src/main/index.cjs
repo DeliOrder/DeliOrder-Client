@@ -3,7 +3,10 @@ require("dotenv").config();
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
+require("./ipcMainHandlers/openFolderDialog.cjs");
 require("./ipcMainHandlers/openFileDialog.cjs");
+require("./ipcMainHandlers/replicateFile.cjs");
+require("./ipcMainHandlers/executeFile.cjs");
 require("./ipcMainHandlers/downloadFile.cjs");
 require("./ipcMainHandlers/moveFile.cjs");
 require("./ipcMainHandlers/deleteFile.cjs");
