@@ -1,13 +1,15 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
-import PropTypes from "prop-types";
 import axios from "axios";
 
-import DeliLogo from "../../assets/images/logo.png";
+import usePackageStore from "@renderer/store";
 
-function Home({ setIsLogIn }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+import DeliLogo from "@renderer/assets/images/logo.png";
+
+function Home() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { setClientStatus } = usePackageStore();
 
   useEffect(() => {
     const getJwtToken = async () => {
@@ -28,14 +30,14 @@ function Home({ setIsLogIn }) {
         // TODO: 추후 에러관련 처리
         throw new Error(error);
       } finally {
-        setIsLogIn(true);
+        setClientStatus({ isLogin: true });
       }
     };
 
     if (searchParams.get("code")) {
       getJwtToken();
     }
-  }, [searchParams, setIsLogIn]);
+  }, [searchParams]);
 
   const navigateToReceivingPage = () => {
     navigate("/package/receiving");
@@ -67,9 +69,5 @@ function Home({ setIsLogIn }) {
     </div>
   );
 }
-
-Home.propTypes = {
-  setIsLogIn: PropTypes.func.isRequired,
-};
 
 export default Home;
