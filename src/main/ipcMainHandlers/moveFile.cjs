@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const { convertPath } = require("../utils/convertPath.cjs");
 
-const moveFile = async () => {
+const moveFile = () => {
   ipcMain.handle("move-file", async (event, order) => {
     try {
       const oldFullPath = path.join(order.sourcePath, order.attachmentName);
@@ -18,7 +18,13 @@ const moveFile = async () => {
         fs.mkdirSync(convertedFolderPath, { recursive: true });
       }
 
-      await fs.promises.rename(convertedOldFullPath, convertedNewFullPath);
+      fs.rename(convertedOldFullPath, convertedNewFullPath, (error) => {
+        if (error) {
+          console.error("파일 이동 중 오류 발생:", error);
+          return;
+        }
+        console.log(`파일이 ${convertedNewFullPath}로 이동하였습니다.`);
+      });
     } catch (error) {
       console.error("moving-file main handler 에러:", error);
     }
