@@ -37,7 +37,7 @@ function Home({ setIsLogIn }) {
     }
   }, [searchParams, setIsLogIn]);
 
-  const navigateToRecevingPage = () => {
+  const navigateToReceivingPage = () => {
     navigate("/package/receiving");
   };
 
@@ -55,7 +55,7 @@ function Home({ setIsLogIn }) {
           보내기
         </button>
         <button
-          onClick={navigateToRecevingPage}
+          onClick={navigateToReceivingPage}
           className="m-7 w-3/5 rounded-full bg-blue-500 p-7 text-3xl text-white hover:bg-blue-700"
         >
           받기

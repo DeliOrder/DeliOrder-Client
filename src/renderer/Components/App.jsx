@@ -4,7 +4,7 @@ import Home from "./Home";
 import Nav from "./Nav";
 import Login from "./Login";
 import SignUp from "./SignUp";
-import ReceivingPackage from "./RecevingPackage";
+import ReceivingPackage from "./ReceivingPackage";
 import CreatingPackage from "./CreatingPackage";
 import MyPackages from "./MyPackages";
 import { useState } from "react";

@@ -3,7 +3,9 @@ require("dotenv").config();
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
-const { openFileDialog } = require("./ipcMainHandlers/openFileDialog.cjs");
+require("./ipcMainHandlers/openFileDialog.cjs");
+require("./ipcMainHandlers/deleteFile.cjs");
+require("./ipcMainHandlers/editFileName.cjs");
 
 const createWindow = () => {
   const BASE_URL = process.env.VITE_BASE_URL;
@@ -35,5 +37,3 @@ createAppWindow();
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
-
-openFileDialog();

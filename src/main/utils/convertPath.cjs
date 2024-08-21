@@ -5,8 +5,16 @@ const convertPath = (targetPath) => {
   const platform = os.platform();
   const homeDir = os.homedir();
 
-  let convertedPath;
+  const onlyInMacOs = "../../Library";
+  const onlyInWindows = "AppData";
 
+  if (
+    (targetPath.startsWith(onlyInMacOs) && platform !== "darwin") ||
+    (targetPath.startsWith(onlyInWindows) && platform !== "win32")
+  )
+    return { error: true };
+
+  let convertedPath;
   switch (platform) {
     case "win32":
       if (targetPath.startsWith("../../Applications/")) {
@@ -23,6 +31,11 @@ const convertPath = (targetPath) => {
       if (targetPath.startsWith("..\\..\\Program Files\\")) {
         convertedPath = targetPath.replace(
           "..\\..\\Program Files\\",
+          "../../Applications/",
+        );
+      } else if (targetPath.startsWith("..\\..\\Program Files (x86)\\")) {
+        convertedPath = targetPath.replace(
+          "..\\..\\Program Files (x86)\\",
           "../../Applications/",
         );
       } else {

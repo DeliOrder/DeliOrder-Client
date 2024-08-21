@@ -1,5 +1,9 @@
 /* eslint-disable */
 const { convertPath } = require("../src/main/utils/convertPath.cjs");
+const os = require("os");
+
+const platform = os.platform();
+const homeDir = os.homedir();
 
 const testerHomeDir = {
   windows: "C:\\Users\\janej",
@@ -49,5 +53,15 @@ test("windows to macOS", () => {
   expect(convertPath(windowsPathSample.programFiles)).toBe(
     "../../Applications/MyApp/bin",
   );
+});
+
+test("only windows to windows", () => {
+  if (platform === "win32") {
+    expect(convertPath(windowsPathSample.appData)).toBe(
+      homeDir + windowsPathSample.appData,
+    );
+  } else {
+    expect(convertPath(windowsPathSample.appData).error).toBe(true);
+  }
 });
 /* eslint-enable */

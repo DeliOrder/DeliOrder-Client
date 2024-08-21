@@ -14,4 +14,20 @@ contextBridge.exposeInMainWorld("electronAPI", {
       };
     }
   },
+  deleteFile: async (order) => {
+    try {
+      await ipcRenderer.invoke("delete-file", order);
+      return;
+    } catch (error) {
+      console.error("delete-file renderer error:", error);
+    }
+  },
+  editFileName: async (order) => {
+    try {
+      await ipcRenderer.invoke("edit-file-name", order);
+      return;
+    } catch (error) {
+      console.error("edit-file-name renderer error:", error);
+    }
+  },
 });
