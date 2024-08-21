@@ -23,4 +23,5 @@ const deleteFile = () => {
     }
   });
 };
-module.exports = { deleteFile };
+
+deleteFile();
