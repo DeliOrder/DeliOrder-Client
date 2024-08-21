@@ -72,10 +72,10 @@ function ReceivingPackage() {
         for (const order of orderList) {
           switch (order.action) {
             case "생성하기":
-              window.electronAPI.downloadFile(order);
+              await window.electronAPI.downloadFile(order);
               break;
             case "이동하기":
-              window.electronAPI.moveFile(order);
+              await window.electronAPI.moveFile(order);
               break;
             case "복제하기":
               console.log("파일을 복제합니다");
