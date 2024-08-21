@@ -1,4 +1,7 @@
 import { Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+
+import usePackageStore from "@renderer/store";
 
 import Home from "./Home";
 import Nav from "./Nav";
@@ -7,17 +10,33 @@ import SignUp from "./SignUp";
 import ReceivingPackage from "./ReceivingPackage";
 import CreatingPackage from "./CreatingPackage";
 import MyPackages from "./MyPackages";
-import { useState } from "react";
 
 function App() {
-  const [isLogIn, setIsLogIn] = useState(false);
+  const { setClientStatus } = usePackageStore();
+
+  const hasPreviousLogin = () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    const jwtToken = localStorage.getItem("jwtToken");
+    const userId = localStorage.getItem("userID");
+    const targetId = localStorage.getItem("targetId");
+
+    return refreshToken && jwtToken && userId && targetId;
+  };
+
+  useEffect(() => {
+    if (hasPreviousLogin()) {
+      setClientStatus({ isLogin: true });
+    } else {
+      window.localStorage.clear();
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Nav isLogIn={isLogIn} setIsLogIn={setIsLogIn} />
+      <Nav />
       <div className="flex-grow">
         <Routes>
-          <Route path="/" element={<Home setIsLogIn={setIsLogIn} />} />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/package/new" element={<CreatingPackage />} />

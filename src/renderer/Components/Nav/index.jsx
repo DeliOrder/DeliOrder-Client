@@ -1,26 +1,26 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
-import PropTypes from "prop-types";
+import usePackageStore from "@renderer/store";
 
 import DeliLogo from "../../assets/images/logo.png";
 
-function Nav({ isLogIn, setIsLogIn }) {
+function Nav() {
+  const { clientStatus, setClientStatus } = usePackageStore();
+  const { isLogin } = clientStatus;
+
   const handleLogOut = async () => {
+    if (!isLogin) return;
+
     try {
       const target_id = window.localStorage.getItem("targetId");
 
       await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/auth/sign-out/kakao`,
-        {
-          target_id,
-        },
+        { target_id },
       );
 
-      window.localStorage.removeItem("jwtToken");
-      window.localStorage.removeItem("refreshToken");
-      window.localStorage.removeItem("targetId");
-      window.localStorage.removeItem("userId");
-      setIsLogIn(false);
+      window.localStorage.clear();
+      setClientStatus({ isLogin: false });
     } catch (error) {
       // TODO: 추후 에러처리 관련 구현
       alert(error.message);
@@ -43,22 +43,13 @@ function Nav({ isLogIn, setIsLogIn }) {
       </div>
       <div className="block w-full flex-grow lg:flex lg:w-auto lg:items-center">
         <div className="text-sm lg:flex-grow">
-          <Link
-            to="/"
-            className="mr-4 mt-4 block text-teal-200 hover:text-white lg:mt-0 lg:inline-block"
-          >
+          <Link to="/" className="text-teal-hover-white mr-4">
             소개
           </Link>
-          <Link
-            to="/package/new"
-            className="mr-4 mt-4 block text-teal-200 hover:text-white lg:mt-0 lg:inline-block"
-          >
+          <Link to="/package/new" className="text-teal-hover-white mr-4">
             보내기
           </Link>
-          <Link
-            to="/package/receiving"
-            className="mt-4 block text-teal-200 hover:text-white lg:mt-0 lg:inline-block"
-          >
+          <Link to="/package/receiving" className="text-teal-hover-white">
             받기
           </Link>
         </div>
@@ -66,26 +57,21 @@ function Nav({ isLogIn, setIsLogIn }) {
           <Link
             //TODO: 추후 내 소포함 페이지 연결 && 백엔드 verify 함수 사용
             to="/myPackages"
-            className="mr-6 mt-4 inline-block rounded border border-white px-4 py-2 text-sm leading-none text-white hover:border-transparent hover:bg-white hover:text-teal-500 lg:mt-0"
+            className="button-white-border mr-6"
           >
             내 소포함
           </Link>
           <Link
-            to={isLogIn ? "/" : "/login"}
-            onClick={isLogIn && handleLogOut}
-            className="mt-4 inline-block rounded border border-white px-4 py-2 text-sm leading-none text-white hover:border-transparent hover:bg-white hover:text-teal-500 lg:mt-0"
+            to={isLogin ? "/" : "/login"}
+            onClick={handleLogOut}
+            className="button-white-border"
           >
-            {isLogIn ? "로그아웃" : "로그인"}
+            {isLogin ? "로그아웃" : "로그인"}
           </Link>
         </div>
       </div>
     </nav>
   );
 }
-
-Nav.propTypes = {
-  setIsLogIn: PropTypes.func.isRequired,
-  isLogIn: PropTypes.bool.isRequired,
-};
 
 export default Nav;

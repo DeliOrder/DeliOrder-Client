@@ -3,6 +3,7 @@ import { create } from "zustand";
 const createClientStatusSlice = (set, get) => ({
   clientStatus: {
     isSubmitted: false,
+    isLogin: false,
   },
   setClientStatus: (setValue) =>
     set((state) => ({

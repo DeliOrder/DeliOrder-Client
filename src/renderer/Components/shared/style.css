@@ -26,6 +26,10 @@
   @apply my-3 w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700;
 }
 
+.button-white-border {
+  @apply mt-4 inline-block rounded border border-white px-4 py-2 text-sm leading-none text-white hover:border-transparent hover:bg-white hover:text-teal-500 lg:mt-0;
+}
+
 .file-input {
   @apply w-full cursor-pointer rounded border bg-white text-sm font-semibold text-gray-400 file:mr-4 file:cursor-pointer file:border-0 file:px-4 file:py-3 file:text-gray-500 file:hover:bg-gray-200;
 }
@@ -44,4 +48,8 @@
 
 .text-block-blue {
   @apply min-h-10 min-w-8 rounded bg-sky-300 px-4 py-2 text-sm;
+}
+
+.text-teal-hover-white {
+  @apply mt-4 block text-teal-200 hover:text-white lg:mt-0 lg:inline-block;
 }
