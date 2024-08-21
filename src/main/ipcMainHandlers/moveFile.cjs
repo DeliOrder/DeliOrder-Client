@@ -9,6 +9,7 @@ const moveFile = () => {
     try {
       const oldFullPath = path.join(order.sourcePath, order.attachmentName);
       const newFullPath = path.join(order.executionPath, order.attachmentName);
+
       const convertedFolderPath = convertPath(order.executionPath);
       const convertedOldFullPath = convertPath(oldFullPath);
       const convertedNewFullPath = convertPath(newFullPath);

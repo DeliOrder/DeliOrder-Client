@@ -9,8 +9,10 @@ const downloadFile = () => {
   ipcMain.handle("download-file", async (event, order) => {
     try {
       const fullPath = path.join(order.executionPath, order.attachmentName);
+
       const convertedFullPath = convertPath(fullPath);
       const convertedFolderPath = convertPath(order.executionPath);
+
       const file = fs.createWriteStream(convertedFullPath);
 
       if (!fs.existsSync(convertedFolderPath)) {
