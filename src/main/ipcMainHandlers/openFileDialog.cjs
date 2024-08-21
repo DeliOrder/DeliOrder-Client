@@ -28,4 +28,4 @@ const openFileDialog = () => {
   });
 };
 
-module.exports = { openFileDialog };
+openFileDialog();
