@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import usePackageStore from "@renderer/store";
 import Modal from "../../../Modal";
+import { GUIDE_MESSAGES } from "@renderer/constants/messages.js";
 
 import addingIcon from "@images/addingIcon.svg";
 import downloadIcon from "@images/downloadIcon.svg";
@@ -18,7 +19,7 @@ function BookmarkToolbar() {
 
   const userId = localStorage.getItem("userID");
   const notifyLoginRequired = () => {
-    alert("로그인 유저 전용 기능입니다.");
+    alert(GUIDE_MESSAGES.REQUIRE_LOGIN);
   };
 
   const handleAddBookmark = async () => {
@@ -27,6 +28,11 @@ function BookmarkToolbar() {
       return;
     }
     const BookmarkTarget = getOrder();
+
+    if (!validateRequiredInputs(BookmarkTarget)) {
+      alert(GUIDE_MESSAGES.BOOKMARK_REQUIREMENT);
+    }
+
     const formattedBookmarkData = {
       ...BookmarkTarget,
       attachmentType: "",
@@ -67,6 +73,11 @@ function BookmarkToolbar() {
   const applyBookmark = (index) => {
     updateOrder(bookmarks[index]);
     setIsModalOpen(false);
+  };
+
+  const validateRequiredInputs = (inputs) => {
+    const requiredField = [action, attachmentName, executionPath];
+    return requiredField.every((field) => inputs.field.length > 0);
   };
 
   return (
