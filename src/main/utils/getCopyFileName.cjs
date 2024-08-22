@@ -1,4 +1,4 @@
-function getCopyFileName(baseName) {
+const getCopyFileName = (baseName) => {
   const baseNameArray = baseName.split(".");
   const extension = baseNameArray.pop();
   const fileName = baseNameArray.join(".");
@@ -16,6 +16,6 @@ function getCopyFileName(baseName) {
   const copyFileName = `${fileName.slice(0, lastParenIndex)}(${nextCopyNumber}).${extension}`;
 
   return copyFileName;
-}
+};
 
 module.exports = { getCopyFileName };

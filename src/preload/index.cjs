@@ -75,7 +75,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     try {
       await ipcRenderer.invoke("execute-file", order);
     } catch (error) {
-      console.error("Error in executeFile: ", error);
+      console.error("Error in replicateFile");
     }
   },
   replicateFile: async (order) => {

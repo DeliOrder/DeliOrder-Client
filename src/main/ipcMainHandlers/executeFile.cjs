@@ -2,7 +2,7 @@ const { ipcMain } = require("electron");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
-const { exec } = require("child_process");
+const { execSync } = require("child_process");
 
 const { convertPath } = require("../utils/convertPath.cjs");
 
@@ -14,21 +14,19 @@ const executeFile = () => {
     }
 
     const platform = os.platform();
-    const folderPath = convertPath(order.executionPath);
-    const filePath = path.join(folderPath, order.attachmentName);
+    const fullPath = path.join(order.executionPath, order.attachmentName);
+    const convertedFullPath = convertPath(fullPath);
 
-    if (!fs.existsSync(filePath)) {
+    if (!fs.existsSync(convertedFullPath)) {
       throw new Error("해당 위치에 요청한 파일이 없습니다.");
     }
-
-    exec(
-      `${platform === "win32" ? "start" : "open"} "${filePath}"`,
-      (error) => {
-        if (error) {
-          console.error("파일 실행하는 중 에러가 발생했습니다.");
-        }
-      },
-    );
+    try {
+      execSync(
+        `${platform === "win32" ? "start" : "open"} "${convertedFullPath}"`,
+      );
+    } catch (error) {
+      console.error("execute-file main handler 에러:", error);
+    }
   });
 };
 

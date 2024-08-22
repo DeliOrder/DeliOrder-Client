@@ -6,6 +6,7 @@ function Order({ order, index }) {
 
   const { action, attachmentName, sourcePath, executionPath, editingName } =
     order;
+
   const handleDelete = () => {
     deleteOrder(index);
   };
