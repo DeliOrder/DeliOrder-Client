@@ -1,78 +1,125 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import mockData from "./mockData.json";
 import triangleArrowDown from "@images/triangleArrowDown.svg";
+import axios from "axios";
 
 function MyPackages() {
-  // TODO: userDBAllData는 목데이터로 front 로직 구현시 데이터베이스에서 실제정보를 불러와주는 로직 필요
-  const userDBAllData = mockData;
+  const [userHistoryData, setUserHistoryData] = useState([]);
   const [currentSort, setCurrentSort] = useState("sortByNewest");
-  const [userHistorySort, setUserHistorySort] = useState(
-    userDBAllData.history.slice().reverse(),
-  );
+
+  useEffect(() => {
+    const userId = window.localStorage.getItem("userId");
+    const getUserHistoryData = async () => {
+      const {
+        data: { history },
+      } = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/users/${userId}/history`,
+      );
+
+      setUserHistoryData(
+        history.sort(
+          (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
+        ),
+      );
+    };
+
+    getUserHistoryData();
+  }, []);
 
   const toggleSort = () => {
+    let sortedUserHistory;
+
     if (currentSort === "sortByNewest") {
       setCurrentSort("sortByOldest");
-      setUserHistorySort(userDBAllData.history);
+
+      sortedUserHistory = userHistoryData.sort(
+        (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt),
+      );
     } else {
       setCurrentSort("sortByNewest");
-      setUserHistorySort(userDBAllData.history.slice().reverse());
+
+      sortedUserHistory = userHistoryData.sort(
+        (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
+      );
     }
+
+    setUserHistoryData(sortedUserHistory);
   };
 
   return (
-    <div className="flex min-h-screen items-start justify-center bg-gray-50 p-8">
-      <div className="mt-6 w-full max-w-3xl space-y-6">
+    <div className="flex min-h-screen items-start justify-center bg-gradient-to-r from-blue-50 to-blue-100 p-8">
+      <div className="mt-6 w-full max-w-3xl space-y-8">
         <div
-          className="flex cursor-pointer flex-row items-center text-lg font-bold text-gray-700"
+          className="flex cursor-pointer flex-row items-center text-lg font-bold text-blue-700 hover:text-blue-900"
           onClick={toggleSort}
         >
           <img
-            className="mr-1 h-4 w-4"
+            className="mr-2 h-5 w-5 transform transition-transform duration-300"
             src={triangleArrowDown}
-            alt="triangleArrowDown"
+            alt="Sort Icon"
           />
           {currentSort === "sortByNewest"
-            ? "최신패키지 순 정렬"
-            : "과거패키지 순 정렬"}
+            ? "최신 패키지 순 정렬"
+            : "과거 패키지 순 정렬"}
         </div>
-        {userHistorySort.map((userPackage, index) => (
+        {userHistoryData.map((userPackage, index) => (
           <div
             key={userPackage.serialNumber}
-            className="rounded-lg border border-gray-300 bg-white p-6 shadow-md transition-shadow duration-300 hover:shadow-lg"
+            className="rounded-xl border border-gray-200 bg-white p-8 shadow-lg transition-shadow duration-300 hover:shadow-2xl"
           >
             <div className="mb-4 flex items-center justify-between border-b pb-4">
-              <span className="text-lg font-semibold text-blue-600">
-                Package {index + 1}
+              <span className="text-xl font-semibold text-blue-800">
+                패키지 {index + 1}
               </span>
-              <time className="text-sm text-gray-500">
+              <time className="text-sm text-gray-600">
                 {"만료일시: "}
-                {new Date(userPackage.expireAt.$date).toLocaleString() + " / "}
+                {new Date(userPackage.expireAt).toLocaleString()} {" / "}
                 <span
                   className={`font-bold ${
-                    new Date(userPackage.expireAt.$date) > new Date()
+                    Date.parse(userPackage.expireAt) > Date.parse(new Date())
                       ? "text-green-600"
                       : "text-red-600"
                   }`}
                 >
-                  {new Date(userPackage.expireAt.$date) > new Date()
-                    ? "전송가능"
+                  {Date.parse(userPackage.expireAt) > Date.parse(new Date())
+                    ? "전송 가능"
                     : "만료됨"}
                 </span>
               </time>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-4">
               {userPackage.orders.map((order, orderIndex) => (
-                <div key={order.createdAt.$date} className="text-gray-700">
-                  {/* TODO: 행동의 타입뿐만 아니라 더욱 구체적인 정보를 불러오도록 추가 구현 필요 */}
-                  {orderIndex + 1}. {order.action}
+                <div key={order._id} className="text-gray-700">
+                  <span className="font-medium text-blue-700">
+                    {`${orderIndex + 1}. ${order.action}`}
+                  </span>
+                  <span className="text-gray-600">
+                    : "{order.attachmentName}" 을 "{order.executionPath}" 에서
+                  </span>
+                  {order.editingName && (
+                    <span className="text-gray-600">
+                      {" "}
+                      "{order.editingName}" 로
+                    </span>
+                  )}
+                  {order.sourcePath && (
+                    <span className="text-gray-600">
+                      {" "}
+                      "{order.sourcePath}" 로
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
-            <p className="mt-4 text-right text-sm text-gray-400">
-              일련번호: {userPackage.serialNumber}
-            </p>
+            <div className="mt-6 flex justify-between text-right">
+              <a href="#" className="">
+                링크: 추후에 클릭해서 해당 패키지 내용을 자동적으로 불러오기
+                기능
+              </a>
+              <p className="text-sm text-gray-400">
+                일련번호: {userPackage.serialNumber}
+              </p>
+            </div>
           </div>
         ))}
       </div>
