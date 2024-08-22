@@ -5,8 +5,10 @@ import usePackageStore from "@renderer/store";
 import DeliLogo from "../../assets/images/logo.png";
 
 function Nav() {
-  const { clientStatus, setClientStatus } = usePackageStore();
-  const { isLogin } = clientStatus;
+  const {
+    clientStatus: { isLogin },
+    setClientStatus,
+  } = usePackageStore();
 
   const handleLogOut = async () => {
     if (!isLogin) return;
@@ -54,13 +56,11 @@ function Nav() {
           </Link>
         </div>
         <div>
-          <Link
-            //TODO: 추후 내 소포함 페이지 연결 && 백엔드 verify 함수 사용
-            to="/myPackages"
-            className="button-white-border mr-6"
-          >
-            내 소포함
-          </Link>
+          {isLogin && (
+            <Link to="/myPackages" className="button-white-border mr-6">
+              내 소포함
+            </Link>
+          )}
           <Link
             to={isLogin ? "/" : "/login"}
             onClick={handleLogOut}
