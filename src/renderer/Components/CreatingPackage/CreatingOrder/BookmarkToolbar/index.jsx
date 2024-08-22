@@ -31,14 +31,16 @@ function BookmarkToolbar() {
   const handleAddBookmark = async () => {
     if (!isLogin) {
       notifyLoginRequired();
+      setIsInfoModalOpen(true);
       return;
     }
     const BookmarkTarget = getOrder();
 
     if (!validateRequiredInputs(BookmarkTarget)) {
       setIsError(true);
-
       setInfoMessage(GUIDE_MESSAGES.BOOKMARK_REQUIREMENT);
+      setIsInfoModalOpen(true);
+      return;
     }
 
     const formattedBookmarkData = {
@@ -62,14 +64,16 @@ function BookmarkToolbar() {
       setInfoMessage(response.data.message);
       setIsInfoModalOpen(true);
     } catch (error) {
-      console.error(
-        "즐겨찾기 등록하는 중 에러발생 :",
-        error.response.data.message,
-      );
-      setInfoMessage(
-        "즐겨찾기 등록하는 중 에러발생",
-        error.response.data.message,
-      );
+      if (error.response) {
+        console.error(
+          "즐겨찾기 등록하는 중 에러발생 :",
+          error.response.data.message,
+        );
+        setInfoMessage("에러발생: " + error.response.data.message);
+      } else {
+        console.error("응답을 받지 못하였습니다");
+        setInfoMessage("일시적 서버에러입니다. 잠시후 다시 시도해주세요");
+      }
 
       setIsError(true);
       setIsInfoModalOpen(true);
@@ -95,14 +99,19 @@ function BookmarkToolbar() {
       setBookMarks(response.data.bookmarkList);
       setIsModalOpen(true);
     } catch (error) {
-      console.error(
-        "즐겨찾기 가져오는 중 에러발생 :",
-        error.response.data.message,
-      );
-      setInfoMessage(
-        "즐겨찾기 가져오는 중 에러발생 :",
-        error.response.data.message,
-      );
+      if (error.response) {
+        console.error(
+          "즐겨찾기 가져오는 중 에러발생 :",
+          error.response.data.message,
+        );
+        setInfoMessage("에러발생: " + error.response.data.message);
+      } else {
+        console.error("응답을 받지 못하였습니다");
+        setInfoMessage("일시적 서버에러입니다. 잠시후 다시 시도해주세요");
+      }
+
+      setIsError(true);
+      setIsInfoModalOpen(true);
     }
   };
 
@@ -114,6 +123,11 @@ function BookmarkToolbar() {
   const validateRequiredInputs = (inputs) => {
     const requiredField = ["action", "attachmentName", "executionPath"];
     return requiredField.every((field) => inputs[field].length > 0);
+  };
+
+  const closeModal = () => {
+    setIsError(false);
+    setIsInfoModalOpen(false);
   };
 
   return (
@@ -142,20 +156,10 @@ function BookmarkToolbar() {
         </Modal>
       )}
       {
-        <InfoModal isOpen={isInfoModalOpen}>
-          <h2 className="mb-4 text-xl font-semibold">DELIORDER</h2>
+        <InfoModal isOpen={isInfoModalOpen} onClose={closeModal}>
           <p className={`font-bold ${isError ? "text-red-600" : ""}`}>
             {infoMessage}
           </p>
-          <button
-            className="focus:shadow-outline mt-4 rounded-md bg-blue-400 px-4 py-2 text-center font-bold text-white hover:bg-blue-500"
-            onClick={() => {
-              setIsError(false);
-              setIsInfoModalOpen(false);
-            }}
-          >
-            닫기
-          </button>
         </InfoModal>
       }
       <span className="label-large">즐겨찾기</span>
