@@ -78,13 +78,13 @@ function ReceivingPackage() {
               await window.electronAPI.moveFile(order);
               break;
             case "복제하기":
-              console.log("파일을 복제합니다");
+              await window.electronAPI.replicateFile(order);
               break;
             case "수정하기":
               await window.electronAPI.editFileName(order);
               break;
             case "실행하기":
-              console.log("파일을 실행합니다");
+              await window.electronAPI.executeFile(order);
               break;
             case "삭제하기":
               await window.electronAPI.deleteFile(order);

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import usePackageStore from "@renderer/store";
 
 function FolderPicker({ isOptional }) {
-  const [filePath, setFilePath] = useState("");
+  const [folderPath, setFolderPath] = useState("");
   const { updateOrder, getOrder, setClientStatus, clientStatus } =
     usePackageStore();
   const currentOrder = getOrder();
@@ -14,28 +14,27 @@ function FolderPicker({ isOptional }) {
 
   useEffect(() => {
     if (clientStatus.isSubmitted) {
-      setFilePath("");
+      setFolderPath("");
       setClientStatus({ isSubmitted: false });
     }
   }, [clientStatus.isSubmitted]);
 
   const openFolderPicker = async () => {
     try {
-      const { canceled, filePaths } = await window.electronAPI.openFileDialog();
+      const { canceled, folderPaths } =
+        await window.electronAPI.openFolderDialog();
 
       if (canceled) {
         console.error("폴더 선택이 취소되었습니다.");
       }
 
-      if (filePaths.length === 0) {
+      if (folderPaths.length === 0) {
         console.error("선택된 경로가 없습니다.");
       }
 
-      const selectedPath = filePaths;
+      setFolderPath(folderPaths);
 
-      setFilePath(selectedPath);
-
-      updateOrder({ [pathType]: selectedPath });
+      updateOrder({ [pathType]: folderPaths });
     } catch (error) {
       console.error("폴더 경로를 여는 중 에러가 발생 :", error);
     }
@@ -43,10 +42,10 @@ function FolderPicker({ isOptional }) {
 
   const appendUserPath = (event) => {
     const userDefinedPath = event.target.value;
-    updateOrder({ [pathType]: filePath + userDefinedPath });
+    updateOrder({ [pathType]: folderPath + userDefinedPath });
   };
 
-  const displayedPath = currentOrder[pathType] || filePath;
+  const displayedPath = currentOrder[pathType] || folderPath;
 
   return (
     <div className="my-3">

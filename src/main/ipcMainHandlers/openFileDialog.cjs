@@ -1,25 +1,38 @@
 const { ipcMain, dialog } = require("electron");
 const path = require("path");
-const os = require("os");
-
-const homeDir = os.homedir();
+const fs = require("fs");
 
 const openFileDialog = () => {
   ipcMain.handle("open-file-dialog", async () => {
     try {
+      const mime = (await import("mime")).default;
       const result = await dialog.showOpenDialog({
-        properties: ["openDirectory"],
+        properties: ["openFile"],
       });
-
       const selectedFilePath = result.filePaths[0];
-      const relativePath = path.relative(homeDir, selectedFilePath);
+      const { base: attachmentName, ext: extension } =
+        path.parse(selectedFilePath);
+      const selectedFileStat = fs.statSync(selectedFilePath);
+
+      if (selectedFileStat.isDirectory()) {
+        return { attachmentName, canceled: result.canceled };
+      }
+
+      const fileBuffer = fs.readFileSync(selectedFilePath);
+      const baseName = path.basename(selectedFilePath);
+      const fileBase64 = fileBuffer.toString("base64");
+      const mimeType = mime.getType(extension);
 
       return {
         canceled: result.canceled,
-        filePaths: relativePath,
+        selectedFilePath,
+        attachmentName,
+        fileBase64,
+        baseName,
+        mimeType,
       };
     } catch (error) {
-      console.error("open-file-dialog handler:", error);
+      console.error("open-file-dialog handler 에러:", error);
       return {
         canceled: true,
         filePaths: "",
