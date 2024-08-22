@@ -19,7 +19,7 @@ const openFolderDialog = () => {
         folderPaths: relativePath,
       };
     } catch (error) {
-      console.error("open-folder-dialog handler:", error);
+      console.error("open-folder-dialog handler 에러:", error);
       return {
         canceled: true,
         filePaths: "",
