@@ -153,7 +153,44 @@
       "__v": 0
     }
   ],
-  "bookmark": [],
+  "bookmark": [
+    {
+      "action": "생성하기",
+      "attachmentName": "image (2).png",
+      "attachmentType": "file",
+      "attachmentUrl": "https://fakeSAWSUrl2",
+      "sourcePath": "",
+      "executionPath": "C:\\Users\\userK\\Downloads",
+      "editingName": "",
+      "_id": {
+        "$oid": "fakeMongooseObjectId"
+      },
+      "createdAt": {
+        "$date": "2024-08-20T16:38:47.895Z"
+      },
+      "updatedAt": {
+        "$date": "2024-08-20T16:38:47.895Z"
+      }
+    },
+    {
+      "action": "이동하기",
+      "attachmentName": "dogpung.gif",
+      "attachmentType": "file",
+      "attachmentUrl": "",
+      "sourcePath": "C:\\Users\\userK\\Pictures",
+      "executionPath": "C:\\Users\\userK\\Documents",
+      "editingName": "",
+      "_id": {
+        "$oid": "fakeMongooseObjectId"
+      },
+      "createdAt": {
+        "$date": "2024-08-20T16:38:47.896Z"
+      },
+      "updatedAt": {
+        "$date": "2024-08-20T16:38:47.896Z"
+      }
+    }
+  ],
   "loginType": "google",
   "refreshToken": "fakeToken",
   "createdAt": {
