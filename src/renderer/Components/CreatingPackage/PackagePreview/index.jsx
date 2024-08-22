@@ -95,7 +95,7 @@ function PackagePreview() {
       try {
         if (error.response.data.error === "Token expired") {
           const userRefreshToken = window.localStorage.getItem("refreshToken");
-          const userId = window.localStorage.getItem("userID");
+          const userId = window.localStorage.getItem("userId");
           const authorization = "Bearer " + userRefreshToken;
 
           const { jwtToken, refreshToken } = await axios.post(
