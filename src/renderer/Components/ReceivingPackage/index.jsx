@@ -7,7 +7,7 @@ import NumberInput from "./NumberInput";
 import { SERIAL_NUMBER_LENGTH } from "../../constants/config";
 
 function ReceivingPackage() {
-  const [isModalOpen, setIsModalOpen] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputNumbers, setInputNumbers] = useState(
     Array(SERIAL_NUMBER_LENGTH).fill(""),
   );
@@ -121,7 +121,7 @@ function ReceivingPackage() {
             .map((_, index) => (
               <NumberInput
                 key={index}
-                onKeyDownFunc={() => {
+                onKeyDownFunc={(event) => {
                   validateNumber(event);
                   updateInputNumbers(event, index);
                 }}
