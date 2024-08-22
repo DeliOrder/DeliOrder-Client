@@ -26,6 +26,14 @@
   @apply my-3 w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700;
 }
 
+.button-blue-round {
+  @apply inline-flex h-10 w-10 items-center justify-center rounded-full border-none bg-blue-600 outline-none hover:bg-blue-700 active:bg-blue-600;
+}
+
+.button-yellow-square {
+  @apply inline-flex h-10 w-10 items-center justify-center rounded border-none bg-yellow-400 outline-none hover:bg-yellow-600 active:bg-yellow-500;
+}
+
 .button-white-border {
   @apply mt-4 inline-block rounded border border-white px-4 py-2 text-sm leading-none text-white hover:border-transparent hover:bg-white hover:text-teal-500 lg:mt-0;
 }
@@ -40,6 +48,10 @@
 
 .text-xs-red {
   @apply mt-2 text-xs text-red-400;
+}
+
+.text-sm-gray-centered {
+  @apply block content-center px-3 text-sm text-gray-500;
 }
 
 .text-base-gray {
