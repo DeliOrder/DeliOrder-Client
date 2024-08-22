@@ -12,9 +12,9 @@ const openFileDialog = () => {
       const selectedFilePath = result.filePaths[0];
       const { base: attachmentName, ext: extension } =
         path.parse(selectedFilePath);
-      const selectFileStat = fs.statSync(selectedFilePath);
+      const selectedFileStat = fs.statSync(selectedFilePath);
 
-      if (selectFileStat.isDirectory()) {
+      if (selectedFileStat.isDirectory()) {
         return { attachmentName, canceled: result.canceled };
       }
 
@@ -32,7 +32,7 @@ const openFileDialog = () => {
         mimeType,
       };
     } catch (error) {
-      console.error("open-file-dialog handler:", error);
+      console.error("open-file-dialog handler 에러:", error);
       return {
         canceled: true,
         filePaths: "",

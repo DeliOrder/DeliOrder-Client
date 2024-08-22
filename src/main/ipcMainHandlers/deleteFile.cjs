@@ -17,7 +17,7 @@ const deleteFile = () => {
       const trash = (await import("trash")).default;
       await trash(convertedFullPath);
     } catch (error) {
-      console.error("delete-file main handler error:", error);
+      console.error("delete-file main handler 에러:", error);
     }
   });
 };
