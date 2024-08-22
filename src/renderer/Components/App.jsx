@@ -14,17 +14,17 @@ import MyPackages from "./MyPackages";
 function App() {
   const { setClientStatus } = usePackageStore();
 
-  const hasPreviousLogin = () => {
+  const hasPreviousLoginInfo = () => {
     const refreshToken = localStorage.getItem("refreshToken");
     const jwtToken = localStorage.getItem("jwtToken");
-    const userId = localStorage.getItem("userID");
+    const userId = localStorage.getItem("userId");
     const targetId = localStorage.getItem("targetId");
 
     return refreshToken && jwtToken && userId && targetId;
   };
 
   useEffect(() => {
-    if (hasPreviousLogin()) {
+    if (hasPreviousLoginInfo()) {
       setClientStatus({ isLogin: true });
     } else {
       window.localStorage.clear();

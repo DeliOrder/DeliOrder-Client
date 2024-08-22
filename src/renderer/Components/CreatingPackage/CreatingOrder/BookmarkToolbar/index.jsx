@@ -17,7 +17,7 @@ function BookmarkToolbar() {
     updateOrder,
   } = usePackageStore();
 
-  const userId = localStorage.getItem("userID");
+  const userId = localStorage.getItem("userId");
   const notifyLoginRequired = () => {
     alert(GUIDE_MESSAGES.REQUIRE_LOGIN);
   };
@@ -39,15 +39,19 @@ function BookmarkToolbar() {
       attachmentUrl: "",
     };
 
-    await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/${userId}/bookmark`,
-      formattedBookmarkData,
-      {
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/${userId}/bookmark`,
+        formattedBookmarkData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      },
-    );
+      );
+    } catch (error) {
+      console.error("즐겨찾기 등록하는 중 에러발생 :", error);
+    }
   };
 
   const handleGetBookmark = async () => {
@@ -56,17 +60,23 @@ function BookmarkToolbar() {
       return;
     }
     const BookmarkTarget = getOrder();
-    const result = await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/${userId}/bookmark`,
-      BookmarkTarget,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
+    let result;
 
-    setBookMarks(result);
+    try {
+      result = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/${userId}/bookmark`,
+        BookmarkTarget,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+    } catch (error) {
+      console.error("즐겨찾기 가져오는 중 에러발생 :", error);
+    }
+
+    setBookMarks(result.data);
     setIsModalOpen(true);
   };
 
@@ -80,6 +90,7 @@ function BookmarkToolbar() {
     return requiredField.every((field) => inputs.field.length > 0);
   };
 
+  //TODO: 모달창 안의 버튼의 키값을 유효한 값으로 넣어주시기 바랍니다.
   return (
     <>
       {bookmarks.length > 0 && (
