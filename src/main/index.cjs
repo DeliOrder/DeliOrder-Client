@@ -15,8 +15,13 @@ require("./ipcMainHandlers/editFileName.cjs");
 const createWindow = () => {
   const BASE_URL = process.env.VITE_BASE_URL;
   const win = new BrowserWindow({
-    width: 1200,
+    width: 1280,
     height: 800,
+    autoHideMenuBar: true,
+    resizable: false,
+    backgroundColor: "#DBEAFE",
+    icon: path.join(__dirname, "../renderer/assets/images/logo.png"),
+    roundedCorners: true,
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.cjs"),
       contextIsolation: true,
