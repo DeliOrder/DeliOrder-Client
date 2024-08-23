@@ -4,11 +4,15 @@ import axios from "axios";
 
 import Modal from "../Modal";
 import NumberInput from "./NumberInput";
+import PreNotification from "./PreNotification";
 import { SERIAL_NUMBER_LENGTH } from "../../constants/config";
 
 function ReceivingPackage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [orders, setOrders] = useState([]);
+
   const navigate = useNavigate();
 
   const validateNumber = (event) => {
@@ -53,8 +57,13 @@ function ReceivingPackage() {
   };
 
   const navigateToMainPage = () => {
-    setIsModalOpen(false);
+    setIsAlertModalOpen(false);
     navigate("/");
+  };
+
+  const handleConfirmReply = (event) => {
+    setIsNotificationOpen(false);
+    return event.target.value === "확인";
   };
 
   const handleReceivePackage = async (event) => {
@@ -73,6 +82,16 @@ function ReceivingPackage() {
       } = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/packages/${serialNumber}`,
       );
+
+      if (orderList) {
+        setOrders(orderList);
+        setIsNotificationOpen(true);
+      }
+
+      if (!handleConfirmReply) {
+        setModalMessage("취소합니다.");
+        setIsAlertModalOpen(true);
+      }
 
       const processActions = async () => {
         for (const order of orderList) {
@@ -102,15 +121,15 @@ function ReceivingPackage() {
       };
 
       processActions();
-      setModalMessage(message);
-      setIsModalOpen(true);
+      setModalMessage(response.data.message);
+      setIsAlertModalOpen(true);
     } catch (error) {
       if (error.response) {
         setModalMessage(error.response.data.message);
       } else {
         setModalMessage("응답을 받지 못했습니다.");
       }
-      setIsModalOpen(true);
+      setIsAlertModalOpen(true);
     }
   };
 
@@ -143,7 +162,7 @@ function ReceivingPackage() {
         >
           받기
         </button>
-        <Modal isOpen={isModalOpen} onClose={navigateToMainPage}>
+        <Modal isOpen={isAlertModalOpen} onClose={navigateToMainPage}>
           <h2 className="mb-4 text-xl font-semibold">DELIORDER</h2>
           <p>{modalMessage}</p>
           <button
@@ -153,6 +172,25 @@ function ReceivingPackage() {
             메인페이지로 이동하기
           </button>
         </Modal>
+        {orders.length > 0 && (
+          <Modal isOpen={isNotificationOpen}>
+            <PreNotification orders={orders} />
+            <p>
+              <button
+                className="button-yellow-square"
+                onClick={handleConfirmReply}
+              >
+                확인
+              </button>
+              <button
+                className="button-yellow-square"
+                onClick={handleConfirmReply}
+              >
+                취소
+              </button>
+            </p>
+          </Modal>
+        )}
       </form>
     </div>
   );
