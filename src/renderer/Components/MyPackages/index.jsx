@@ -1,30 +1,56 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import triangleArrowDown from "@images/triangleArrowDown.svg";
 import axios from "axios";
+import refreshToken from "../../utils/refreshToken";
 
 function MyPackages() {
   const [userHistoryData, setUserHistoryData] = useState([]);
   const [currentSort, setCurrentSort] = useState("sortByNewest");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const userId = window.localStorage.getItem("userId");
     const getUserHistoryData = async () => {
-      const {
-        data: { history },
-      } = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/users/${userId}/history`,
-      );
+      const userId = window.localStorage.getItem("userId");
+      const jwtToken = window.localStorage.getItem("jwtToken");
+      const authorization = "Bearer " + jwtToken;
 
-      setUserHistoryData(
-        history.sort(
-          (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
-        ),
-      );
+      try {
+        const {
+          data: { history },
+        } = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}/users/${userId}/history`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              ...(jwtToken && { authorization }),
+            },
+          },
+        );
+
+        setUserHistoryData(
+          history.sort(
+            (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
+          ),
+        );
+      } catch (error) {
+        if (error.response.data.error === "Unauthorized") {
+          alert("로그인이 필요합니다.");
+          navigate("/login");
+        }
+
+        if (error.response.data.error === "Token expired") {
+          refreshToken();
+          getUserHistoryData();
+        }
+
+        console.error("유저정보를 불러오는 중 오류가 발생하였습니다.", error);
+      }
     };
 
     getUserHistoryData();
-  }, []);
+  }, [navigate]);
 
   const toggleSort = () => {
     let sortedUserHistory;
@@ -94,28 +120,24 @@ function MyPackages() {
                     {`${orderIndex + 1}. ${order.action}`}
                   </span>
                   <span className="text-gray-600">
-                    : "{order.attachmentName}" 을 "{order.executionPath}" 에서
+                    :{" "}
+                    {`"${order.attachmentName}" 을 "${order.executionPath}" 에서`}
                   </span>
                   {order.editingName && (
                     <span className="text-gray-600">
-                      {" "}
-                      "{order.editingName}" 로
+                      {` "${order.editingName}" 로`}
                     </span>
                   )}
                   {order.sourcePath && (
                     <span className="text-gray-600">
-                      {" "}
-                      "{order.sourcePath}" 로
+                      {` "${order.sourcePath}" 로`}
                     </span>
                   )}
                 </div>
               ))}
             </div>
             <div className="mt-6 flex justify-between text-right">
-              <a href="#" className="">
-                링크: 추후에 클릭해서 해당 패키지 내용을 자동적으로 불러오기
-                기능
-              </a>
+              {/* TODO: 추후에 링크 기능 추가 */}
               <p className="text-sm text-gray-400">
                 일련번호: {userPackage.serialNumber}
               </p>
