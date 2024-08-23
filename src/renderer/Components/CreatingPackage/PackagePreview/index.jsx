@@ -6,6 +6,7 @@ import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+  DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -13,17 +14,19 @@ import Modal from "../../Modal";
 
 import usePackageStore from "@renderer/store";
 import Order from "./Order";
+import refreshToken from "../../../utils/refreshToken";
 
 function PackagePreview() {
-  const navigate = useNavigate();
+  const { orders, getOrders, clearOrders } = usePackageStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { orders, getOrders, clearOrders } = usePackageStore();
+  const navigate = useNavigate();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const orderPackage = getOrders();
   const s3Client = new S3Client({
     region: import.meta.env.VITE_AWS_REGION,
     credentials: {
@@ -32,22 +35,18 @@ function PackagePreview() {
     },
   });
 
-  //TODO: 해당 handleFilePackage 함수 추후 2개의 함수로 분리 필요
-  const handleFilePackage = async () => {
-    setIsLoading(true);
-    const orderPackage = getOrders();
-    const fileList = orderPackage.filter(
-      (action) => action.action === "생성하기",
-    );
-
-    // TODO:: console.error 관련 사용자에게 직접 표시되도록 개선 필요
-    if (!fileList.every((action) => action.attachmentType === "file")) {
-      console.error("파일이 선택되지 않았습니다.");
-      setIsLoading(false);
-      return;
-    }
-
+  const uploadFileToAWS = async () => {
     try {
+      const fileList = orderPackage.filter(
+        (action) => action.action === "생성하기",
+      );
+
+      // TODO:: console.error 관련 사용자에게 직접 표시되도록 개선 필요
+      if (!fileList.every((action) => action.attachmentType === "file")) {
+        setIsLoading(false);
+        throw new Error("파일이 선택되지 않았습니다.");
+      }
+
       // TODO: 대용량 파일 전송을 대비한 Promise.allSettled 사용 고려 및 트랜잭션을 고려한 로직 개선 필요
       await Promise.all(
         fileList.map(async (file) => {
@@ -75,7 +74,41 @@ function PackagePreview() {
           return signedUrl;
         }),
       );
+    } catch (error) {
+      throw new Error("AWS에 업로드중 문제가 발생하였습니다.", error);
+    }
+  };
 
+  const deleteFileToAWS = async () => {
+    try {
+      const fileList = orderPackage.filter(
+        (action) => action.action === "생성하기",
+      );
+
+      if (!fileList.every((action) => action.attachmentType === "file")) {
+        setIsLoading(false);
+        throw new Error("파일이 선택되지 않았습니다.");
+      }
+
+      await Promise.all(
+        fileList.map(async (file) => {
+          const deleteParams = {
+            Bucket: import.meta.env.VITE_AWS_BUCKET,
+            Key: file.attachmentName,
+          };
+
+          const deleteCommand = new DeleteObjectCommand(deleteParams);
+          await s3Client.send(deleteCommand);
+        }),
+      );
+    } catch (error) {
+      console.log(error);
+      throw new Error("AWS 파일 삭제중 문제가 발생하였습니다.", error);
+    }
+  };
+
+  const uploadPackageToServer = async () => {
+    try {
       const jwtToken = window.localStorage.getItem("jwtToken");
       const authorization = "Bearer " + jwtToken;
 
@@ -89,37 +122,24 @@ function PackagePreview() {
           },
         },
       );
+    } catch (error) {
+      if (error.response?.data.error === "Token expired") {
+        refreshToken();
+        uploadPackageToServer();
+      }
+      throw new Error("패키지 업로드중 오류가 발생했습니다.", error);
+    }
+  };
 
+  const handleFilePackage = async () => {
+    try {
+      setIsLoading(true);
+      await uploadFileToAWS();
+      await uploadPackageToServer();
       openModal();
     } catch (error) {
-      try {
-        if (error.response.data.error === "Token expired") {
-          const userRefreshToken = window.localStorage.getItem("refreshToken");
-          const userId = window.localStorage.getItem("userId");
-          const authorization = "Bearer " + userRefreshToken;
-
-          const { jwtToken, refreshToken } = await axios.post(
-            `${import.meta.env.VITE_SERVER_URL}/auth/refresh/kakao`,
-            { userId },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                authorization,
-              },
-            },
-          );
-
-          if (refreshToken) {
-            localStorage.setItem("refreshToken", refreshToken);
-          }
-
-          localStorage.setItem("jwtToken", jwtToken);
-          handleFilePackage();
-        }
-      } catch (refreshError) {
-        console.error("토큰 재발급 중 오류 발생", refreshError);
-      }
-      console.error("파일 업로드 중 오류 발생:", error);
+      deleteFileToAWS();
+      console.error("파일을 업로드하던중 문제가 발생하였습니다.", error);
     } finally {
       clearOrders();
       setIsLoading(false);
