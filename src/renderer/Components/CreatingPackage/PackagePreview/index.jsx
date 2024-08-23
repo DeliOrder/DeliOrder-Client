@@ -20,12 +20,10 @@ function PackagePreview() {
   const { orders, getOrders, clearOrders } = usePackageStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [serialNumber, setSerialNumber] = useState("");
+  const [expiredTime, setExpiredTime] = useState("");
   const navigate = useNavigate();
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
   const orderPackage = getOrders();
   const s3Client = new S3Client({
     region: import.meta.env.VITE_AWS_REGION,
@@ -34,6 +32,15 @@ function PackagePreview() {
       secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY_ID,
     },
   });
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(serialNumber);
+  };
 
   const uploadFileToAWS = async () => {
     try {
@@ -66,7 +73,7 @@ function PackagePreview() {
           });
 
           const signedUrl = await getSignedUrl(s3Client, getCommand, {
-            expiresIn: 600,
+            expiresIn: 600000,
           });
 
           file.attachmentUrl = signedUrl;
@@ -112,7 +119,7 @@ function PackagePreview() {
       const jwtToken = window.localStorage.getItem("jwtToken");
       const authorization = "Bearer " + jwtToken;
 
-      await axios.post(
+      const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/packages/new`,
         { orders: orderPackage },
         {
@@ -122,6 +129,7 @@ function PackagePreview() {
           },
         },
       );
+      setSerialNumber(response.data.serialNumber);
     } catch (error) {
       if (error.response?.data.error === "Token expired") {
         refreshToken();
@@ -136,6 +144,11 @@ function PackagePreview() {
       setIsLoading(true);
       await uploadFileToAWS();
       await uploadPackageToServer();
+
+      const now = new Date();
+      const tenMinutesLater = new Date(now.getTime() + 10 * 60000);
+
+      setExpiredTime(tenMinutesLater);
       openModal();
     } catch (error) {
       deleteFileToAWS();
@@ -176,11 +189,14 @@ function PackagePreview() {
             <div className="flex">
               <input
                 type="text"
-                defaultValue="777777"
+                defaultValue={serialNumber}
                 className="flex-grow rounded-l-md border px-2 py-1"
                 readOnly
               />
-              <button className="rounded-r-md bg-blue-400 px-4 py-1 text-white hover:bg-blue-500">
+              <button
+                className="rounded-r-md bg-blue-400 px-4 py-1 text-white hover:bg-blue-500"
+                onClick={copyToClipboard}
+              >
                 복사
               </button>
             </div>
@@ -190,25 +206,26 @@ function PackagePreview() {
             <div className="flex">
               <input
                 type="text"
-                defaultValue="https://www.naver.com"
-                className="flex-grow rounded-l-md border px-2 py-1"
+                defaultValue="링크기능은 현재 준비중입니다."
+                className="flex-grow rounded-l-md border bg-gray-300 px-2 py-1"
                 readOnly
               />
-              <button className="rounded-r-md bg-blue-400 px-4 py-1 text-white hover:bg-blue-500">
+              <button className="disabled cursor-default rounded-r-md bg-gray-400 px-4 py-1 text-black">
                 복사
               </button>
             </div>
           </div>
           <p className="mt-4">
             이 일련번호와 링크주소는 10분 뒤(
-            {new Date().toLocaleTimeString().slice(0, -3)})까지 유효합니다
+            {expiredTime ? expiredTime.toLocaleTimeString().slice(0, -3) : ""}
+            )까지 유효합니다
           </p>
           <div className="flex justify-center">
             <button
               className="mt-4 rounded-md bg-blue-400 px-4 py-2 font-bold text-white hover:bg-blue-500 focus:outline-none"
-              onClick={navigateToMainPage}
+              onClick={closeModal}
             >
-              메인화면으로
+              닫기
             </button>
           </div>
         </div>
