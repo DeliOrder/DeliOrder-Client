@@ -61,6 +61,7 @@ function CreatingOrder() {
                 className="input-text focus:shadow-outline"
                 placeholder="변경할 파일명을 적어주세요."
                 onChange={handleInput}
+                value={currentOrder.editingName}
                 required
               />
             </div>

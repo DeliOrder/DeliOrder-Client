@@ -36,7 +36,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
       return { canceled, fileObj, attachmentName };
     } catch (error) {
-      console.error("Error in openFolderDialog:", error);
+      console.error("Error in openFolderDialog: ", error);
       return {
         canceled: true,
         filePaths: "",
@@ -47,7 +47,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     try {
       await ipcRenderer.invoke("delete-file", order);
     } catch (error) {
-      console.error("delete-file renderer error:", error);
+      console.error("delete-file renderer error: ", error);
     }
   },
   editFileName: async (order) => {
@@ -75,7 +75,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     try {
       await ipcRenderer.invoke("execute-file", order);
     } catch (error) {
-      console.error("Error in replicateFile");
+      console.error("Error in replicateFile: ", error);
     }
   },
   replicateFile: async (order) => {
