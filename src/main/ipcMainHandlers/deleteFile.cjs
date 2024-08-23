@@ -30,8 +30,12 @@ const deleteFile = () => {
 
       const trash = (await import("trash")).default;
       await trash(convertedFullPath);
+
+      return "삭제 성공";
     } catch (error) {
       console.error("delete-file main handler 에러:", error);
+
+      return "삭제 실패";
     }
   });
 };
