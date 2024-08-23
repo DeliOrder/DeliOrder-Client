@@ -6,6 +6,7 @@ import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+  DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -78,6 +79,34 @@ function PackagePreview() {
     }
   };
 
+  const deleteFileToAWS = async () => {
+    try {
+      const fileList = orderPackage.filter(
+        (action) => action.action === "생성하기",
+      );
+
+      if (!fileList.every((action) => action.attachmentType === "file")) {
+        setIsLoading(false);
+        throw new Error("파일이 선택되지 않았습니다.");
+      }
+
+      await Promise.all(
+        fileList.map(async (file) => {
+          const deleteParams = {
+            Bucket: import.meta.env.VITE_AWS_BUCKET,
+            Key: file.attachmentName,
+          };
+
+          const deleteCommand = new DeleteObjectCommand(deleteParams);
+          await s3Client.send(deleteCommand);
+        }),
+      );
+    } catch (error) {
+      console.log(error);
+      throw new Error("AWS 파일 삭제중 문제가 발생하였습니다.", error);
+    }
+  };
+
   const uploadPackageToServer = async () => {
     try {
       const jwtToken = window.localStorage.getItem("jwtToken");
@@ -102,7 +131,6 @@ function PackagePreview() {
     }
   };
 
-  //TODO: 해당 handleFilePackage 함수 추후 2개의 함수로 분리 필요
   const handleFilePackage = async () => {
     try {
       setIsLoading(true);
@@ -110,6 +138,7 @@ function PackagePreview() {
       await uploadPackageToServer();
       openModal();
     } catch (error) {
+      deleteFileToAWS();
       console.error("파일을 업로드하던중 문제가 발생하였습니다.", error);
     } finally {
       clearOrders();
