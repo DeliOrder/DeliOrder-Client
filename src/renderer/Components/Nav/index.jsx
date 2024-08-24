@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
+
 import usePackageStore from "@renderer/store";
+import { getAuth, signOut } from "firebase/auth";
 
 import DeliLogo from "../../assets/images/logo.png";
 
@@ -13,13 +15,35 @@ function Nav() {
   const handleLogOut = async () => {
     if (!isLogin) return;
 
-    try {
-      const target_id = window.localStorage.getItem("targetId");
+    let auth;
 
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/sign-out/kakao`,
-        { target_id },
-      );
+    try {
+      const loginType = window.localStorage.getItem("deliOrderProvider");
+      const deliOrderToken = window.localStorage.getItem("deliOrderToken");
+      const authorization = "Bearer " + deliOrderToken;
+
+      switch (loginType) {
+        case "kakao":
+          await axios.post(
+            `${import.meta.env.VITE_SERVER_URL}/auth/sign-out/kakao`,
+            { deliOrderToken },
+            {
+              headers: {
+                ...(deliOrderToken && { authorization }),
+              },
+            },
+          );
+          break;
+        case "google":
+        case "local":
+          auth = getAuth();
+          try {
+            await signOut(auth);
+          } catch (error) {
+            console.error(error, "구글 로그아웃 에러");
+          }
+          break;
+      }
 
       window.localStorage.clear();
       setClientStatus({ isLogin: false });
