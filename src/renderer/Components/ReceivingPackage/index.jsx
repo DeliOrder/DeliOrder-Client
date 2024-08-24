@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Modal from "../Modal";
-import InfoModal from "../InfoModal";
 import NumberInput from "./NumberInput";
 import PreNotification from "./PreNotification";
 import { SERIAL_NUMBER_LENGTH } from "../../constants/config";
 
+<<<<<<< HEAD
 function ReceivingPackage() {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [infoModalMessage, setInfoModalMessage] = useState("");
@@ -61,20 +61,34 @@ function ReceivingPackage() {
   };
 
 =======
+=======
+import useModalConfig from "../../utils/useModalConfig";
+>>>>>>> a64b85c (Feat: 패키지 실행 결과를 보여줍니다.)
 
-  const [currentOrders, setCurrentOrders] = useState([]);
+function ReceivingPackage() {
   const [inputNumbers, setInputNumbers] = useState(
     Array(SERIAL_NUMBER_LENGTH).fill(""),
   );
 
+  const { modalConfig: resultModalConfig, openModal: openResultModal } =
+    useModalConfig();
+
+  const { modalConfig: infoModalConfig, openModal: openInfoModal } =
+    useModalConfig();
+
+  const {
+    modalConfig: confirmModalConfig,
+    openModal: openConfirmModal,
+    closeModal: closeConfirmModal,
+  } = useModalConfig();
+
   const navigate = useNavigate();
 >>>>>>> 42310f0 (Feat: 각 오더의 결과값을 받아올 수 있도록 로직 구현)
   const navigateToMainPage = () => {
-    setIsInfoModalOpen(false);
     navigate("/");
   };
 
-  const handleRetrieveOrder = async (event) => {
+  const handleGetOrder = async (event) => {
     event.preventDefault();
 
     try {
@@ -91,7 +105,10 @@ function ReceivingPackage() {
       } = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/packages/${serialNumber}`,
       );
+      console.log("조회완료");
+      const currentPackage = response.data.existPackage.orders;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
       if (orderList) {
         setOrders(orderList);
@@ -139,17 +156,36 @@ function ReceivingPackage() {
 
       setIsNotificationOpen(true);
 >>>>>>> 42310f0 (Feat: 각 오더의 결과값을 받아올 수 있도록 로직 구현)
+=======
+      openConfirmModal(
+        <>
+          <PreNotification orders={currentPackage} />
+          <p className="my-2 flex justify-around">
+            <button
+              type="button"
+              onClick={() => handleProcessPackage(currentPackage)}
+              className="button-yellow-square w-24"
+            >
+              확인
+            </button>
+          </p>
+        </>,
+        "패키지 내용 확인",
+        navigateToMainPage,
+      );
+>>>>>>> a64b85c (Feat: 패키지 실행 결과를 보여줍니다.)
     } catch (error) {
-      error.response
-        ? setInfoModalMessage(error.response.data.message)
-        : setInfoModalMessage("응답을 받지 못했습니다.");
-
-      setIsInfoModalOpen(true);
+      openInfoModal(
+        error.response
+          ? error.response.data.message
+          : "응답을 받지 못했습니다.",
+        "오류",
+      );
     }
   };
 
   const handleProcessPackage = async (orderList) => {
-    const results = await Promise.all(
+    const processResults = await Promise.all(
       orderList.map(async (order) => {
         switch (order.action) {
           case "생성하기":
@@ -170,7 +206,16 @@ function ReceivingPackage() {
       }),
     );
 
-    setProcessResults(results);
+    openResultModal(
+      processResults.map((result, index) => (
+        <p key={index} className="mt-2 text-xs">
+          {result}
+        </p>
+      )),
+      "실행결과",
+    );
+
+    closeConfirmModal();
   };
 
   return (
@@ -205,43 +250,20 @@ function ReceivingPackage() {
         <button
           type="submit"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
           onClick={handleRetrieveOrder}
 >>>>>>> 42310f0 (Feat: 각 오더의 결과값을 받아올 수 있도록 로직 구현)
+=======
+          onClick={handleGetOrder}
+>>>>>>> a64b85c (Feat: 패키지 실행 결과를 보여줍니다.)
           className="m-5 w-1/3 transform rounded-full bg-slate-200 p-5 text-3xl shadow-lg transition duration-300 hover:scale-105"
         >
           받기
         </button>
-        <InfoModal isOpen={isInfoModalOpen} onClose={navigateToMainPage}>
-          <h2 className="mb-4 text-xl font-semibold">DELIORDER</h2>
-          <p>{infoModalMessage}</p>
-        </InfoModal>
-        <Modal isOpen={isNotificationOpen.length > 0}>
-          <PreNotification orders={currentOrders} />
-          <p className="my-2 flex justify-around">
-            <button
-              className="button-yellow-square w-24"
-              onClick={() => handleProcessPackage(currentOrders)}
-            >
-              확인
-            </button>
-            <button
-              className="button-yellow-square w-24"
-              onClick={() => setIsNotificationOpen(false)}
-            >
-              취소
-            </button>
-          </p>
-        </Modal>
-        <InfoModal
-          isOpen={processResults.length > 0}
-          onClose={() => setProcessResults([])}
-        >
-          <h2 className="mb-4 text-xl font-semibold">DELIORDER</h2>
-          {processResults.map((result) => (
-            <p key={result}>{result}</p>
-          ))}
-        </InfoModal>
+        <Modal modalConfig={infoModalConfig} />
+        <Modal modalConfig={confirmModalConfig} />
+        <Modal modalConfig={resultModalConfig} />
       </form>
     </div>
   );
