@@ -116,8 +116,8 @@ function PackagePreview() {
 
   const uploadPackageToServer = async () => {
     try {
-      const jwtToken = window.localStorage.getItem("jwtToken");
-      const authorization = "Bearer " + jwtToken;
+      const deliOrderToken = window.localStorage.getItem("deliOrderToken");
+      const authorization = "Bearer " + deliOrderToken;
 
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/packages/new`,
@@ -125,7 +125,7 @@ function PackagePreview() {
         {
           headers: {
             "Content-Type": "application/json",
-            ...(jwtToken && { authorization }),
+            ...(deliOrderToken && { authorization }),
           },
         },
       );
@@ -163,7 +163,7 @@ function PackagePreview() {
     closeModal();
     navigate("/");
   };
-  // TODO: 링크 및 일련번호 생성 후 모달창에 동적으로 값부여 및 복사버튼에 기능부여 필요
+
   return (
     <div className="relative w-3/5 bg-white px-6 pb-8 pt-10 shadow-sm ring-1 ring-gray-900/5 sm:mr-3 sm:max-w-full sm:rounded-lg sm:px-10">
       <label className="mb-2 block text-xl font-bold text-gray-700">

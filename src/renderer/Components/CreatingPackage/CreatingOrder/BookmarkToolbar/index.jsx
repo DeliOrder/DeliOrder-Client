@@ -23,9 +23,9 @@ function BookmarkToolbar() {
     updateOrder,
   } = usePackageStore();
 
-  const userId = window.localStorage.getItem("userId");
-  const jwtToken = window.localStorage.getItem("jwtToken");
-  const authorization = "Bearer " + jwtToken;
+  const userId = window.localStorage.getItem("deliOrderUserId");
+  const deliOrderToken = window.localStorage.getItem("deliOrderToken");
+  const authorization = "Bearer " + deliOrderToken;
 
   const notifyLoginRequired = () => {
     setIsError(true);
@@ -62,7 +62,7 @@ function BookmarkToolbar() {
         {
           headers: {
             "Content-Type": "application/json",
-            ...(jwtToken && { authorization }),
+            ...(deliOrderToken && { authorization }),
           },
         },
       );
@@ -113,7 +113,7 @@ function BookmarkToolbar() {
         {
           headers: {
             "Content-Type": "application/json",
-            ...(jwtToken && { authorization }),
+            ...(deliOrderToken && { authorization }),
           },
         },
       );
@@ -178,7 +178,7 @@ function BookmarkToolbar() {
         <Modal isOpen={isModalOpen}>
           {bookmarks.map((bookmark, index) => (
             <button
-              key={bookmark.createdAt}
+              key={bookmark._id}
               className="button-base-blue"
               onClick={() => {
                 applyBookmark(index);

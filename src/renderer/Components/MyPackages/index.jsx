@@ -12,9 +12,9 @@ function MyPackages() {
 
   useEffect(() => {
     const getUserHistoryData = async () => {
-      const userId = window.localStorage.getItem("userId");
-      const jwtToken = window.localStorage.getItem("jwtToken");
-      const authorization = "Bearer " + jwtToken;
+      const userId = window.localStorage.getItem("deliOrderUserId");
+      const deliOrderToken = window.localStorage.getItem("deliOrderToken");
+      const authorization = "Bearer " + deliOrderToken;
 
       try {
         const {
@@ -24,7 +24,7 @@ function MyPackages() {
           {
             headers: {
               "Content-Type": "application/json",
-              ...(jwtToken && { authorization }),
+              ...(deliOrderToken && { authorization }),
             },
           },
         );
@@ -44,7 +44,6 @@ function MyPackages() {
           refreshToken();
           getUserHistoryData();
         }
-
         console.error("유저정보를 불러오는 중 오류가 발생하였습니다.", error);
       }
     };

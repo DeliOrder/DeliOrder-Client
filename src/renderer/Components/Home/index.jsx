@@ -1,7 +1,9 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
+import { signInWithCustomToken } from "firebase/auth";
 import axios from "axios";
 
+import { auth } from "../../firebase";
 import usePackageStore from "@renderer/store";
 
 import DeliLogo from "@renderer/assets/images/logo.png";
@@ -15,17 +17,22 @@ function Home() {
     const getJwtToken = async () => {
       try {
         const authCode = searchParams.get("code");
-        const {
-          data: { jwtToken, refreshToken, target_id, _id },
-        } = await axios.post(
+        const response = await axios.post(
           `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/kakao`,
           { authCode },
         );
 
-        window.localStorage.setItem("jwtToken", jwtToken);
-        window.localStorage.setItem("refreshToken", refreshToken);
-        window.localStorage.setItem("targetId", target_id);
-        window.localStorage.setItem("userId", _id);
+        const { firebaseToken, deliOrderToken, userId, loginType } =
+          response.data;
+
+        await signInWithCustomToken(auth, firebaseToken);
+        console.log("Firebase login success");
+
+        window.localStorage.setItem("deliOrderToken", deliOrderToken);
+        window.localStorage.setItem("deliOrderUserId", userId);
+        window.localStorage.setItem("deliOrderProvider", loginType);
+
+        navigate("/");
       } catch (error) {
         // TODO: 추후 에러관련 처리
         throw new Error(error);
