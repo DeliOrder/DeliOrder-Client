@@ -109,7 +109,6 @@ function PackagePreview() {
         }),
       );
     } catch (error) {
-      console.log(error);
       throw new Error("AWS 파일 삭제중 문제가 발생하였습니다.", error);
     }
   };
