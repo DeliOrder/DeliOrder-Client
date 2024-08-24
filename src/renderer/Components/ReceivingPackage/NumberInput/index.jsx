@@ -23,7 +23,15 @@ function NumberInput({ inputNumbers, setInputNumbers, index }) {
   };
 
   const updateInputNumbers = (event, index) => {
-    if (!isNaN(event.key) && event.key.trim() !== "") {
+    if (event.target.value && event.code !== "Backspace") {
+      return event.target.nextSibling?.focus();
+    }
+
+    if (!event.target.value && event.code === "Backspace") {
+      return event.target.previousSibling?.focus();
+    }
+
+    if (!Number.isNaN(event.key) && event.key.trim() !== "") {
       const tempNumbers = [...inputNumbers];
       tempNumbers[index] = event.key;
       setInputNumbers(tempNumbers);
