@@ -37,7 +37,7 @@ const moveFile = () => {
           console.error("파일 이동 중 오류 발생:", error);
           return;
         }
-        console.log(`파일이 ${convertedNewFullPath}로 이동하였습니다.`);
+        console.error(`파일이 ${convertedNewFullPath}로 이동하였습니다.`);
         return "이동 성공";
       });
 >>>>>>> 42310f0 (Feat: 각 오더의 결과값을 받아올 수 있도록 로직 구현)

@@ -49,7 +49,7 @@ const replicateFile = () => {
 =======
       fs.copyFile(convertedFullPath, copyFilePath, (error) => {
         if (error) {
-          console.log("replicate-file main handler 에러:", error);
+          console.error("replicate-file main handler 에러:", error);
         } else {
           return "복제 성공";
         }
