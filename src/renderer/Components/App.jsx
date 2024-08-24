@@ -17,7 +17,7 @@ function App() {
   const hasPreviousLoginInfo = () => {
     const refreshToken = localStorage.getItem("refreshToken");
     const jwtToken = localStorage.getItem("jwtToken");
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("deliOrderUserId");
     const targetId = localStorage.getItem("targetId");
 
     return refreshToken && jwtToken && userId && targetId;
