@@ -13,8 +13,10 @@ const openFolderDialog = () => {
 
       const selectedFolderPath = result.filePaths[0];
       const relativePath = path.relative(homeDir, selectedFolderPath);
+      const { base: attachmentName } = path.parse(relativePath);
 
       return {
+        attachmentName,
         canceled: result.canceled,
         folderPaths: relativePath,
       };

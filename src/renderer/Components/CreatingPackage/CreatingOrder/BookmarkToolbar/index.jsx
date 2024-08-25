@@ -18,7 +18,7 @@ function BookmarkToolbar() {
   const [isError, setIsError] = useState(false);
 
   const {
-    clientStatus: { isLogin },
+    clientStatus: { isLogin, isPickFile },
     getOrder,
     updateOrder,
   } = usePackageStore();
@@ -161,7 +161,9 @@ function BookmarkToolbar() {
   };
 
   const validateRequiredInputs = (inputs) => {
-    const requiredField = ["action", "attachmentName", "executionPath"];
+    const requiredField = isPickFile
+      ? ["action", "attachmentName", "executionPath"]
+      : ["action", "executionPath"];
     return requiredField.every((field) => inputs[field].length > 0);
   };
 
