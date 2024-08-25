@@ -5,7 +5,7 @@ function FilePicker() {
   const { updateOrder, getOrder, getClientStatus, setClientStatus } =
     usePackageStore();
   const currentOrder = getOrder();
-  const { isPickFile, isPickOptionDefault } = getClientStatus();
+  const { isPickFile, isUsingFilePicker } = getClientStatus();
 
   const setFileInfo = (event) => {
     updateOrder({
@@ -66,8 +66,8 @@ function FilePicker() {
             <label>
               <input
                 type="radio"
-                checked={isPickOptionDefault}
-                onChange={() => setClientStatus({ isPickOptionDefault: true })}
+                checked={isUsingFilePicker}
+                onChange={() => setClientStatus({ isUsingFilePicker: true })}
               />
               파일선택기
             </label>
@@ -75,16 +75,14 @@ function FilePicker() {
               <label>
                 <input
                   type="radio"
-                  checked={!isPickOptionDefault}
-                  onChange={() =>
-                    setClientStatus({ isPickOptionDefault: false })
-                  }
+                  checked={!isUsingFilePicker}
+                  onChange={() => setClientStatus({ isUsingFilePicker: false })}
                 />
                 직접 입력하기
               </label>
             )}
           </div>
-          {isPickOptionDefault ? (
+          {isUsingFilePicker ? (
             <button
               type="button"
               className="input-base focus:shadow-outline"

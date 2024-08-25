@@ -20,11 +20,8 @@ const executeFile = () => {
         : path.join(order.executionPath, order.attachmentName);
     const convertedFullPath = convertPath(fullPath);
 
-    if (
-      !fs.existsSync(convertedFullPath) &&
-      order.attachmentType !== "folder"
-    ) {
-      throw new Error("해당 위치에 요청한 파일이 없습니다.");
+    if (!fs.existsSync(convertedFullPath)) {
+      throw new Error("해당 위치에 요청한 파일 또는 폴더가 없습니다.");
     }
 
     try {

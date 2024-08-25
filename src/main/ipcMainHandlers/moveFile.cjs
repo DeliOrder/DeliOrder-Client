@@ -21,13 +21,7 @@ const moveFile = () => {
         fs.mkdirSync(convertedFolderPath, { recursive: true });
       }
 
-      fs.rename(convertedOldFullPath, convertedNewFullPath, (error) => {
-        if (error) {
-          console.error("파일 이동 중 오류 발생:", error);
-          return;
-        }
-        console.log(`파일이 ${convertedNewFullPath}로 이동하였습니다.`);
-      });
+      fs.renameSync(convertedOldFullPath, convertedNewFullPath);
     } catch (error) {
       console.error("moving-file main handler 에러:", error);
     }
