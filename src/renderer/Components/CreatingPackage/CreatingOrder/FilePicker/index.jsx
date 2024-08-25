@@ -1,12 +1,11 @@
-import { useState } from "react";
-
 import usePackageStore from "@renderer/store";
 import { GUIDE_MESSAGES } from "@renderer/constants/messages";
 
 function FilePicker() {
-  const [isPickOptionDefault, setIsPickOptionDefault] = useState(true);
-  const { updateOrder, getOrder } = usePackageStore();
+  const { updateOrder, getOrder, getClientStatus, setClientStatus } =
+    usePackageStore();
   const currentOrder = getOrder();
+  const { isPickFile, isPickOptionDefault } = getClientStatus();
 
   const setFileInfo = (event) => {
     updateOrder({
@@ -14,6 +13,7 @@ function FilePicker() {
       attachmentType: "string",
     });
   };
+
   const openFilePicker = async () => {
     try {
       const { attachmentName, canceled, fileObj } =
@@ -38,46 +38,74 @@ function FilePicker() {
 
   return (
     <div className="my-3">
-      <label className="label-small">대상파일 선택하기</label>
-      <div className="my-1 flex justify-start space-x-4 text-gray-500">
-        <span>선택방법 :</span>
+      <label className="label-small flex gap-4">
+        대상 선택하기:
         <label>
           <input
             type="radio"
-            checked={isPickOptionDefault}
-            onChange={() => setIsPickOptionDefault(true)}
+            checked={isPickFile}
+            onChange={() => setClientStatus({ isPickFile: true })}
           />
-          파일선택기
+          파일
         </label>
         {currentOrder.action !== "생성하기" && (
           <label>
             <input
               type="radio"
-              checked={!isPickOptionDefault}
-              onChange={() => setIsPickOptionDefault(false)}
+              checked={!isPickFile}
+              onChange={() => setClientStatus({ isPickFile: false })}
             />
-            직접 입력하기
+            폴더
           </label>
         )}
-      </div>
-      {isPickOptionDefault ? (
-        <button
-          type="button"
-          className="input-base focus:shadow-outline"
-          onClick={openFilePicker}
-        >
-          파일을 선택해 주세요.
-        </button>
-      ) : (
-        <input
-          type="text"
-          className="input-text focus:shadow-outline file:bg-gray-00"
-          placeholder="파일명 입력하기 (예: dog.gif)"
-          onChange={setFileInfo}
-        />
+      </label>
+      {isPickFile && (
+        <>
+          <div className="my-1 flex justify-start space-x-4 text-gray-500">
+            <span>선택방법 :</span>
+            <label>
+              <input
+                type="radio"
+                checked={isPickOptionDefault}
+                onChange={() => setClientStatus({ isPickOptionDefault: true })}
+              />
+              파일선택기
+            </label>
+            {currentOrder.action !== "생성하기" && (
+              <label>
+                <input
+                  type="radio"
+                  checked={!isPickOptionDefault}
+                  onChange={() =>
+                    setClientStatus({ isPickOptionDefault: false })
+                  }
+                />
+                직접 입력하기
+              </label>
+            )}
+          </div>
+          {isPickOptionDefault ? (
+            <button
+              type="button"
+              className="input-base focus:shadow-outline"
+              onClick={openFilePicker}
+            >
+              파일을 선택해 주세요.
+            </button>
+          ) : (
+            <input
+              type="text"
+              className="input-text focus:shadow-outline file:bg-gray-00"
+              placeholder="파일명 입력하기 (예: dog.gif)"
+              onChange={setFileInfo}
+            />
+          )}
+          <p className="text-xs-gray">{GUIDE_MESSAGES.COMPRESSION_NOTICE}</p>
+          <p className="text-base-gray">
+            File Name: {currentOrder.attachmentName}
+          </p>
+        </>
       )}
-      <p className="text-xs-gray">{GUIDE_MESSAGES.COMPRESSION_NOTICE}</p>
-      <p className="text-base-gray">File Name: {currentOrder.attachmentName}</p>
     </div>
   );
 }

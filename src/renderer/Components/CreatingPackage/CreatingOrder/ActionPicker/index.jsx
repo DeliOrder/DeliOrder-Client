@@ -2,10 +2,17 @@ import usePackageStore from "@renderer/store";
 
 function ActionPicker() {
   const { updateOrder, getOrder } = usePackageStore();
+  const { setClientStatus } = usePackageStore();
   const currentOrder = getOrder();
 
   const handleActionChange = (event) => {
-    updateOrder({ action: event.target.value });
+    const selectedAction = event.target.value;
+
+    if (selectedAction === "생성하기") {
+      setClientStatus({ isPickFile: true, isPickOptionDefault: true });
+    }
+
+    updateOrder({ action: selectedAction });
   };
 
   return (
