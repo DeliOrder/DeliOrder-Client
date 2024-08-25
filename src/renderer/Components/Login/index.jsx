@@ -1,14 +1,130 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import axios from "axios";
+
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+
+import { auth } from "../../firebase";
+import usePackageStore from "@renderer/store";
+
 import googleLogo from "../../assets/images/googleLogo.svg";
 import kakaoLogo from "../../assets/images/kakaoLogo.svg";
 
 function Login() {
-  const handleKakaoLogin = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${import.meta.env.VITE_KAKAO_KEY}&redirect_uri=${import.meta.env.VITE_BASE_URL}&response_type=code`;
+  const navigate = useNavigate();
+  const { setClientStatus } = usePackageStore();
+
+  const [emailValue, setEmailValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
+
+  useEffect(() => {
+    if (window.Kakao && !window.Kakao.isInitialized()) {
+      window.Kakao.init(import.meta.env.VITE_KAKAO_KEY);
+    }
+  }, []);
+
+  const handleEmailLogin = async (event) => {
+    event.preventDefault();
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        emailValue,
+        passwordValue,
+      );
+      const firebaseIdToken = await userCredential.user.getIdToken();
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/local`,
+        { firebaseIdToken },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${firebaseIdToken}`,
+          },
+        },
+      );
+
+      const { deliOrderToken, deliOrderRefreshToken, userId, loginType } =
+        response.data;
+      window.localStorage.setItem("deliOrderToken", deliOrderToken);
+      window.localStorage.setItem(
+        "deliOrderRefreshToken",
+        deliOrderRefreshToken,
+      );
+      window.localStorage.setItem("deliOrderUserId", userId);
+      window.localStorage.setItem("deliOrderAuthProvider", loginType);
+
+      setClientStatus({ isLogin: true });
+      navigate("/");
+    } catch (error) {
+      console.error("이메일 로그인 실패: ", error);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      const user = userCredential.user;
+      const firebaseIdToken = await user.getIdToken();
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/google`,
+        { firebaseIdToken },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${firebaseIdToken}`,
+          },
+        },
+      );
+
+      const { deliOrderToken, deliOrderRefreshToken, userId, loginType } =
+        response.data;
+      window.localStorage.setItem("deliOrderToken", deliOrderToken);
+      window.localStorage.setItem(
+        "deliOrderRefreshToken",
+        deliOrderRefreshToken,
+      );
+      window.localStorage.setItem("deliOrderUserId", userId);
+      window.localStorage.setItem("deliOrderAuthProvider", loginType);
+
+      setClientStatus({ isLogin: true });
+      navigate("/");
+    } catch (error) {
+      console.error("구글 로그인 실패", error);
+    }
+  };
+  const handleKakaoLogin = async () => {
+    try {
+      const response = await window.Kakao.Auth.authorize({
+        redirectUri: `${import.meta.env.VITE_BASE_URL}`,
+      });
+      const { access_token } = response;
+
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/kakao`,
+        {
+          token: access_token,
+        },
+      );
+    } catch (error) {
+      console.error("카카오 로그인 실패:", error);
+    }
   };
 
   return (
     <div className="flex flex-grow items-center justify-center p-4">
-      <form className="m-4 w-[400px] rounded border-gray-600 bg-white p-6 shadow-md">
+      <form
+        className="m-4 w-[400px] rounded border-gray-600 bg-white p-6 shadow-md"
+        onSubmit={handleEmailLogin}
+      >
         <div className="mb-4">
           <label
             className="mb-2 block text-sm font-bold text-gray-700"
@@ -21,6 +137,7 @@ function Login() {
             id="user-mail"
             name="user-mail"
             type="email"
+            onChange={(event) => setEmailValue(event.target.value)}
           />
         </div>
         <div className="mb-6">
@@ -35,12 +152,13 @@ function Login() {
             id="password"
             name="password"
             type="password"
+            onChange={(event) => setPasswordValue(event.target.value)}
           />
         </div>
         <div className="flex items-center justify-center">
           <button
             className="focus:shadow-outline mb-8 w-full rounded-md bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-            type="button"
+            type="submit"
           >
             이메일 로그인
           </button>
@@ -50,6 +168,7 @@ function Login() {
           <button
             className="focus:shadow-outline mb-4 flex w-full items-center justify-center rounded-md bg-slate-200 px-4 py-2 font-bold text-black hover:bg-slate-300"
             type="button"
+            onClick={handleGoogleLogin}
           >
             <img src={googleLogo} alt="Google Icon" className="mr-2 h-6 w-6" />
             구글 로그인
@@ -65,12 +184,12 @@ function Login() {
         </div>
         <div className="text-center">
           <p className="mb-2 text-sm font-bold">DELIORDER가 처음이신가요?</p>
-          <a
+          <Link
             className="m-2 inline-block text-sm font-bold text-blue-500 hover:underline"
-            href="/signUp"
+            to="/signUp"
           >
             이메일로 가입하기
-          </a>
+          </Link>
         </div>
       </form>
     </div>

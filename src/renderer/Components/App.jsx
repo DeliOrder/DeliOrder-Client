@@ -15,12 +15,13 @@ function App() {
   const { setClientStatus } = usePackageStore();
 
   const hasPreviousLoginInfo = () => {
-    const refreshToken = localStorage.getItem("refreshToken");
-    const jwtToken = localStorage.getItem("jwtToken");
-    const userId = localStorage.getItem("userId");
-    const targetId = localStorage.getItem("targetId");
+    const deliOrderToken = window.localStorage.getItem("deliOrderToken");
+    const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
+    const deliOrderAuthProvider = window.localStorage.getItem(
+      "deliOrderAuthProvider",
+    );
 
-    return refreshToken && jwtToken && userId && targetId;
+    return deliOrderToken && deliOrderUserId && deliOrderAuthProvider;
   };
 
   useEffect(() => {
