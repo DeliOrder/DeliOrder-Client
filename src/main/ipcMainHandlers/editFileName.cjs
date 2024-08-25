@@ -7,13 +7,19 @@ const { convertPath } = require("../utils/convertPath.cjs");
 const editFileName = () => {
   ipcMain.handle("edit-file-name", async (event, order) => {
     try {
-      const oldFullPath = path.join(order.executionPath, order.attachmentName);
-      const convertedOldFullPath = convertPath(oldFullPath);
+      if (order.attachmentType === "folder") {
+        order.executionPath = path.dirname(order.executionPath);
+      }
 
+      const oldFullPath = path.join(order.executionPath, order.attachmentName);
       const newFullPath = path.join(order.executionPath, order.editingName);
+      const convertedOldFullPath = convertPath(oldFullPath);
       const convertedNewFullPath = convertPath(newFullPath);
 
-      if (!fs.existsSync(convertedOldFullPath)) {
+      if (
+        !fs.existsSync(convertedOldFullPath) &&
+        order.attachmentType !== "folder"
+      ) {
         throw new Error("해당 위치에 요청한 파일이 없습니다.");
       }
 
