@@ -17,20 +17,20 @@ function FolderPicker({ isOptional }) {
       setFolderPath("");
       setClientStatus({ isSubmitted: false });
     }
-  }, [clientStatus.isSubmitted]);
+  }, [clientStatus.isSubmitted, setFolderPath, setClientStatus]);
 
   useEffect(() => {
+    const updateAttachmentName = (path) => {
+      const pathArray = path.split("/");
+      const attachmentName = pathArray[pathArray.length - 1];
+
+      updateOrder({ attachmentName });
+    };
+
     if (currentOrder.sourcePath) {
       updateAttachmentName(currentOrder.sourcePath);
     }
-  }, [currentOrder.sourcePath, currentOrder.executionPath]);
-
-  const updateAttachmentName = (path) => {
-    const pathArray = path.split("/");
-    const attachmentName = pathArray[pathArray.length - 1];
-
-    updateOrder({ attachmentName });
-  };
+  }, [currentOrder.sourcePath, currentOrder.executionPath, updateOrder]);
 
   const openFolderPicker = async () => {
     try {
