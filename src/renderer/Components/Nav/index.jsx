@@ -18,7 +18,7 @@ function Nav() {
     let auth;
 
     try {
-      const loginType = window.localStorage.getItem("deliOrderProvider");
+      const loginType = window.localStorage.getItem("deliOrderAuthProvider");
       const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
 
       switch (loginType) {
