@@ -32,7 +32,6 @@ function Home() {
         } = response.data;
 
         await signInWithCustomToken(auth, firebaseToken);
-        console.log("Firebase login success");
 
         window.localStorage.setItem("deliOrderToken", deliOrderToken);
         window.localStorage.setItem(
@@ -40,14 +39,13 @@ function Home() {
           deliOrderRefreshToken,
         );
         window.localStorage.setItem("deliOrderUserId", userId);
-        window.localStorage.setItem("deliOrderProvider", loginType);
+        window.localStorage.setItem("deliOrderAuthProvider", loginType);
 
+        setClientStatus({ isLogin: true });
         navigate("/");
       } catch (error) {
         // TODO: 추후 에러관련 처리
         throw new Error(error);
-      } finally {
-        setClientStatus({ isLogin: true });
       }
     };
 

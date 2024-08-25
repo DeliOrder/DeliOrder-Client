@@ -17,9 +17,11 @@ function App() {
   const hasPreviousLoginInfo = () => {
     const deliOrderToken = window.localStorage.getItem("deliOrderToken");
     const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
-    const deliOrderProvider = window.localStorage.getItem("deliOrderProvider");
+    const deliOrderAuthProvider = window.localStorage.getItem(
+      "deliOrderAuthProvider",
+    );
 
-    return deliOrderToken && deliOrderUserId && deliOrderProvider;
+    return deliOrderToken && deliOrderUserId && deliOrderAuthProvider;
   };
 
   useEffect(() => {

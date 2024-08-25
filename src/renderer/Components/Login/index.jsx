@@ -28,7 +28,7 @@ function Login() {
     }
   }, []);
 
-  const handleLocalLogin = async (event) => {
+  const handleEmailLogin = async (event) => {
     event.preventDefault();
 
     try {
@@ -58,7 +58,7 @@ function Login() {
         deliOrderRefreshToken,
       );
       window.localStorage.setItem("deliOrderUserId", userId);
-      window.localStorage.setItem("deliOrderProvider", loginType);
+      window.localStorage.setItem("deliOrderAuthProvider", loginType);
 
       setClientStatus({ isLogin: true });
       navigate("/");
@@ -72,7 +72,6 @@ function Login() {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const user = userCredential.user;
-
       const firebaseIdToken = await user.getIdToken();
 
       const response = await axios.post(
@@ -94,10 +93,9 @@ function Login() {
         deliOrderRefreshToken,
       );
       window.localStorage.setItem("deliOrderUserId", userId);
-      window.localStorage.setItem("deliOrderProvider", loginType);
+      window.localStorage.setItem("deliOrderAuthProvider", loginType);
 
       setClientStatus({ isLogin: true });
-
       navigate("/");
     } catch (error) {
       console.error("구글 로그인 실패", error);
@@ -105,7 +103,7 @@ function Login() {
   };
   const handleKakaoLogin = async () => {
     try {
-      const response = await await window.Kakao.Auth.authorize({
+      const response = await window.Kakao.Auth.authorize({
         redirectUri: `${import.meta.env.VITE_BASE_URL}`,
       });
       const { access_token } = response;
@@ -117,7 +115,7 @@ function Login() {
         },
       );
     } catch (error) {
-      console.error("Kakao login failed:", error);
+      console.error("카카오 로그인 실패:", error);
     }
   };
 
@@ -125,7 +123,7 @@ function Login() {
     <div className="flex flex-grow items-center justify-center p-4">
       <form
         className="m-4 w-[400px] rounded border-gray-600 bg-white p-6 shadow-md"
-        onSubmit={handleLocalLogin}
+        onSubmit={handleEmailLogin}
       >
         <div className="mb-4">
           <label
