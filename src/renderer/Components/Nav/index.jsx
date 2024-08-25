@@ -21,26 +21,22 @@ function Nav() {
       const loginType = window.localStorage.getItem("deliOrderAuthProvider");
       const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
 
-      switch (loginType) {
-        case "kakao":
-          try {
-            await axios.post(
-              `${import.meta.env.VITE_SERVER_URL}/auth/sign-out/kakao`,
-              { deliOrderUserId, loginType },
-            );
-          } catch (error) {
-            console.error("카카오 로그아웃 에러: ", error);
-          }
-          break;
-        case "google":
-        case "local":
-          try {
-            auth = getAuth();
-            await signOut(auth);
-          } catch (error) {
-            console.error("파이어베이스 로그아웃 에러: ", error);
-          }
-          break;
+      if (loginType === "kakao") {
+        try {
+          await axios.post(
+            `${import.meta.env.VITE_SERVER_URL}/auth/sign-out/kakao`,
+            { deliOrderUserId, loginType },
+          );
+        } catch (error) {
+          console.error("카카오 로그아웃 에러: ", error);
+        }
+      } else {
+        try {
+          auth = getAuth();
+          await signOut(auth);
+        } catch (error) {
+          console.error("파이어베이스 로그아웃 에러: ", error);
+        }
       }
 
       window.localStorage.clear();
