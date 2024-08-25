@@ -19,28 +19,26 @@ function Nav() {
 
     try {
       const loginType = window.localStorage.getItem("deliOrderProvider");
-      const deliOrderToken = window.localStorage.getItem("deliOrderToken");
-      const authorization = "Bearer " + deliOrderToken;
+      const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
 
       switch (loginType) {
         case "kakao":
-          await axios.post(
-            `${import.meta.env.VITE_SERVER_URL}/auth/sign-out/kakao`,
-            { deliOrderToken },
-            {
-              headers: {
-                ...(deliOrderToken && { authorization }),
-              },
-            },
-          );
+          try {
+            await axios.post(
+              `${import.meta.env.VITE_SERVER_URL}/auth/sign-out/kakao`,
+              { deliOrderUserId, loginType },
+            );
+          } catch (error) {
+            console.error("카카오 로그아웃 에러: ", error);
+          }
           break;
         case "google":
         case "local":
-          auth = getAuth();
           try {
+            auth = getAuth();
             await signOut(auth);
           } catch (error) {
-            console.error(error, "구글 로그아웃 에러");
+            console.error("파이어베이스 로그아웃 에러: ", error);
           }
           break;
       }
