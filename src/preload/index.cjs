@@ -3,9 +3,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("electronAPI", {
   openFolderDialog: async () => {
     try {
-      const result = await ipcRenderer.invoke("open-folder-dialog");
-
-      return result;
+      return await ipcRenderer.invoke("open-folder-dialog");
     } catch (error) {
       console.error("Error in openFolderDialog:", error);
       return {

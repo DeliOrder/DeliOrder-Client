@@ -4,6 +4,8 @@ const createClientStatusSlice = (set, get) => ({
   clientStatus: {
     isSubmitted: false,
     isLogin: false,
+    isPickFile: true,
+    isUsingFilePicker: true,
   },
   setClientStatus: (setValue) =>
     set((state) => ({

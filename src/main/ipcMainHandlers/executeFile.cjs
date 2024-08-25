@@ -14,15 +14,19 @@ const executeFile = () => {
     }
 
     const platform = os.platform();
-    const fullPath = path.join(order.executionPath, order.attachmentName);
+    const fullPath =
+      order.attachmentType === "folder"
+        ? path.join(order.executionPath)
+        : path.join(order.executionPath, order.attachmentName);
     const convertedFullPath = convertPath(fullPath);
 
     if (!fs.existsSync(convertedFullPath)) {
-      throw new Error("해당 위치에 요청한 파일이 없습니다.");
+      throw new Error("해당 위치에 요청한 파일 또는 폴더가 없습니다.");
     }
+
     try {
       execSync(
-        `${platform === "win32" ? "start" : "open"} "${convertedFullPath}"`,
+        `${platform === "win32" ? "explorer" : "open"} "${convertedFullPath}"`,
       );
     } catch (error) {
       console.error("execute-file main handler 에러:", error);

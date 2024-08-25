@@ -29,7 +29,7 @@ function App() {
     } else {
       window.localStorage.clear();
     }
-  }, []);
+  }, [setClientStatus]);
 
   return (
     <div className="flex min-h-screen flex-col">

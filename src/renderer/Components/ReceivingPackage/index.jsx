@@ -8,11 +8,7 @@ import { SERIAL_NUMBER_LENGTH } from "../../constants/config";
 
 function ReceivingPackage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [inputNumbers, setInputNumbers] = useState(
-    Array(SERIAL_NUMBER_LENGTH).fill(""),
-  );
   const [modalMessage, setModalMessage] = useState("");
-
   const navigate = useNavigate();
 
   const validateNumber = (event) => {
@@ -35,19 +31,13 @@ function ReceivingPackage() {
       event.preventDefault();
     }
   };
-  const updateInputNumbers = (event, index) => {
+  const updateInputNumbers = (event) => {
     if (event.target.value && event.code !== "Backspace") {
       return event.target.nextSibling?.focus();
     }
 
     if (!event.target.value && event.code === "Backspace") {
       return event.target.previousSibling?.focus();
-    }
-
-    if (!Number.isNaN(event.key) && event.key.trim() !== "") {
-      const tempNumbers = [...inputNumbers];
-      tempNumbers[index] = event.key;
-      setInputNumbers(tempNumbers);
     }
   };
 
@@ -70,12 +60,20 @@ function ReceivingPackage() {
   const handleReceivePackage = async (event) => {
     event.preventDefault();
     try {
+      const inputNumbers = Array.from(
+        event.target.elements,
+        (element) => element.value,
+      );
       const serialNumber = inputNumbers.join("");
-      const response = await axios.get(
+      const {
+        data: {
+          existPackage: { orders: orderList },
+          message,
+        },
+      } = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/packages/${serialNumber}`,
       );
-      const orderList = response.data.existPackage.orders;
-      // TODO: 콘솔로그를 일렉트론의 유틸함수와 연결해주기
+
       const processActions = async () => {
         for (const order of orderList) {
           switch (order.action) {
@@ -98,14 +96,13 @@ function ReceivingPackage() {
               await window.electronAPI.deleteFile(order);
               break;
             default:
-              console.log("알 수 없는 작업입니다");
+              console.error("입력 되지 않은 행동입니다.");
           }
-          await new Promise((resolve) => setTimeout(resolve, 100));
         }
       };
 
       processActions();
-      setModalMessage(response.data.message);
+      setModalMessage(message);
       setIsModalOpen(true);
     } catch (error) {
       if (error.response) {
@@ -119,7 +116,10 @@ function ReceivingPackage() {
 
   return (
     <div className="flex h-[90.5vh] items-center justify-center bg-blue-100">
-      <form className="flex h-3/5 w-3/5 flex-col items-center gap-20 rounded-xl bg-white p-10 shadow-2xl">
+      <form
+        onSubmit={handleReceivePackage}
+        className="flex h-3/5 w-3/5 flex-col items-center gap-20 rounded-xl bg-white p-10 shadow-2xl"
+      >
         <label className="text-6xl font-semibold tracking-wide text-gray-800">
           일련번호
         </label>
@@ -131,7 +131,7 @@ function ReceivingPackage() {
                 key={index}
                 onKeyDownFunc={(event) => {
                   validateNumber(event);
-                  updateInputNumbers(event, index);
+                  updateInputNumbers(event);
                 }}
                 onChangeFunc={handleFocusShift}
               />
@@ -139,7 +139,6 @@ function ReceivingPackage() {
         </div>
         <button
           type="submit"
-          onClick={handleReceivePackage}
           className="m-5 w-1/3 transform rounded-full bg-slate-200 p-5 text-3xl shadow-lg transition duration-300 hover:scale-105"
         >
           받기
