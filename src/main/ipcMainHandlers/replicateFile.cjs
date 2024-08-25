@@ -20,11 +20,8 @@ const replicateFile = () => {
           : path.join(order.executionPath, order.attachmentName);
       const convertedFullPath = convertPath(fullPath);
 
-      if (
-        !fs.existsSync(convertedFullPath) &&
-        order.attachmentType !== "folder"
-      ) {
-        throw new Error("해당 위치에 요청한 파일이 없습니다.");
+      if (!fs.existsSync(convertedFullPath)) {
+        throw new Error("해당 위치에 요청한 파일 또는 폴더가 없습니다.");
       }
 
       const baseName = path.basename(order.attachmentName);
@@ -43,18 +40,8 @@ const replicateFile = () => {
             : path.join(folderPath, copyFileName);
       }
 
-      if (order.attachmentType === "folder") {
-        return await fsPromises.cp(convertedFullPath, copyFilePath, {
-          recursive: true,
-        });
-      }
-
-      fs.copyFile(convertedFullPath, copyFilePath, (error) => {
-        if (error) {
-          console.log("replicate-file main handler 에러:", error);
-        } else {
-          console.log("파일이 성공적으로 복사되었습니다.");
-        }
+      await fsPromises.cp(convertedFullPath, copyFilePath, {
+        recursive: true,
       });
     } catch (error) {
       console.error("replicate-file main handler 에러:", error);

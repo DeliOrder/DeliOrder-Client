@@ -9,7 +9,7 @@ function ActionPicker() {
     const selectedAction = event.target.value;
 
     if (selectedAction === "생성하기") {
-      setClientStatus({ isPickFile: true, isPickOptionDefault: true });
+      setClientStatus({ isPickFile: true, isUsingFilePicker: true });
     }
 
     updateOrder({ action: selectedAction });

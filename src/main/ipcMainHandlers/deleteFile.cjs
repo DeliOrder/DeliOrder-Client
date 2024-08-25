@@ -25,7 +25,7 @@ const deleteFile = () => {
       }
 
       if (!fs.existsSync(convertedFullPath)) {
-        throw new Error("해당 위치에 요청한 파일이 없습니다.");
+        throw new Error("해당 위치에 요청한 파일 또는 폴더가 없습니다.");
       }
 
       const trash = (await import("trash")).default;
