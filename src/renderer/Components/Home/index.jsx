@@ -37,7 +37,7 @@ function Home() {
     if (searchParams.get("code")) {
       getJwtToken();
     }
-  }, [searchParams]);
+  }, [searchParams, setClientStatus]);
 
   const navigateToReceivingPage = () => {
     navigate("/package/receiving");
