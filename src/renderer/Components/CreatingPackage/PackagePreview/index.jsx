@@ -162,7 +162,7 @@ function PackagePreview() {
     closeModal();
     navigate("/");
   };
-
+  // TODO: 링크 및 일련번호 생성 후 모달창에 동적으로 값부여 및 복사버튼에 기능부여 필요
   return (
     <div className="relative w-3/5 bg-white px-6 pb-8 pt-10 shadow-sm ring-1 ring-gray-900/5 sm:mr-3 sm:max-w-full sm:rounded-lg sm:px-10">
       <label className="mb-2 block text-xl font-bold text-gray-700">
@@ -180,9 +180,12 @@ function PackagePreview() {
       >
         패키징하기
       </button>
-      <Modal isOpen={isModalOpen} onClose={navigateToMainPage}>
+      <Modal
+        isOpen={isModalOpen}
+        title={"DELIORDER"}
+        onClose={navigateToMainPage}
+      >
         <div>
-          <h2 className="mb-4 text-center text-xl font-semibold">DELIORDER</h2>
           <div className="mb-4">
             <p>일련번호</p>
             <div className="flex">
