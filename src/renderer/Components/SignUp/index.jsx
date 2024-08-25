@@ -20,7 +20,7 @@ function SignUp() {
     navigate("/");
   };
 
-  const handleLocalSignUp = async (event) => {
+  const handleEmailSignUp = async (event) => {
     event.preventDefault();
     const signUpFormValue = {
       emailValue,
@@ -30,8 +30,7 @@ function SignUp() {
       checkBoxValue,
     };
 
-    // TODO: 로컬 로그인 관련 유효성 로직 추가 필요
-
+    // TODO: 이메일 가입 관련 유효성 로직 추가 필요
     try {
       const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(
@@ -39,12 +38,10 @@ function SignUp() {
         emailValue,
         passwordValue,
       );
-      console.log(userCredential);
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/auth/sign-up/local`,
         { signUpFormValue },
       );
-      console.log(response.data);
       openModal();
     } catch (error) {
       console.error("가입실패", error);
@@ -55,7 +52,7 @@ function SignUp() {
     <div className="flex flex-grow items-center justify-center p-4">
       <form
         className="m-4 w-[400px] rounded border-gray-600 bg-white p-6 shadow-md"
-        onSubmit={handleLocalSignUp}
+        onSubmit={handleEmailSignUp}
       >
         <div className="mb-4">
           <label
@@ -144,7 +141,7 @@ function SignUp() {
             className="focus:shadow-outline mb-4 w-full rounded-md bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
             type="submit"
             // onClick={openModal}
-            onClick={handleLocalSignUp}
+            onClick={handleEmailSignUp}
           >
             가입하기
           </button>
