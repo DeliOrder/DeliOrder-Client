@@ -1,7 +1,6 @@
 const { ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const fsPromises = require("fs/promises");
 
 const { convertPath } = require("../utils/convertPath.cjs");
 
