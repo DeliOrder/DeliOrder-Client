@@ -38,7 +38,6 @@ function Login() {
         passwordValue,
       );
       const firebaseIdToken = await userCredential.user.getIdToken();
-      console.log(firebaseIdToken, "로컬액세스");
 
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/local`,
@@ -51,8 +50,13 @@ function Login() {
         },
       );
 
-      const { deliOrderToken, userId, loginType } = response.data;
+      const { deliOrderToken, deliOrderRefreshToken, userId, loginType } =
+        response.data;
       window.localStorage.setItem("deliOrderToken", deliOrderToken);
+      window.localStorage.setItem(
+        "deliOrderRefreshToken",
+        deliOrderRefreshToken,
+      );
       window.localStorage.setItem("deliOrderUserId", userId);
       window.localStorage.setItem("deliOrderProvider", loginType);
 
@@ -71,7 +75,6 @@ function Login() {
 
       const firebaseIdToken = await user.getIdToken();
 
-      console.log(user, firebaseIdToken, "오스코드으");
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/google`,
         { firebaseIdToken },
@@ -83,8 +86,13 @@ function Login() {
         },
       );
 
-      const { deliOrderToken, userId, loginType } = response.data;
+      const { deliOrderToken, deliOrderRefreshToken, userId, loginType } =
+        response.data;
       window.localStorage.setItem("deliOrderToken", deliOrderToken);
+      window.localStorage.setItem(
+        "deliOrderRefreshToken",
+        deliOrderRefreshToken,
+      );
       window.localStorage.setItem("deliOrderUserId", userId);
       window.localStorage.setItem("deliOrderProvider", loginType);
 
@@ -100,7 +108,6 @@ function Login() {
       const response = await await window.Kakao.Auth.authorize({
         redirectUri: `${import.meta.env.VITE_BASE_URL}`,
       });
-      console.log(response, "카카오로그인클라이언트");
       const { access_token } = response;
 
       await axios.post(

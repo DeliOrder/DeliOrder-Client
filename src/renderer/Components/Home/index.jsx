@@ -17,18 +17,28 @@ function Home() {
     const getJwtToken = async () => {
       try {
         const authCode = searchParams.get("code");
+
         const response = await axios.post(
           `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/kakao`,
           { authCode },
         );
 
-        const { firebaseToken, deliOrderToken, userId, loginType } =
-          response.data;
+        const {
+          firebaseToken,
+          deliOrderToken,
+          deliOrderRefreshToken,
+          userId,
+          loginType,
+        } = response.data;
 
         await signInWithCustomToken(auth, firebaseToken);
         console.log("Firebase login success");
 
         window.localStorage.setItem("deliOrderToken", deliOrderToken);
+        window.localStorage.setItem(
+          "deliOrderRefreshToken",
+          deliOrderRefreshToken,
+        );
         window.localStorage.setItem("deliOrderUserId", userId);
         window.localStorage.setItem("deliOrderProvider", loginType);
 
