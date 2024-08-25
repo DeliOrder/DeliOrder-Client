@@ -1,8 +1,6 @@
 import PropTypes from "prop-types";
 
-function Modal({ modalConfig }) {
-  let { isOpen, title, content, onClose } = modalConfig;
-
+function Modal({ title = "", isOpen, onClose, children }) {
   if (!isOpen) return null;
 
   return (
@@ -10,11 +8,11 @@ function Modal({ modalConfig }) {
       <div className="relative z-20 flex min-w-[300px] items-center justify-center rounded-lg bg-white p-6 shadow-lg">
         <div className="flex-col items-center justify-center">
           <h2 className="mb-4 text-xl font-semibold">{title}</h2>
-          {content}
+          {children}
           <button
             type="button"
-            onClick={() => onClose()}
-            className="button-yellow-square w-24"
+            onClick={onClose}
+            className="button-yellow-square mt-5 w-24"
           >
             닫기
           </button>
@@ -25,18 +23,10 @@ function Modal({ modalConfig }) {
 }
 
 Modal.propTypes = {
-  modalConfig: PropTypes.shape({
-    isOpen: PropTypes.bool.isRequired,
-    title: PropTypes.string,
-    content: PropTypes.node,
-    onClose: PropTypes.func,
-  }).isRequired,
-};
-
-Modal.defaultProps = {
-  modalConfig: {
-    onClose: () => {},
-  },
+  isOpen: PropTypes.bool.isRequired,
+  title: PropTypes.string,
+  children: PropTypes.node,
+  onClose: PropTypes.func,
 };
 
 export default Modal;
