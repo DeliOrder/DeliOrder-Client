@@ -31,6 +31,7 @@ function FolderPicker({ isOptional }) {
       updateAttachmentName(currentOrder.sourcePath);
     }
   }, [currentOrder.sourcePath, currentOrder.executionPath, updateOrder]);
+  }, [clientStatus.isSubmitted, setClientStatus]);
 
   const openFolderPicker = async () => {
     try {
