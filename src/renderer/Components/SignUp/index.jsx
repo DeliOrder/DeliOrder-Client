@@ -172,7 +172,6 @@ function SignUp() {
             className="focus:shadow-outline h-12 w-4/12 rounded-r bg-blue-400 px-4 py-2 font-bold text-white hover:bg-blue-500"
             type="button"
             onClick={handleEmailValidate}
-            //TODO: 추후 데이터베이스 연결 또는 firebase를 통해 아이디 중복 확인 로직 구현 필요
           >
             중복확인
           </button>
