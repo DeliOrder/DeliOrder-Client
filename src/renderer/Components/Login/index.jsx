@@ -40,7 +40,7 @@ function Login() {
       const firebaseIdToken = await userCredential.user.getIdToken();
 
       const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/local`,
+        `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/email`,
         { firebaseIdToken },
         {
           headers: {
