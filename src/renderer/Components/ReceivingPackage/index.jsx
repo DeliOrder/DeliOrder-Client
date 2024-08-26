@@ -3,28 +3,34 @@ import { useState } from "react";
 
 import Modal from "../Modal";
 import NumberInput from "./NumberInput";
-import PreNotification from "./PreNotification";
+import ProcessConfirm from "./ProcessConfirm";
 
+import usePackageStore from "@renderer/store";
 import useModal from "@renderer/utils/useModal";
 import { SERIAL_NUMBER_LENGTH } from "@renderer/constants/config";
 
 function ReceivingPackage() {
-  const [infoMessage, setInfoMessage] = useState("");
   const [currentPackage, setCurrentPackage] = useState([]);
-  const [processResults, setProcessResults] = useState([]);
-
-  const [isInfoModalOpen, openInfoModal, closeInfoModal] = useModal();
+  const { setInfoMessage, openInfoModal } = usePackageStore();
   const [isConfirmModalOpen, openConfirmModal, closeConfirmModal] = useModal();
-  const [isResultModalOpen, openResultModal, closeResultModal] = useModal();
 
-  const [inputNumbers, setInputNumbers] = useState(
-    Array(SERIAL_NUMBER_LENGTH).fill(""),
-  );
   const handleGetPackage = async (event) => {
     event.preventDefault();
 
     try {
+      const inputNumbers = Array.from(
+        event.target.elements,
+        (element) => element.value,
+      );
+
       const serialNumber = inputNumbers.join("");
+      if (serialNumber === "") {
+        setInfoMessage("일련 번호를 입력해 주세요.");
+        openInfoModal();
+
+        return;
+      }
+
       const {
         data: {
           existPackage: { orders },
@@ -47,43 +53,6 @@ function ReceivingPackage() {
     }
   };
 
-  const handleProcessPackage = async (receivedPackage) => {
-    closeConfirmModal();
-
-    try {
-      const results = await Promise.all(
-        receivedPackage.map(async (order) => {
-          switch (order.action) {
-            case "생성하기":
-              return await window.electronAPI.downloadFile(order);
-            case "이동하기":
-              return await window.electronAPI.moveFile(order);
-            case "복제하기":
-              return await window.electronAPI.replicateFile(order);
-            case "수정하기":
-              return await window.electronAPI.editFileName(order);
-            case "실행하기":
-              return await window.electronAPI.executeFile(order);
-            case "삭제하기":
-              return await window.electronAPI.deleteFile(order);
-            default:
-              return "알 수 없는 작업입니다";
-          }
-        }),
-      );
-
-      setProcessResults(results);
-      openResultModal();
-    } catch (error) {
-      setInfoMessage(
-        error.response
-          ? error.response.data.message
-          : "실행중 오류가 발생하였습니다",
-      );
-      openInfoModal();
-    }
-  };
-
   return (
     <div className="flex h-[90.5vh] items-center justify-center bg-blue-100">
       <form
@@ -95,49 +64,24 @@ function ReceivingPackage() {
         </label>
         <div className="flex justify-center">
           {Array(SERIAL_NUMBER_LENGTH)
-            .fill()
+            .fill("")
             .map((_, index) => (
-              <NumberInput
-                key={index}
-                setInputNumbers={setInputNumbers}
-                inputNumbers={inputNumbers}
-                index={index}
-              />
+              <NumberInput key={index} />
             ))}
         </div>
         <button type="submit" className="button-slate-round">
           받기
         </button>
       </form>
-      <Modal title={"오류"} isOpen={isInfoModalOpen} onClose={closeInfoModal}>
-        <p>{infoMessage}</p>
-      </Modal>
       <Modal
-        title={"패키지 내용 확인"}
+        title="패키지 내용 확인"
         isOpen={isConfirmModalOpen}
         onClose={closeConfirmModal}
       >
-        <PreNotification orders={currentPackage} />
-        <div className="mt-1 flex justify-center">
-          <button
-            type="button"
-            onClick={() => handleProcessPackage(currentPackage)}
-            className="button-yellow-square w-24"
-          >
-            확인
-          </button>
-        </div>
-      </Modal>
-      <Modal
-        title="실행결과"
-        isOpen={isResultModalOpen}
-        onClose={closeResultModal}
-      >
-        {processResults.map((result, index) => (
-          <p key={index} className="mt-2 text-xs">
-            {result}
-          </p>
-        ))}
+        <ProcessConfirm
+          orders={currentPackage}
+          closeModal={closeConfirmModal}
+        />
       </Modal>
     </div>
   );

@@ -1,6 +1,4 @@
-import PropTypes from "prop-types";
-
-function NumberInput({ inputNumbers, setInputNumbers, index }) {
+function NumberInput() {
   const validateNumber = (event) => {
     const VALID_KEY = [
       "Tab",
@@ -21,24 +19,18 @@ function NumberInput({ inputNumbers, setInputNumbers, index }) {
       event.preventDefault();
     }
   };
-
-  const updateInputNumbers = (event, index) => {
+  const shiftFocusOnKeyDown = (event) => {
     if (event.target.value && event.code !== "Backspace") {
-      return event.target.nextSibling?.focus();
+      event.target.nextSibling?.focus();
+      return;
     }
 
     if (!event.target.value && event.code === "Backspace") {
-      return event.target.previousSibling?.focus();
-    }
-
-    if (!Number.isNaN(event.key) && event.key.trim() !== "") {
-      const tempNumbers = [...inputNumbers];
-      tempNumbers[index] = event.key;
-      setInputNumbers(tempNumbers);
+      event.target.previousSibling?.focus();
     }
   };
 
-  const handleFocusShift = (event) => {
+  const shiftFocusOnChange = (event) => {
     if (event.nativeEvent.data === null) {
       event.target.previousSibling?.focus();
       return;
@@ -56,17 +48,11 @@ function NumberInput({ inputNumbers, setInputNumbers, index }) {
       type="text"
       onKeyDown={(event) => {
         validateNumber(event);
-        updateInputNumbers(event, index);
+        shiftFocusOnKeyDown(event);
       }}
-      onChange={handleFocusShift}
+      onChange={shiftFocusOnChange}
     />
   );
 }
-
-NumberInput.propTypes = {
-  inputNumbers: PropTypes.array.isRequired,
-  setInputNumbers: PropTypes.func.isRequired,
-  index: PropTypes.number.isRequired,
-};
 
 export default NumberInput;
