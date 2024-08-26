@@ -181,8 +181,8 @@ function PackagePreview() {
         패키징하기
       </button>
       <Modal
+        title="DELIORDER"
         isOpen={isModalOpen}
-        title={"DELIORDER"}
         onClose={navigateToMainPage}
       >
         <div>
