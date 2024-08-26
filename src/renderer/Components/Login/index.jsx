@@ -9,9 +9,10 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
-import { auth } from "../../firebase";
+import { auth } from "../../../../firebase";
 import usePackageStore from "@renderer/store";
 
+import { GUIDE_MESSAGES, SIGN_IN_ALERT } from "../../constants/messages";
 import googleLogo from "../../assets/images/googleLogo.svg";
 import kakaoLogo from "../../assets/images/kakaoLogo.svg";
 
@@ -21,12 +22,18 @@ function Login() {
 
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+  const { openInfoModal, setInfoMessage } = usePackageStore();
 
   useEffect(() => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(import.meta.env.VITE_KAKAO_KEY);
     }
   }, []);
+
+  const notifyInfoMessage = (message) => {
+    setInfoMessage(message);
+    openInfoModal();
+  };
 
   const handleEmailLogin = async (event) => {
     event.preventDefault();
@@ -64,6 +71,11 @@ function Login() {
       navigate("/");
     } catch (error) {
       console.error("이메일 로그인 실패: ", error);
+      if (error.code === "auth/invalid-credential") {
+        notifyInfoMessage(SIGN_IN_ALERT.CHECK_ID_OR_PASSWORD);
+      } else {
+        notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+      }
     }
   };
 
@@ -98,7 +110,12 @@ function Login() {
       setClientStatus({ isLogin: true });
       navigate("/");
     } catch (error) {
-      console.error("구글 로그인 실패", error);
+      console.error("구글 로그인 실패: ", error);
+      if (error.code === "auth/invalid-credential") {
+        notifyInfoMessage(SIGN_IN_ALERT.CHECK_ID_OR_PASSWORD);
+      } else {
+        notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+      }
     }
   };
   const handleKakaoLogin = async () => {
@@ -115,7 +132,8 @@ function Login() {
         },
       );
     } catch (error) {
-      console.error("카카오 로그인 실패:", error);
+      console.error("카카오 로그인 실패: ", error);
+      notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
     }
   };
 
