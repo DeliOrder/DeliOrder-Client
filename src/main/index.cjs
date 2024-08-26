@@ -11,6 +11,7 @@ require("./ipcMainHandlers/downloadFile.cjs");
 require("./ipcMainHandlers/moveFile.cjs");
 require("./ipcMainHandlers/deleteFile.cjs");
 require("./ipcMainHandlers/editFileName.cjs");
+require("./ipcMainHandlers/unzipFile.cjs");
 
 const createWindow = () => {
   const BASE_URL = process.env.VITE_BASE_URL;
