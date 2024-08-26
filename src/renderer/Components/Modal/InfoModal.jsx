@@ -7,7 +7,7 @@ function InfoModal() {
 
   return (
     <Modal title="알림" isOpen={infoModal.isOpen} onClose={closeInfoModal}>
-      <p className="mt-2 text-xs">{infoModal.message}</p>
+      <div className="mt-2 text-xs">{infoModal.message}</div>
     </Modal>
   );
 }
