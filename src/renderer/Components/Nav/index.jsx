@@ -5,45 +5,48 @@ import usePackageStore from "@renderer/store";
 import { getAuth, signOut } from "firebase/auth";
 
 import DeliLogo from "../../assets/images/logo.png";
-
+import { GUIDE_MESSAGES } from "../../constants/messages";
 function Nav() {
   const {
     clientStatus: { isLogin },
     setClientStatus,
   } = usePackageStore();
 
+  const { openInfoModal, setInfoMessage } = usePackageStore();
+
+  const notifyInfoMessage = () => {
+    setInfoMessage(GUIDE_MESSAGES.REQUIRE_LOGIN);
+    openInfoModal();
+  };
+
   const handleLogOut = async () => {
     if (!isLogin) return;
 
-    let auth;
+    const loginType = window.localStorage.getItem("deliOrderAuthProvider");
+    const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
 
-    try {
-      const loginType = window.localStorage.getItem("deliOrderAuthProvider");
-      const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
-
-      if (loginType === "kakao") {
-        try {
-          await axios.post(
-            `${import.meta.env.VITE_SERVER_URL}/auth/sign-out/kakao`,
-            { deliOrderUserId, loginType },
-          );
-        } catch (error) {
-          console.error("카카오 로그아웃 에러: ", error);
-        }
-      } else {
-        try {
-          auth = getAuth();
-          await signOut(auth);
-        } catch (error) {
-          console.error("파이어베이스 로그아웃 에러: ", error);
-        }
+    if (loginType === "kakao") {
+      try {
+        await axios.post(
+          `${import.meta.env.VITE_SERVER_URL}/auth/sign-out/kakao`,
+          { deliOrderUserId, loginType },
+        );
+        window.localStorage.clear();
+        setClientStatus({ isLogin: false });
+      } catch (error) {
+        console.error("카카오 로그아웃 실패: ", error);
+        notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
       }
-
-      window.localStorage.clear();
-      setClientStatus({ isLogin: false });
-    } catch (error) {
-      // TODO: 추후 에러처리 관련 구현
-      alert(error.message);
+    } else {
+      try {
+        const auth = getAuth();
+        await signOut(auth);
+        window.localStorage.clear();
+        setClientStatus({ isLogin: false });
+      } catch (error) {
+        console.error("파이어베이스 로그아웃 실패: ", error);
+        notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+      }
     }
   };
 
