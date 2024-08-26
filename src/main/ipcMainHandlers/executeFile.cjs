@@ -20,11 +20,7 @@ const executeFile = () => {
     const convertedFullPath = convertPath(fullPath);
 
     if (!fs.existsSync(convertedFullPath)) {
-<<<<<<< HEAD
-      throw new Error("해당 위치에 요청한 파일 또는 폴더가 없습니다.");
-=======
       return "실행 실패: 해당 위치에 요청한 파일이 없습니다.";
->>>>>>> 42310f0 (Feat: 각 오더의 결과값을 받아올 수 있도록 로직 구현)
     }
 
     try {
