@@ -17,7 +17,7 @@ function FilePicker() {
   const openFilePicker = async () => {
     try {
       const { attachmentName, canceled, fileObj } =
-        await window.electronAPI.openFileDialog();
+        await window.electronAPI.openFileDialog(currentOrder.action);
 
       if (canceled || (currentOrder.action === "생성하기" && !fileObj)) {
         console.error("폴더 선택이 취소되었습니다.");
@@ -29,8 +29,6 @@ function FilePicker() {
         attachmentFile: fileObj,
         attachmentType: "file",
       });
-
-      updateOrder({ attachmentName, attachmentType: "file" });
     } catch (error) {
       console.error("폴더 경로를 여는 중 에러가 발생 :", error);
     }
@@ -48,16 +46,17 @@ function FilePicker() {
           />
           파일
         </label>
-        {currentOrder.action !== "생성하기" && (
-          <label>
-            <input
-              type="radio"
-              checked={!isPickFile}
-              onChange={() => setClientStatus({ isPickFile: false })}
-            />
-            폴더
-          </label>
-        )}
+        {currentOrder.action !== "생성하기" &&
+          currentOrder.action !== "압축해제하기" && (
+            <label>
+              <input
+                type="radio"
+                checked={!isPickFile}
+                onChange={() => setClientStatus({ isPickFile: false })}
+              />
+              폴더
+            </label>
+          )}
       </label>
       {isPickFile && (
         <>
@@ -71,16 +70,19 @@ function FilePicker() {
               />
               파일선택기
             </label>
-            {currentOrder.action !== "생성하기" && (
-              <label>
-                <input
-                  type="radio"
-                  checked={!isUsingFilePicker}
-                  onChange={() => setClientStatus({ isUsingFilePicker: false })}
-                />
-                직접 입력하기
-              </label>
-            )}
+            {currentOrder.action !== "생성하기" &&
+              currentOrder.action !== "압축해제하기" && (
+                <label>
+                  <input
+                    type="radio"
+                    checked={!isUsingFilePicker}
+                    onChange={() =>
+                      setClientStatus({ isUsingFilePicker: false })
+                    }
+                  />
+                  직접 입력하기
+                </label>
+              )}
           </div>
           {isUsingFilePicker ? (
             <button
