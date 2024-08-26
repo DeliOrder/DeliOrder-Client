@@ -83,4 +83,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
       console.error("Error in replicateFile: ", error);
     }
   },
+  unzipFile: async (order) => {
+    try {
+      return await ipcRenderer.invoke("unzip-file", order);
+    } catch (error) {
+      console.error("Error in unzipFile: ", error);
+    }
+  },
 });
