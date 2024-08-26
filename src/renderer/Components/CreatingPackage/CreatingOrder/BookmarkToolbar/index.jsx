@@ -11,13 +11,10 @@ import addingIcon from "@images/addingIcon.svg";
 import downloadIcon from "@images/downloadIcon.svg";
 
 function BookmarkToolbar() {
-  const [infoMessage, setInfoMessage] = useState("");
   const [bookmarks, setBookMarks] = useState([]);
-  const [isError, setIsError] = useState(false);
-
-  const [isInfoModalOpen, openInfoModal, closeInfoModal] = useModal();
   const [isBookmarkListOpen, openBookmarkList, closeBookmarkList] = useModal();
 
+  const { openInfoModal, setInfoMessage } = usePackageStore();
   const {
     clientStatus: { isLogin, isPickFile },
     getOrder,
@@ -29,21 +26,19 @@ function BookmarkToolbar() {
   const authorization = "Bearer " + deliOrderToken;
 
   const notifyLoginRequired = () => {
-    setIsError(true);
     setInfoMessage(GUIDE_MESSAGES.REQUIRE_LOGIN);
+    openInfoModal();
   };
 
   const handleAddBookmark = async () => {
     if (!isLogin) {
       notifyLoginRequired();
-      openInfoModal();
       return;
     }
 
     const BookmarkTarget = getOrder();
 
     if (!validateRequiredInputs(BookmarkTarget)) {
-      setIsError(true);
       setInfoMessage(GUIDE_MESSAGES.BOOKMARK_REQUIREMENT);
       openInfoModal();
       return;
@@ -98,7 +93,6 @@ function BookmarkToolbar() {
         openInfoModal();
       }
 
-      setIsError(true);
       openInfoModal();
     }
   };
@@ -106,7 +100,6 @@ function BookmarkToolbar() {
   const handleGetBookmark = async () => {
     if (!isLogin) {
       notifyLoginRequired();
-      openInfoModal();
       return;
     }
 
@@ -149,7 +142,6 @@ function BookmarkToolbar() {
         setInfoMessage("일시적 서버 에러입니다. 잠시 후 다시 시도해주세요");
       }
 
-      setIsError(true);
       openInfoModal();
     }
   };
@@ -168,11 +160,6 @@ function BookmarkToolbar() {
       ? ["action", "attachmentName", "executionPath"]
       : ["action", "executionPath"];
     return requiredField.every((field) => inputs[field].length > 0);
-  };
-
-  const handleModalClose = () => {
-    if (isError) setIsError(false);
-    closeInfoModal();
   };
 
   return (
@@ -216,11 +203,6 @@ function BookmarkToolbar() {
             {bookmark.action}
           </button>
         ))}
-      </Modal>
-      <Modal title={"알림"} isOpen={isInfoModalOpen} onClose={handleModalClose}>
-        <p className={`font-bold ${isError ? "text-red-600" : ""}`}>
-          {infoMessage}
-        </p>
       </Modal>
     </>
   );

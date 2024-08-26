@@ -10,6 +10,7 @@ import SignUp from "./SignUp";
 import ReceivingPackage from "./ReceivingPackage";
 import CreatingPackage from "./CreatingPackage";
 import MyPackages from "./MyPackages";
+import InfoModal from "./Modal/InfoModal";
 
 function App() {
   const { setClientStatus } = usePackageStore();
@@ -45,6 +46,7 @@ function App() {
           <Route path="/myPackages" element={<MyPackages />} />
         </Routes>
       </div>
+      <InfoModal />
     </div>
   );
 }

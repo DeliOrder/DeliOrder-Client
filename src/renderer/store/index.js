@@ -53,10 +53,30 @@ const createOrdersSlice = (set, get) => ({
     })),
 });
 
+const infoModalSlice = (set) => ({
+  infoModal: {
+    message: "",
+    isOpen: false,
+  },
+  setInfoMessage: (newMessage) =>
+    set((state) => ({
+      infoModal: { ...state.infoModal, message: newMessage },
+    })),
+  openInfoModal: () =>
+    set((state) => ({
+      infoModal: { ...state.infoModal, isOpen: true },
+    })),
+  closeInfoModal: () =>
+    set(() => ({
+      infoModal: { message: "", isOpen: false },
+    })),
+});
+
 const usePackageStore = create((set, get) => ({
   ...createClientStatusSlice(set, get),
   ...createOrderSlice(set, get),
   ...createOrdersSlice(set, get),
+  ...infoModalSlice(set, get),
 }));
 
 export default usePackageStore;
