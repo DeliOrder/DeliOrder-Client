@@ -188,7 +188,7 @@ function BookmarkToolbar() {
         </div>
       </div>
       <Modal
-        title={"즐겨찾기 목록"}
+        title="즐겨찾기 목록"
         isOpen={isBookmarkListOpen}
         onClose={closeBookmarkList}
       >
