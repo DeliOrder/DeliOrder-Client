@@ -118,13 +118,15 @@ function ReceivingPackage() {
         onClose={closeConfirmModal}
       >
         <PreNotification orders={currentPackage} />
-        <button
-          type="button"
-          onClick={() => handleProcessPackage(currentPackage)}
-          className="button-yellow-square w-24"
-        >
-          확인
-        </button>
+        <div className="mt-1 flex justify-center">
+          <button
+            type="button"
+            onClick={() => handleProcessPackage(currentPackage)}
+            className="button-yellow-square w-24"
+          >
+            확인
+          </button>
+        </div>
       </Modal>
       <Modal
         title="실행결과"
