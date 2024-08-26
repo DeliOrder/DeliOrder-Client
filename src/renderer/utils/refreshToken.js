@@ -7,24 +7,25 @@ const refreshToken = async () => {
       "deliOrderRefreshToken",
     );
     const authorization = "Bearer " + deliOrderRefreshToken;
-    const { newDeliOrderToken, newDeliOrderRefreshToken } = await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/auth/refresh/kakao`,
-      { deliOrderRefreshToken, deliOrderUserId },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          authorization,
+    if (deliOrderUserId && deliOrderRefreshToken) {
+      const { newDeliOrderToken, newDeliOrderRefreshToken } = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/auth/token/refresh`,
+        { deliOrderRefreshToken, deliOrderUserId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization,
+          },
         },
-      },
-    );
-
-    window.localStorage.setItem("deliOrderToken", newDeliOrderToken);
-    window.localStorage.setItem(
-      "deliOrderRefreshToken",
-      newDeliOrderRefreshToken,
-    );
+      );
+      window.localStorage.setItem("deliOrderToken", newDeliOrderToken);
+      window.localStorage.setItem(
+        "deliOrderRefreshToken",
+        newDeliOrderRefreshToken,
+      );
+    }
   } catch (error) {
-    console.error("토큰 재발급 중 오류 발생", error);
+    console.error("토큰 재발급 불가", error);
     window.localStorage.clear();
     window.location.href = "/login";
   }
