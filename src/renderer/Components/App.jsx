@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
+import axios from "axios";
 
 import usePackageStore from "@renderer/store";
 
@@ -10,27 +11,53 @@ import SignUp from "./SignUp";
 import ReceivingPackage from "./ReceivingPackage";
 import CreatingPackage from "./CreatingPackage";
 import MyPackages from "./MyPackages";
+import refreshToken from "../utils/refreshToken";
 import InfoModal from "./Modal/InfoModal";
 
 function App() {
   const { setClientStatus } = usePackageStore();
+  const deliOrderToken = window.localStorage.getItem("deliOrderToken");
+  const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
+  const deliOrderAuthProvider = window.localStorage.getItem(
+    "deliOrderAuthProvider",
+  );
 
   const hasPreviousLoginInfo = () => {
-    const deliOrderToken = window.localStorage.getItem("deliOrderToken");
-    const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
-    const deliOrderAuthProvider = window.localStorage.getItem(
-      "deliOrderAuthProvider",
-    );
-
     return deliOrderToken && deliOrderUserId && deliOrderAuthProvider;
   };
 
   useEffect(() => {
-    if (hasPreviousLoginInfo()) {
-      setClientStatus({ isLogin: true });
-    } else {
-      window.localStorage.clear();
-    }
+    const validateToken = async () => {
+      try {
+        if (hasPreviousLoginInfo()) {
+          const authorization = "Bearer " + deliOrderToken;
+          axios.get(`${import.meta.env.VITE_SERVER_URL}/auth/token/validate`, {
+            headers: {
+              authorization,
+            },
+          });
+          setClientStatus({ isLogin: true });
+        } else {
+          window.localStorage.clear();
+        }
+      } catch (error) {
+        console.error("앱초기진입 로그인에러: ", error);
+        if (error.name === "TokenExpiredError") {
+          try {
+            await refreshToken();
+          } catch (refreshError) {
+            console.error("토큰 갱신 중 오류 발생: ", refreshError);
+            window.localStorage.clear();
+            setClientStatus({ isLogin: false });
+          }
+        } else {
+          window.localStorage.clear();
+          setClientStatus({ isLogin: false });
+        }
+      }
+    };
+
+    validateToken();
   }, [setClientStatus]);
 
   return (
