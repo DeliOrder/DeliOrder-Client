@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 import Modal from "../Modal";
+import usePackageStore from "@renderer/store";
 import { validateEmail, validatePassword } from "../../utils/validate.js";
+import { SIGN_UP_ALERT, GUIDE_MESSAGES } from "../../constants/messages.js";
 
 function SignUp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,6 +16,8 @@ function SignUp() {
   const [passwordValue, setPasswordValue] = useState("");
   const [passwordCheckValue, setPasswordCheckValue] = useState("");
   const [checkBoxValue, setCheckBoxValue] = useState(false);
+
+  const { openInfoModal, setInfoMessage } = usePackageStore();
   const navigate = useNavigate();
 
   const openModal = () => setIsModalOpen(true);
@@ -22,25 +26,33 @@ function SignUp() {
     navigate("/");
   };
 
+  const notifyInfoMessage = (message) => {
+    setInfoMessage(message);
+    openInfoModal();
+  };
+
   const handleEmailValidate = async () => {
     try {
       if (!validateEmail(emailValue)) {
-        throw new Error("이메일형식에 맞지 않음");
+        throw new Error("이메일형식에 맞지 않습니다");
       }
 
-      const response = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/auth/sign-up/check-email`,
         { emailValue },
       );
       setEmailValidate(true);
-      // TODO: 모달로 이메일 중복검증 성공 관련 메세지 표시
-      console.log("이메일 중복검증이 완료되었습니다.");
+      notifyInfoMessage(SIGN_UP_ALERT.EMAIL_VERIFICATION_SUCCESS);
     } catch (error) {
-      console.log(
+      console.error(
         "이메일 중복검증 실패: ",
         error.response?.data?.error || error.message,
       );
-      // TODO: 모달로 이메일 중복검증 오류 관련 메세지 표시
+      if (error.response) {
+        notifyInfoMessage(SIGN_UP_ALERT.EMAIL_ALREADY_REGISTERED);
+      } else {
+        notifyInfoMessage(SIGN_UP_ALERT.INVALID_EMAIL_FORMAT);
+      }
       setEmailValidate(false);
     }
   };
@@ -55,41 +67,81 @@ function SignUp() {
       checkBoxValue,
     };
 
-    console.log(checkBoxValue);
-
     if (!emailValidate) {
-      console.log("이메일 중복 검증 실패");
-      // TODO: 모달로 이메일 중복검증을 하고 와달라는 메세지 표시
+      notifyInfoMessage(SIGN_UP_ALERT.EMAIL_VERIFICATION_REQUIRED);
       return;
     }
 
     if (!validatePassword(passwordValue, passwordCheckValue).valid) {
-      console.log(validatePassword(passwordValue, passwordCheckValue).errors);
-      // TODO: 모달로 비번관련 에러 메세지 표시
+      const passwordErrorList = validatePassword(
+        passwordValue,
+        passwordCheckValue,
+      ).errors;
+      notifyInfoMessage(
+        <>
+          {passwordErrorList.map((errorMessage, index) => {
+            let errorComponent;
+            switch (errorMessage) {
+              case "isLongEnough":
+                errorComponent = (
+                  <div key={index}>{SIGN_UP_ALERT.NOT_LONG_ENOUGH}</div>
+                );
+                break;
+              case "hasLetter":
+                errorComponent = (
+                  <div key={index}>{SIGN_UP_ALERT.DO_NOT_HAS_LETTER}</div>
+                );
+                break;
+              case "hasNumber":
+                errorComponent = (
+                  <div key={index}>{SIGN_UP_ALERT.DO_NOT_HAS_NUMBER}</div>
+                );
+                break;
+              case "hasSpecialChar":
+                errorComponent = (
+                  <div key={index}>{SIGN_UP_ALERT.DO_NOT_HAS_SPECIAL_CHAR}</div>
+                );
+                break;
+              case "hasNoWhitespace":
+                errorComponent = (
+                  <div key={index}>
+                    {SIGN_UP_ALERT.DO_NOT_HAS_NO_WHITESPACE}
+                  </div>
+                );
+                break;
+              case "hasSameValue":
+                errorComponent = (
+                  <div key={index}>{SIGN_UP_ALERT.DO_NOT_HAS_SAME_VALUE}</div>
+                );
+                break;
+              default:
+                errorComponent = <div key={index}>{errorMessage}</div>;
+                break;
+            }
+
+            return errorComponent;
+          })}
+        </>,
+      );
       return;
     }
 
     if (!checkBoxValue) {
-      // TODO: 체크박스관련 메세지 표시
-      console.log("개인정보 관련 사항에 동의하여야 가입이 가능합니다.");
+      notifyInfoMessage(SIGN_UP_ALERT.AGREEMENT_REQUIRED);
       return;
     }
 
-    // TODO: 이메일 가입 관련 유효성 로직 추가 필요
     try {
       const auth = getAuth();
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        emailValue,
-        passwordValue,
-      );
-      const response = await axios.post(
+      await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
+      await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/auth/sign-up/email`,
         { signUpFormValue },
       );
       openModal();
     } catch (error) {
       console.error("가입실패", error);
+      notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
     }
   };
 
