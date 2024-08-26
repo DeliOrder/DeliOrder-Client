@@ -1,14 +1,16 @@
 import usePackageStore from "@renderer/store";
 
 function ActionPicker() {
-  const { updateOrder, getOrder } = usePackageStore();
+  const { updateOrder, getOrder, clearOrder } = usePackageStore();
   const { setClientStatus } = usePackageStore();
   const currentOrder = getOrder();
 
   const handleActionChange = (event) => {
     const selectedAction = event.target.value;
 
-    if (selectedAction === "생성하기") {
+    clearOrder();
+
+    if (selectedAction === "생성하기" || selectedAction === "압축해제하기") {
       setClientStatus({ isPickFile: true, isUsingFilePicker: true });
     }
 
@@ -31,6 +33,7 @@ function ActionPicker() {
         <option>수정하기</option>
         <option>실행하기</option>
         <option>삭제하기</option>
+        <option>압축해제하기</option>
       </select>
     </>
   );

@@ -45,6 +45,8 @@ function ProcessConfirm({ orders, closeModal }) {
               return await window.electronAPI.executeFile(order);
             case "삭제하기":
               return await window.electronAPI.deleteFile(order);
+            case "압축해제하기":
+              return await window.electronAPI.unzipFile(order);
             default:
               return "알 수 없는 작업입니다";
           }
