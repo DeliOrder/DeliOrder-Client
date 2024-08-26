@@ -48,6 +48,10 @@ function PackagePreview() {
         (action) => action.action === "생성하기",
       );
 
+      if (fileList.length === 0) {
+        setIsLoading(false);
+        return;
+      }
       // TODO:: console.error 관련 사용자에게 직접 표시되도록 개선 필요
       if (!fileList.every((action) => action.attachmentType === "file")) {
         setIsLoading(false);
@@ -92,7 +96,10 @@ function PackagePreview() {
         (action) => action.action === "생성하기",
       );
 
-      if (!fileList.every((action) => action.attachmentType === "file")) {
+      if (
+        fileList.length === 0 ||
+        !fileList.every((action) => action.attachmentType === "file")
+      ) {
         setIsLoading(false);
         throw new Error("파일이 선택되지 않았습니다.");
       }
