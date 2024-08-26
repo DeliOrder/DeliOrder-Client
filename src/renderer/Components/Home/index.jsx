@@ -1,9 +1,9 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
 import { useEffect } from "react";
 import { signInWithCustomToken } from "firebase/auth";
-import axios from "axios";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { auth } from "../../firebase";
+import { auth } from "@renderer/firebase";
 import usePackageStore from "@renderer/store";
 
 import DeliLogo from "@renderer/assets/images/logo.png";
@@ -52,7 +52,7 @@ function Home() {
     if (searchParams.get("code")) {
       getJwtToken();
     }
-  }, [searchParams, setClientStatus]);
+  }, [searchParams, setClientStatus, navigate]);
 
   const navigateToReceivingPage = () => {
     navigate("/package/receiving");

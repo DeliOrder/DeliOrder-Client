@@ -5,9 +5,11 @@ import usePackageStore from "@renderer/store";
 
 function FolderPicker({ isOptional }) {
   const [folderPath, setFolderPath] = useState("");
+
   const { updateOrder, getOrder, setClientStatus, clientStatus } =
     usePackageStore();
   const currentOrder = getOrder();
+
   const pathType = isOptional ? "sourcePath" : "executionPath";
   const description = isOptional ? "출발" : "목적";
   const displayedPath = currentOrder[pathType] || folderPath;
@@ -27,11 +29,15 @@ function FolderPicker({ isOptional }) {
       updateOrder({ attachmentName });
     };
 
-    if (currentOrder.sourcePath) {
+    if (currentOrder.sourcePath && !clientStatus.isPickFile) {
       updateAttachmentName(currentOrder.sourcePath);
     }
-  }, [currentOrder.sourcePath, currentOrder.executionPath, updateOrder]);
-  }, [clientStatus.isSubmitted, setClientStatus]);
+  }, [
+    currentOrder.sourcePath,
+    currentOrder.executionPath,
+    clientStatus.isPickFile,
+    updateOrder,
+  ]);
 
   const openFolderPicker = async () => {
     try {
