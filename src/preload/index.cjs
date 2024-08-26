@@ -12,12 +12,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
       };
     }
   },
-  openFileDialog: async () => {
+  openFileDialog: async (action) => {
     try {
       const { canceled, attachmentName, fileBase64, mimeType, baseName } =
-        await ipcRenderer.invoke("open-file-dialog");
+        await ipcRenderer.invoke("open-file-dialog", action);
 
-      if (!fileBase64 || !mimeType) {
+      if (action !== "생성하기") {
         return { attachmentName, canceled };
       }
 
