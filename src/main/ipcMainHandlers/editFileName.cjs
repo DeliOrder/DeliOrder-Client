@@ -20,12 +20,13 @@ const editFileName = () => {
       const convertedNewFullPath = convertPath(newFullPath);
 
       if (!fs.existsSync(convertedOldFullPath)) {
-        throw new Error("해당 위치에 요청한 파일이 없습니다.");
+        return "파일명 수정 실패: 해당 위치에 요청한 파일이 없습니다.";
       }
 
       fs.renameSync(convertedOldFullPath, convertedNewFullPath);
     } catch (error) {
       console.error("edit-file-Name main handler 에러:", error);
+      return "파일명 수정 실패";
     }
   });
 };

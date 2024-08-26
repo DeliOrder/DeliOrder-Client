@@ -8,6 +8,10 @@ const { convertPath } = require("../utils/convertPath.cjs");
 const downloadFile = () => {
   ipcMain.handle("download-file", async (event, order) => {
     try {
+      if (order.action !== "생성하기") {
+        return "수신받은 행동이 '생성하기'가 아닙니다.";
+      }
+
       const fullPath = path.join(order.executionPath, order.attachmentName);
 
       const convertedFullPath = convertPath(fullPath);
@@ -16,13 +20,13 @@ const downloadFile = () => {
       const file = fs.createWriteStream(convertedFullPath);
 
       if (!fs.existsSync(convertedFolderPath)) {
-        //TODO: 해당 폴더가 없는경우 수신자에게 처리 선택 보여주는 화면 추가 제시 필요
         fs.mkdirSync(convertedFolderPath, { recursive: true });
       }
 
       https
         .get(order.attachmentUrl, (response) => {
           response.pipe(file);
+
           file.on("finish", () => {
             file.close();
           });
@@ -31,8 +35,12 @@ const downloadFile = () => {
           fs.unlink(convertedFullPath);
           console.error("파일 다운로드 중 오류 발생", error);
         });
+
+      return "생성 성공";
     } catch (error) {
       console.error("download-file main handler 에러:", error);
+
+      return "생성 실패";
     }
   });
 };

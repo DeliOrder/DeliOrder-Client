@@ -1,22 +1,20 @@
 import axios from "axios";
 import { useState } from "react";
 
-import usePackageStore from "@renderer/store";
 import Modal from "../../../Modal";
-import InfoModal from "../../../InfoModal";
+import usePackageStore from "@renderer/store";
+import useModal from "@renderer/utils/useModal";
+import refreshToken from "@renderer/utils/refreshToken";
 import { GUIDE_MESSAGES } from "@renderer/constants/messages.js";
 
 import addingIcon from "@images/addingIcon.svg";
 import downloadIcon from "@images/downloadIcon.svg";
-import refreshToken from "../../../../utils/refreshToken";
 
 function BookmarkToolbar() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookmarks, setBookMarks] = useState([]);
-  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
-  const [infoMessage, setInfoMessage] = useState("");
-  const [isError, setIsError] = useState(false);
+  const [isBookmarkListOpen, openBookmarkList, closeBookmarkList] = useModal();
 
+  const { openInfoModal, setInfoMessage } = usePackageStore();
   const {
     clientStatus: { isLogin, isPickFile },
     getOrder,
@@ -28,23 +26,21 @@ function BookmarkToolbar() {
   const authorization = "Bearer " + deliOrderToken;
 
   const notifyLoginRequired = () => {
-    setIsError(true);
     setInfoMessage(GUIDE_MESSAGES.REQUIRE_LOGIN);
+    openInfoModal();
   };
 
   const handleAddBookmark = async () => {
     if (!isLogin) {
       notifyLoginRequired();
-      setIsInfoModalOpen(true);
       return;
     }
 
     const BookmarkTarget = getOrder();
 
     if (!validateRequiredInputs(BookmarkTarget)) {
-      setIsError(true);
       setInfoMessage(GUIDE_MESSAGES.BOOKMARK_REQUIREMENT);
-      setIsInfoModalOpen(true);
+      openInfoModal();
       return;
     }
 
@@ -68,7 +64,7 @@ function BookmarkToolbar() {
       );
 
       setInfoMessage(response.data.message);
-      setIsInfoModalOpen(true);
+      openInfoModal();
     } catch (error) {
       const { response } = error;
 
@@ -88,22 +84,22 @@ function BookmarkToolbar() {
           default:
             console.error("즐겨찾기 등록하는 중 에러발생 :", message);
             setInfoMessage(`에러발생: ${message}`);
+            openInfoModal();
             break;
         }
       } else {
-        console.error("응답을 받지 못하였습니다");
+        console.error("서버 응답 에러 :", error);
         setInfoMessage("일시적 서버 에러입니다. 잠시 후 다시 시도해주세요");
+        openInfoModal();
       }
 
-      setIsError(true);
-      setIsInfoModalOpen(true);
+      openInfoModal();
     }
   };
 
   const handleGetBookmark = async () => {
     if (!isLogin) {
       notifyLoginRequired();
-      setIsInfoModalOpen(true);
       return;
     }
 
@@ -119,7 +115,7 @@ function BookmarkToolbar() {
       );
 
       setBookMarks(response.data.bookmarkList);
-      setIsModalOpen(true);
+      openBookmarkList();
     } catch (error) {
       const { response } = error;
 
@@ -142,12 +138,11 @@ function BookmarkToolbar() {
             break;
         }
       } else {
-        console.error("응답을 받지 못하였습니다");
+        console.error("서버 응답 에러 :", error);
         setInfoMessage("일시적 서버 에러입니다. 잠시 후 다시 시도해주세요");
       }
 
-      setIsError(true);
-      setIsInfoModalOpen(true);
+      openInfoModal();
     }
   };
 
@@ -157,7 +152,7 @@ function BookmarkToolbar() {
     delete bookmarks[index].createdAt;
 
     updateOrder(bookmarks[index]);
-    setIsModalOpen(false);
+    closeBookmarkList();
   };
 
   const validateRequiredInputs = (inputs) => {
@@ -167,43 +162,8 @@ function BookmarkToolbar() {
     return requiredField.every((field) => inputs[field].length > 0);
   };
 
-  const closeModal = () => {
-    setIsError(false);
-    setIsInfoModalOpen(false);
-  };
-
   return (
     <>
-      {bookmarks.length > 0 && (
-        <Modal isOpen={isModalOpen}>
-          {bookmarks.map((bookmark, index) => (
-            <button
-              key={bookmark._id}
-              className="button-base-blue"
-              onClick={() => {
-                applyBookmark(index);
-              }}
-            >
-              {bookmark.action}
-            </button>
-          ))}
-          <button
-            className="button-yellow-square"
-            onClick={() => {
-              setIsModalOpen(false);
-            }}
-          >
-            닫기
-          </button>
-        </Modal>
-      )}
-      {
-        <InfoModal isOpen={isInfoModalOpen} onClose={closeModal}>
-          <p className={`font-bold ${isError ? "text-red-600" : ""}`}>
-            {infoMessage}
-          </p>
-        </InfoModal>
-      }
       <span className="label-large">즐겨찾기</span>
       <div className="flex flex-row justify-around py-1">
         <div className="flex flex-row">
@@ -227,6 +187,23 @@ function BookmarkToolbar() {
           </button>
         </div>
       </div>
+      <Modal
+        title="즐겨찾기 목록"
+        isOpen={isBookmarkListOpen}
+        onClose={closeBookmarkList}
+      >
+        {bookmarks.map((bookmark, index) => (
+          <button
+            key={bookmark.createdAt}
+            className="button-base-blue"
+            onClick={() => {
+              applyBookmark(index);
+            }}
+          >
+            {bookmark.action}
+          </button>
+        ))}
+      </Modal>
     </>
   );
 }

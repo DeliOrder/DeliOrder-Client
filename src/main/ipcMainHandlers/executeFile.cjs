@@ -9,8 +9,7 @@ const { convertPath } = require("../utils/convertPath.cjs");
 const executeFile = () => {
   ipcMain.handle("execute-file", async (event, order) => {
     if (order.action !== "실행하기") {
-      console.error(`수신받은 행동이 "실행하기"가 아닙니다.`);
-      return;
+      return "수신받은 행동이 '실행하기'가 아닙니다.";
     }
 
     const platform = os.platform();
@@ -21,15 +20,18 @@ const executeFile = () => {
     const convertedFullPath = convertPath(fullPath);
 
     if (!fs.existsSync(convertedFullPath)) {
-      throw new Error("해당 위치에 요청한 파일 또는 폴더가 없습니다.");
+      return "실행 실패: 해당 위치에 요청한 파일이 없습니다.";
     }
 
     try {
       execSync(
         `${platform === "win32" ? "explorer" : "open"} "${convertedFullPath}"`,
       );
+
+      return "실행 성공";
     } catch (error) {
       console.error("execute-file main handler 에러:", error);
+      return "실행 실패";
     }
   });
 };

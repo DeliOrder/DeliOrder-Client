@@ -109,7 +109,6 @@ function PackagePreview() {
         }),
       );
     } catch (error) {
-      console.log(error);
       throw new Error("AWS 파일 삭제중 문제가 발생하였습니다.", error);
     }
   };
@@ -181,9 +180,12 @@ function PackagePreview() {
       >
         패키징하기
       </button>
-      <Modal isOpen={isModalOpen} onClose={navigateToMainPage}>
+      <Modal
+        title="DELIORDER"
+        isOpen={isModalOpen}
+        onClose={navigateToMainPage}
+      >
         <div>
-          <h2 className="mb-4 text-center text-xl font-semibold">DELIORDER</h2>
           <div className="mb-4">
             <p>일련번호</p>
             <div className="flex">

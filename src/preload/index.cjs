@@ -43,42 +43,42 @@ contextBridge.exposeInMainWorld("electronAPI", {
   },
   deleteFile: async (order) => {
     try {
-      await ipcRenderer.invoke("delete-file", order);
+      return await ipcRenderer.invoke("delete-file", order);
     } catch (error) {
       console.error("delete-file renderer error: ", error);
     }
   },
   editFileName: async (order) => {
     try {
-      await ipcRenderer.invoke("edit-file-name", order);
+      return await ipcRenderer.invoke("edit-file-name", order);
     } catch (error) {
       console.error("edit-file-name renderer error:", error);
     }
   },
   downloadFile: async (order) => {
     try {
-      await ipcRenderer.invoke("download-file", order);
+      return await ipcRenderer.invoke("download-file", order);
     } catch (error) {
       console.error("Error in downloadFile: ", error);
     }
   },
   moveFile: async (order) => {
     try {
-      await ipcRenderer.invoke("move-file", order);
+      return await ipcRenderer.invoke("move-file", order);
     } catch (error) {
       console.error("Error in moveFile: ", error);
     }
   },
   executeFile: async (order) => {
     try {
-      await ipcRenderer.invoke("execute-file", order);
+      return await ipcRenderer.invoke("execute-file", order);
     } catch (error) {
       console.error("Error in replicateFile: ", error);
     }
   },
   replicateFile: async (order) => {
     try {
-      await ipcRenderer.invoke("replicate-file", order);
+      return await ipcRenderer.invoke("replicate-file", order);
     } catch (error) {
       console.error("Error in replicateFile: ", error);
     }
