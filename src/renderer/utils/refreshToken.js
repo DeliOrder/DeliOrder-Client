@@ -2,12 +2,14 @@ import axios from "axios";
 
 const refreshToken = async () => {
   try {
-    const userRefreshToken = window.localStorage.getItem("refreshToken");
-    const userId = window.localStorage.getItem("userId");
-    const authorization = "Bearer " + userRefreshToken;
-    const { jwtToken, refreshToken } = await axios.post(
+    const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
+    const deliOrderRefreshToken = window.localStorage.getItem(
+      "deliOrderRefreshToken",
+    );
+    const authorization = "Bearer " + deliOrderRefreshToken;
+    const { newDeliOrderToken, newDeliOrderRefreshToken } = await axios.post(
       `${import.meta.env.VITE_SERVER_URL}/auth/refresh/kakao`,
-      { userId },
+      { deliOrderRefreshToken, deliOrderUserId },
       {
         headers: {
           "Content-Type": "application/json",
@@ -16,13 +18,15 @@ const refreshToken = async () => {
       },
     );
 
-    if (refreshToken) {
-      localStorage.setItem("refreshToken", refreshToken);
-    }
-
-    localStorage.setItem("jwtToken", jwtToken);
+    window.localStorage.setItem("deliOrderToken", newDeliOrderToken);
+    window.localStorage.setItem(
+      "deliOrderRefreshToken",
+      newDeliOrderRefreshToken,
+    );
   } catch (error) {
     console.error("토큰 재발급 중 오류 발생", error);
+    window.localStorage.clear();
+    window.location.href = "/login";
   }
 };
 
