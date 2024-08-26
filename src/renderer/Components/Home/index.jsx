@@ -3,15 +3,21 @@ import { useEffect } from "react";
 import { signInWithCustomToken } from "firebase/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { auth } from "@renderer/firebase";
+import { auth } from "../../../../firebase";
 import usePackageStore from "@renderer/store";
 
+import { GUIDE_MESSAGES } from "../../constants/messages";
 import DeliLogo from "@renderer/assets/images/logo.png";
 
 function Home() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { setClientStatus } = usePackageStore();
+  const { setClientStatus, openInfoModal, setInfoMessage } = usePackageStore();
+
+  const notifyInfoMessage = (message) => {
+    setInfoMessage(message);
+    openInfoModal();
+  };
 
   useEffect(() => {
     const getJwtToken = async () => {
@@ -44,8 +50,8 @@ function Home() {
         setClientStatus({ isLogin: true });
         navigate("/");
       } catch (error) {
-        // TODO: 추후 에러관련 처리
-        throw new Error(error);
+        console.errors("카카오 로그인 실패: ", error);
+        notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
       }
     };
 
