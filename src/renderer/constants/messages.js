@@ -21,6 +21,11 @@ export const SIGN_UP_ALERT = {
 
 export const SIGN_IN_ALERT = {
   CHECK_ID_OR_PASSWORD: "아이디 또는 비밀번호를 다시 확인해주세요",
+  INVALID_REQUEST: "비정상적인 접근입니다",
+};
+
+export const SIGN_OUT_ALERT = {
+  INVALID_REQUEST: "비정상적인 접근입니다",
 };
 
 export const GUIDE_MESSAGES = {

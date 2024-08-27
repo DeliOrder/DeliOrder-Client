@@ -72,54 +72,42 @@ function SignUp() {
       return;
     }
 
-    if (!validatePassword(passwordValue, passwordCheckValue).valid) {
-      const passwordErrorList = validatePassword(
-        passwordValue,
-        passwordCheckValue,
-      ).errors;
+    const passwordValidationResult = validatePassword(
+      passwordValue,
+      passwordCheckValue,
+    );
+    if (!passwordValidationResult.valid) {
+      const passwordErrorList = passwordValidationResult.errors;
       notifyInfoMessage(
         <>
           {passwordErrorList.map((errorMessage, index) => {
-            let errorComponent;
+            let errorText;
+
             switch (errorMessage) {
               case "isLongEnough":
-                errorComponent = (
-                  <div key={index}>{SIGN_UP_ALERT.NOT_LONG_ENOUGH}</div>
-                );
+                errorText = SIGN_UP_ALERT.NOT_LONG_ENOUGH;
                 break;
               case "hasLetter":
-                errorComponent = (
-                  <div key={index}>{SIGN_UP_ALERT.DO_NOT_HAS_LETTER}</div>
-                );
+                errorText = SIGN_UP_ALERT.DO_NOT_HAS_LETTER;
                 break;
               case "hasNumber":
-                errorComponent = (
-                  <div key={index}>{SIGN_UP_ALERT.DO_NOT_HAS_NUMBER}</div>
-                );
+                errorText = SIGN_UP_ALERT.DO_NOT_HAS_NUMBER;
                 break;
               case "hasSpecialChar":
-                errorComponent = (
-                  <div key={index}>{SIGN_UP_ALERT.DO_NOT_HAS_SPECIAL_CHAR}</div>
-                );
+                errorText = SIGN_UP_ALERT.DO_NOT_HAS_SPECIAL_CHAR;
                 break;
               case "hasNoWhitespace":
-                errorComponent = (
-                  <div key={index}>
-                    {SIGN_UP_ALERT.DO_NOT_HAS_NO_WHITESPACE}
-                  </div>
-                );
+                errorText = SIGN_UP_ALERT.DO_NOT_HAS_NO_WHITESPACE;
                 break;
               case "hasSameValue":
-                errorComponent = (
-                  <div key={index}>{SIGN_UP_ALERT.DO_NOT_HAS_SAME_VALUE}</div>
-                );
+                errorText = SIGN_UP_ALERT.DO_NOT_HAS_SAME_VALUE;
                 break;
               default:
-                errorComponent = <div key={index}>{errorMessage}</div>;
+                errorText = errorMessage;
                 break;
             }
 
-            return errorComponent;
+            return <div key={index}>{errorText}</div>;
           })}
         </>,
       );

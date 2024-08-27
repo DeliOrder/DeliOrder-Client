@@ -9,7 +9,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
-import { auth } from "../../../../firebase";
+import { auth } from "@renderer/firebase";
 import usePackageStore from "@renderer/store";
 
 import { GUIDE_MESSAGES, SIGN_IN_ALERT } from "../../constants/messages";
@@ -73,6 +73,12 @@ function Login() {
       console.error("이메일 로그인 실패: ", error);
       if (error.code === "auth/invalid-credential") {
         notifyInfoMessage(SIGN_IN_ALERT.CHECK_ID_OR_PASSWORD);
+      } else if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status < 500
+      ) {
+        notifyInfoMessage(SIGN_IN_ALERT.INVALID_REQUEST);
       } else {
         notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
       }
