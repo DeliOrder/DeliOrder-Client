@@ -22,6 +22,38 @@ function CreatingOrder() {
   const currentOrder = getOrder();
   const [message, setMessage] = useState("");
 
+  const clearMessage = () => {
+    setMessage("");
+  };
+
+  const validate = (order) => {
+    function hasExtension(fileName) {
+      return /\.[^/.]+$/.test(fileName);
+    }
+    if (!order.action) {
+      return "행동을 선택해 주세요.";
+    }
+
+    if (!order.attachmentName) {
+      return "대상 파일을 선택해 주세요.";
+    }
+
+    if (order.executionPath) {
+      return "명령을 수행할 최종 경로를 지정해주세요.";
+    }
+
+    if (order.action === "이동하기" && !order.sourcePath) {
+      return "이동할 파일이 있는 경로를 지정해주세요.";
+    }
+
+    if (order.action === "수정하기") {
+      if (!order.editingName) return "수정할 이름을 적어주세요.";
+
+      if (!hasExtension(order.editingName))
+        return "확장자 이름까지 적어주세요.";
+    }
+  };
+
   const handleInput = (event) => {
     updateOrder({ editingName: event.target.value });
   };
@@ -32,11 +64,18 @@ function CreatingOrder() {
     const MAXIMUM_ORDER_NUMBER = 5;
     const isOverMaxOrders = orders.length >= MAXIMUM_ORDER_NUMBER;
 
-    setMessage(isOverMaxOrders ? VALIDATION_MESSAGES.MAX_ORDER_LIMIT : "");
-
-    if (!isOverMaxOrders) {
-      addOrder(currentOrder);
+    if (isOverMaxOrders) {
+      setMessage(VALIDATION_MESSAGES.MAX_ORDER_LIMIT);
+      return;
     }
+
+    const validateResult = validate(currentOrder);
+    if (validateResult) {
+      setMessage(validateResult);
+      return;
+    }
+
+    addOrder(currentOrder);
 
     setClientStatus({ isSubmitted: true });
     clearOrder();
@@ -45,7 +84,7 @@ function CreatingOrder() {
   return (
     <div className="container-small">
       <label className="label-large">제조하기</label>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onClick={clearMessage}>
         <ActionPicker />
         <div className="mx-auto max-w-md">
           <FilePicker />
