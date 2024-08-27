@@ -30,28 +30,37 @@ function ProcessConfirm({ orders, closeModal }) {
 
   const handleProcessPackage = async (receivedPackage) => {
     try {
-      const results = await Promise.all(
-        receivedPackage.map(async (order) => {
-          switch (order.action) {
-            case "생성하기":
-              return await window.electronAPI.downloadFile(order);
-            case "이동하기":
-              return await window.electronAPI.moveFile(order);
-            case "복제하기":
-              return await window.electronAPI.replicateFile(order);
-            case "수정하기":
-              return await window.electronAPI.editFileName(order);
-            case "실행하기":
-              return await window.electronAPI.executeFile(order);
-            case "삭제하기":
-              return await window.electronAPI.deleteFile(order);
-            case "압축해제하기":
-              return await window.electronAPI.unzipFile(order);
-            default:
-              return "알 수 없는 작업입니다";
-          }
-        }),
-      );
+      const results = [];
+
+      for (const order of receivedPackage) {
+        let result;
+        switch (order.action) {
+          case "생성하기":
+            result = await window.electronAPI.downloadFile(order);
+            break;
+          case "이동하기":
+            result = await window.electronAPI.moveFile(order);
+            break;
+          case "복제하기":
+            result = await window.electronAPI.replicateFile(order);
+            break;
+          case "수정하기":
+            result = await window.electronAPI.editFileName(order);
+            break;
+          case "실행하기":
+            result = await window.electronAPI.executeFile(order);
+            break;
+          case "삭제하기":
+            result = await window.electronAPI.deleteFile(order);
+            break;
+          case "압축해제하기":
+            result = await window.electronAPI.unzipFile(order);
+            break;
+          default:
+            result = "알 수 없는 작업입니다";
+        }
+        results.push(result);
+      }
 
       setProcessResults(results);
       openResultModal();
