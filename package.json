@@ -26,6 +26,7 @@
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
     "firebase": "^10.13.0",
+    "iconv-lite": "^0.6.3",
     "mime": "^4.0.4",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
