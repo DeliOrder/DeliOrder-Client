@@ -4,20 +4,57 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 import Modal from "../Modal";
+import usePackageStore from "@renderer/store";
+import { validateEmail, validatePassword } from "../../utils/validate.js";
+import { SIGN_UP_ALERT, GUIDE_MESSAGES } from "../../constants/messages.js";
 
 function SignUp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [emailValue, setEmailValue] = useState("");
+  const [emailValidate, setEmailValidate] = useState(false);
   const [nicknameValue, setNicknameValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [passwordCheckValue, setPasswordCheckValue] = useState("");
   const [checkBoxValue, setCheckBoxValue] = useState(false);
+
+  const { openInfoModal, setInfoMessage } = usePackageStore();
   const navigate = useNavigate();
 
   const openModal = () => setIsModalOpen(true);
   const navigateToMainPage = () => {
     setIsModalOpen(false);
     navigate("/");
+  };
+
+  const notifyInfoMessage = (message) => {
+    setInfoMessage(message);
+    openInfoModal();
+  };
+
+  const handleEmailValidate = async () => {
+    try {
+      if (!validateEmail(emailValue)) {
+        throw new Error("이메일형식에 맞지 않습니다");
+      }
+
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/auth/sign-up/check-email`,
+        { emailValue },
+      );
+      setEmailValidate(true);
+      notifyInfoMessage(SIGN_UP_ALERT.EMAIL_VERIFICATION_SUCCESS);
+    } catch (error) {
+      console.error(
+        "이메일 중복검증 실패: ",
+        error.response?.data?.error || error.message,
+      );
+      if (error.response) {
+        notifyInfoMessage(SIGN_UP_ALERT.EMAIL_ALREADY_REGISTERED);
+      } else {
+        notifyInfoMessage(SIGN_UP_ALERT.INVALID_EMAIL_FORMAT);
+      }
+      setEmailValidate(false);
+    }
   };
 
   const handleEmailSignUp = async (event) => {
@@ -30,21 +67,69 @@ function SignUp() {
       checkBoxValue,
     };
 
-    // TODO: 이메일 가입 관련 유효성 로직 추가 필요
+    if (!emailValidate) {
+      notifyInfoMessage(SIGN_UP_ALERT.EMAIL_VERIFICATION_REQUIRED);
+      return;
+    }
+
+    const passwordValidationResult = validatePassword(
+      passwordValue,
+      passwordCheckValue,
+    );
+    if (!passwordValidationResult.valid) {
+      const passwordErrorList = passwordValidationResult.errors;
+      notifyInfoMessage(
+        <>
+          {passwordErrorList.map((errorMessage, index) => {
+            let errorText;
+
+            switch (errorMessage) {
+              case "isLongEnough":
+                errorText = SIGN_UP_ALERT.NOT_LONG_ENOUGH;
+                break;
+              case "hasLetter":
+                errorText = SIGN_UP_ALERT.DO_NOT_HAS_LETTER;
+                break;
+              case "hasNumber":
+                errorText = SIGN_UP_ALERT.DO_NOT_HAS_NUMBER;
+                break;
+              case "hasSpecialChar":
+                errorText = SIGN_UP_ALERT.DO_NOT_HAS_SPECIAL_CHAR;
+                break;
+              case "hasNoWhitespace":
+                errorText = SIGN_UP_ALERT.DO_NOT_HAS_NO_WHITESPACE;
+                break;
+              case "hasSameValue":
+                errorText = SIGN_UP_ALERT.DO_NOT_HAS_SAME_VALUE;
+                break;
+              default:
+                errorText = errorMessage;
+                break;
+            }
+
+            return <div key={index}>{errorText}</div>;
+          })}
+        </>,
+      );
+      return;
+    }
+
+    if (!checkBoxValue) {
+      notifyInfoMessage(SIGN_UP_ALERT.AGREEMENT_REQUIRED);
+      return;
+    }
+
     try {
       const auth = getAuth();
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        emailValue,
-        passwordValue,
-      );
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/sign-up/local`,
+      await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/auth/sign-up/email`,
         { signUpFormValue },
       );
       openModal();
     } catch (error) {
       console.error("가입실패", error);
+      notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
     }
   };
 
@@ -66,12 +151,15 @@ function SignUp() {
             id="user-mail"
             name="user-mail"
             type="email"
-            onChange={(event) => setEmailValue(event.target.value)}
+            onChange={(event) => {
+              setEmailValue(event.target.value);
+              setEmailValidate(false);
+            }}
           />
           <button
             className="focus:shadow-outline h-12 w-4/12 rounded-r bg-blue-400 px-4 py-2 font-bold text-white hover:bg-blue-500"
             type="button"
-            //TODO: 추후 데이터베이스 연결 또는 firebase를 통해 아이디 중복 확인 로직 구현 필요
+            onClick={handleEmailValidate}
           >
             중복확인
           </button>

@@ -2,27 +2,34 @@ import axios from "axios";
 
 const refreshToken = async () => {
   try {
-    const userRefreshToken = window.localStorage.getItem("refreshToken");
-    const userId = window.localStorage.getItem("userId");
-    const authorization = "Bearer " + userRefreshToken;
-    const { jwtToken, refreshToken } = await axios.post(
-      `${import.meta.env.VITE_SERVER_URL}/auth/refresh/kakao`,
-      { userId },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          authorization,
-        },
-      },
+    const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
+    const deliOrderRefreshToken = window.localStorage.getItem(
+      "deliOrderRefreshToken",
     );
+    const authorization = "Bearer " + deliOrderRefreshToken;
 
-    if (refreshToken) {
-      localStorage.setItem("refreshToken", refreshToken);
+    if (deliOrderUserId && deliOrderRefreshToken) {
+      const { newDeliOrderToken, newDeliOrderRefreshToken } = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/auth/token/refresh`,
+        { deliOrderRefreshToken, deliOrderUserId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization,
+          },
+        },
+      );
+
+      window.localStorage.setItem("deliOrderToken", newDeliOrderToken);
+      window.localStorage.setItem(
+        "deliOrderRefreshToken",
+        newDeliOrderRefreshToken,
+      );
     }
-
-    localStorage.setItem("jwtToken", jwtToken);
   } catch (error) {
-    console.error("토큰 재발급 중 오류 발생", error);
+    console.error("토큰 재발급 불가", error);
+    window.localStorage.clear();
+    window.location.href = "/login";
   }
 };
 
