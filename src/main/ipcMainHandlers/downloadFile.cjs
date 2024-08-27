@@ -23,20 +23,23 @@ const downloadFile = () => {
         fs.mkdirSync(convertedFolderPath, { recursive: true });
       }
 
-      https
-        .get(order.attachmentUrl, (response) => {
-          response.pipe(file);
+      const result = await new Promise((resolve, reject) => {
+        https
+          .get(order.attachmentUrl, (response) => {
+            response.pipe(file);
 
-          file.on("finish", () => {
-            file.close();
+            file.on("finish", () => {
+              file.close(resolve);
+            });
+          })
+          .on("error", (error) => {
+            fs.unlink(convertedFullPath);
+            console.error("파일 다운로드 중 오류 발생", error);
+            throw new Error("파일 다운로드 중 오류 발생");
           });
-        })
-        .on("error", (error) => {
-          fs.unlink(convertedFullPath);
-          console.error("파일 다운로드 중 오류 발생", error);
-        });
+      });
 
-      return "생성 성공";
+      return result;
     } catch (error) {
       console.error("download-file main handler 에러:", error);
 

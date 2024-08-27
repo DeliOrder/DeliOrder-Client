@@ -3,21 +3,33 @@ const path = require("path");
 const fs = require("fs");
 
 const openFileDialog = () => {
-  ipcMain.handle("open-file-dialog", async () => {
+  ipcMain.handle("open-file-dialog", async (event, action) => {
     try {
-      const mime = (await import("mime")).default;
       const result = await dialog.showOpenDialog({
         properties: ["openFile"],
+        ...(action === "압축해제하기" && {
+          filters: [
+            {
+              name: "ZIP Files",
+              extensions: ["zip"],
+            },
+          ],
+        }),
       });
       const selectedFilePath = result.filePaths[0];
       const { base: attachmentName, ext: extension } =
         path.parse(selectedFilePath);
-      const selectedFileStat = fs.statSync(selectedFilePath);
 
-      if (selectedFileStat.isDirectory()) {
+      if (action === "압축해제하기" && extension !== ".zip") {
+        console.error("해당 파일이 zip 파일이 아닙니다");
+        return;
+      }
+
+      if (action !== "생성하기") {
         return { attachmentName, canceled: result.canceled };
       }
 
+      const mime = (await import("mime")).default;
       const fileBuffer = fs.readFileSync(selectedFilePath);
       const baseName = path.basename(selectedFilePath);
       const fileBase64 = fileBuffer.toString("base64");
@@ -26,8 +38,8 @@ const openFileDialog = () => {
       return {
         canceled: result.canceled,
         selectedFilePath,
-        attachmentName,
-        fileBase64,
+        attachmentName: attachmentName.normalize("NFC"),
+        fileBase64: fileBase64.normalize("NFC"),
         baseName,
         mimeType,
       };
