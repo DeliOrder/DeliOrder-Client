@@ -38,8 +38,8 @@ const openFileDialog = () => {
       return {
         canceled: result.canceled,
         selectedFilePath,
-        attachmentName,
-        fileBase64,
+        attachmentName: attachmentName.normalize("NFC"),
+        fileBase64: fileBase64.normalize("NFC"),
         baseName,
         mimeType,
       };
