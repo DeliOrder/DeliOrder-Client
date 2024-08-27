@@ -5,7 +5,8 @@ import usePackageStore from "@renderer/store";
 import { getAuth, signOut } from "firebase/auth";
 
 import DeliLogo from "../../assets/images/logo.png";
-import { GUIDE_MESSAGES } from "../../constants/messages";
+import { GUIDE_MESSAGES, SIGN_OUT_ALERT } from "@renderer/constants/messages";
+
 function Nav() {
   const {
     clientStatus: { isLogin },
@@ -35,7 +36,16 @@ function Nav() {
         setClientStatus({ isLogin: false });
       } catch (error) {
         console.error("카카오 로그아웃 실패: ", error);
-        notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+        console.error("이메일 로그인 실패: ", error);
+        if (
+          error.response &&
+          error.response.status >= 400 &&
+          error.response.status < 500
+        ) {
+          notifyInfoMessage(SIGN_OUT_ALERT.INVALID_REQUEST);
+        } else {
+          notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+        }
       }
     } else {
       try {

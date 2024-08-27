@@ -7,6 +7,7 @@ const refreshToken = async () => {
       "deliOrderRefreshToken",
     );
     const authorization = "Bearer " + deliOrderRefreshToken;
+
     if (deliOrderUserId && deliOrderRefreshToken) {
       const { newDeliOrderToken, newDeliOrderRefreshToken } = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/auth/token/refresh`,
@@ -18,6 +19,7 @@ const refreshToken = async () => {
           },
         },
       );
+
       window.localStorage.setItem("deliOrderToken", newDeliOrderToken);
       window.localStorage.setItem(
         "deliOrderRefreshToken",

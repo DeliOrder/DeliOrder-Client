@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { signInWithCustomToken } from "firebase/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { auth } from "../../../../firebase";
+import { auth } from "@renderer/firebase";
 import usePackageStore from "@renderer/store";
 
-import { GUIDE_MESSAGES } from "../../constants/messages";
+import { GUIDE_MESSAGES } from "@renderer/constants/messages";
 import DeliLogo from "@renderer/assets/images/logo.png";
 
 function Home() {

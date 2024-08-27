@@ -16,41 +16,45 @@ import InfoModal from "./Modal/InfoModal";
 
 function App() {
   const { setClientStatus } = usePackageStore();
-  const deliOrderToken = window.localStorage.getItem("deliOrderToken");
-  const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
-  const deliOrderAuthProvider = window.localStorage.getItem(
-    "deliOrderAuthProvider",
-  );
 
   const hasPreviousLoginInfo = () => {
+    const deliOrderToken = window.localStorage.getItem("deliOrderToken");
+    const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
+    const deliOrderAuthProvider = window.localStorage.getItem(
+      "deliOrderAuthProvider",
+    );
     return deliOrderToken && deliOrderUserId && deliOrderAuthProvider;
   };
 
   useEffect(() => {
     const validateToken = async () => {
       try {
-        if (hasPreviousLoginInfo()) {
-          const authorization = "Bearer " + deliOrderToken;
-          axios.get(`${import.meta.env.VITE_SERVER_URL}/auth/token/validate`, {
-            headers: {
-              authorization,
-            },
-          });
-          setClientStatus({ isLogin: true });
-        } else {
+        const deliOrderToken = window.localStorage.getItem("deliOrderToken");
+
+        if (!hasPreviousLoginInfo()) {
           window.localStorage.clear();
+          return;
         }
+
+        const authorization = "Bearer " + deliOrderToken;
+        axios.get(`${import.meta.env.VITE_SERVER_URL}/auth/token/validate`, {
+          headers: {
+            authorization,
+          },
+        });
+        setClientStatus({ isLogin: true });
       } catch (error) {
         console.error("앱초기진입 로그인에러: ", error);
-        if (error.name === "TokenExpiredError") {
-          try {
-            await refreshToken();
-          } catch (refreshError) {
-            console.error("토큰 갱신 중 오류 발생: ", refreshError);
-            window.localStorage.clear();
-            setClientStatus({ isLogin: false });
-          }
-        } else {
+        if (error.name !== "TokenExpiredError") {
+          window.localStorage.clear();
+          setClientStatus({ isLogin: false });
+          return;
+        }
+
+        try {
+          await refreshToken();
+        } catch (refreshError) {
+          console.error("토큰 갱신 중 오류 발생: ", refreshError);
           window.localStorage.clear();
           setClientStatus({ isLogin: false });
         }
