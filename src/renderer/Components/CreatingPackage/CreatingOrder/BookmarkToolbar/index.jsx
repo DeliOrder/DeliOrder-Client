@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState } from "react";
 
 import Modal from "../../../Modal";
+import BookmarkList from "./BookmarkList/BookmarkList";
+
 import usePackageStore from "@renderer/store";
 import useModal from "@renderer/utils/useModal";
 import refreshToken from "@renderer/utils/refreshToken";
@@ -18,7 +20,6 @@ function BookmarkToolbar() {
   const {
     clientStatus: { isLogin, isPickFile },
     getOrder,
-    updateOrder,
   } = usePackageStore();
 
   const userId = window.localStorage.getItem("deliOrderUserId");
@@ -28,6 +29,11 @@ function BookmarkToolbar() {
   const notifyLoginRequired = () => {
     setInfoMessage(GUIDE_MESSAGES.REQUIRE_LOGIN);
     openInfoModal();
+  };
+
+  const validateRequiredInputs = (inputs) => {
+    const requiredField = ["action", "executionPath"];
+    return requiredField.every((field) => inputs[field].length > 0);
   };
 
   const handleAddBookmark = async () => {
@@ -146,22 +152,6 @@ function BookmarkToolbar() {
     }
   };
 
-  const applyBookmark = (index) => {
-    delete bookmarks[index]._id;
-    delete bookmarks[index].updatedAt;
-    delete bookmarks[index].createdAt;
-
-    updateOrder(bookmarks[index]);
-    closeBookmarkList();
-  };
-
-  const validateRequiredInputs = (inputs) => {
-    const requiredField = isPickFile
-      ? ["action", "attachmentName", "executionPath"]
-      : ["action", "executionPath"];
-    return requiredField.every((field) => inputs[field].length > 0);
-  };
-
   return (
     <>
       <span className="label-large">즐겨찾기</span>
@@ -192,17 +182,10 @@ function BookmarkToolbar() {
         isOpen={isBookmarkListOpen}
         onClose={closeBookmarkList}
       >
-        {bookmarks.map((bookmark, index) => (
-          <button
-            key={bookmark.createdAt}
-            className="button-base-blue"
-            onClick={() => {
-              applyBookmark(index);
-            }}
-          >
-            {bookmark.action}
-          </button>
-        ))}
+        <BookmarkList
+          bookmarks={bookmarks}
+          closeBookmarkList={closeBookmarkList}
+        />
       </Modal>
     </>
   );
