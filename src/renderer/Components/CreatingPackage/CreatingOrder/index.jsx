@@ -38,7 +38,7 @@ function CreatingOrder() {
       return "대상 파일을 선택해 주세요.";
     }
 
-    if (order.executionPath) {
+    if (!order.executionPath) {
       return "명령을 수행할 최종 경로를 지정해주세요.";
     }
 

@@ -52,7 +52,7 @@ function PackagePreview() {
 
     try {
       await Promise.all(
-        ordersToCreate.forEach(async (order) => {
+        ordersToCreate.map(async (order) => {
           const uploadParams = {
             Bucket: import.meta.env.VITE_AWS_BUCKET,
             Key: order.attachmentName,
