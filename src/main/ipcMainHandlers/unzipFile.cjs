@@ -2,6 +2,7 @@ const { ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const yauzl = require("yauzl");
+const iconv = require("iconv-lite");
 
 const { getCopyFileName } = require("../utils/getCopyFileName.cjs");
 const { convertPath } = require("../utils/convertPath.cjs");
@@ -9,15 +10,14 @@ const { convertPath } = require("../utils/convertPath.cjs");
 const unzipFile = () => {
   ipcMain.handle("unzip-file", async (event, order) => {
     if (order.action !== "압축해제하기") {
-      console.error(`수신받은 행동이 "압축해제하기"가 아닙니다.`);
-      return;
+      return "수신받은 행동이 '압축해제하기'가 아닙니다.";
     }
 
     const fullPath = path.join(order.executionPath, order.attachmentName);
     const convertedFullPath = convertPath(fullPath);
 
     if (!fs.existsSync(convertedFullPath)) {
-      throw new Error("해당 위치에 요청한 파일 또는 폴더가 없습니다.");
+      return "해당 위치에 요청한 파일 또는 폴더가 없습니다.";
     }
 
     let { name } = path.parse(convertedFullPath);
@@ -46,7 +46,19 @@ const unzipFile = () => {
             zipFile.readEntry();
             zipFile.on("entry", (entry) => {
               const fileNameBuffer = Buffer.from(entry.fileName, "binary");
-              const decodedFileName = fileNameBuffer.toString("utf-8");
+              const decodedFileNameFromWindow = iconv
+                .decode(fileNameBuffer, "cp949")
+                .normalize("NFC");
+
+              const decodedFileNameFromMac = iconv
+                .decode(fileNameBuffer, "utf-8")
+                .normalize("NFC");
+              let decodedFileName = decodedFileNameFromMac;
+
+              if (decodedFileName.includes("�")) {
+                decodedFileName = decodedFileNameFromWindow;
+              }
+
               const filePath = path.join(newConvertedFullPath, decodedFileName);
 
               if (/\/$/.test(decodedFileName)) {
