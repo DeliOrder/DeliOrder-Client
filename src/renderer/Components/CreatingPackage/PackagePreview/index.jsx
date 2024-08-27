@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import {
   S3Client,
   PutObjectCommand,
@@ -10,21 +9,24 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
+import Order from "./Order";
 import Modal from "../../Modal";
 
 import usePackageStore from "@renderer/store";
-import Order from "./Order";
-import refreshToken from "../../../utils/refreshToken";
+import useModal from "@renderer/utils/useModal";
+import refreshToken from "@renderer/utils/refreshToken";
 
 function PackagePreview() {
-  const { orders, getOrders, clearOrders } = usePackageStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [serialNumber, setSerialNumber] = useState("");
   const [expiredTime, setExpiredTime] = useState("");
+  const [serialNumber, setSerialNumber] = useState("");
+
+  const [isOpen, openModal, closeModal] = useModal();
+  const { orders, getOrders, clearOrders, setInfoMessage, openInfoModal } =
+    usePackageStore();
+  const orderPackage = getOrders();
   const navigate = useNavigate();
 
-  const orderPackage = getOrders();
   const s3Client = new S3Client({
     region: import.meta.env.VITE_AWS_REGION,
     credentials: {
@@ -33,38 +35,28 @@ function PackagePreview() {
     },
   });
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   const copyToClipboard = () => {
     navigator.clipboard.writeText(serialNumber);
   };
 
   const uploadFileToAWS = async () => {
+    const ordersToCreate = orderPackage.filter(
+      (order) => order.action === "생성하기",
+    );
+
+    if (!ordersToCreate.every((order) => order.attachmentType === "file")) {
+      setIsLoading(false);
+      setInfoMessage("생성할 파일이 선택되지 않았습니다.");
+      openInfoModal();
+    }
+
     try {
-      const fileList = orderPackage.filter(
-        (action) => action.action === "생성하기",
-      );
-
-      if (fileList.length === 0) {
-        setIsLoading(false);
-        return;
-      }
-      // TODO:: console.error 관련 사용자에게 직접 표시되도록 개선 필요
-      if (!fileList.every((action) => action.attachmentType === "file")) {
-        setIsLoading(false);
-        throw new Error("파일이 선택되지 않았습니다.");
-      }
-
-      // TODO: 대용량 파일 전송을 대비한 Promise.allSettled 사용 고려 및 트랜잭션을 고려한 로직 개선 필요
       await Promise.all(
-        fileList.map(async (file) => {
+        ordersToCreate.forEach(async (order) => {
           const uploadParams = {
             Bucket: import.meta.env.VITE_AWS_BUCKET,
-            Key: file.attachmentName,
-            Body: file.attachmentFile,
+            Key: order.attachmentName,
+            Body: order.attachmentFile,
             ACL: "public-read",
           };
 
@@ -73,16 +65,14 @@ function PackagePreview() {
 
           const getCommand = new GetObjectCommand({
             Bucket: import.meta.env.VITE_AWS_BUCKET,
-            Key: file.attachmentName,
+            Key: order.attachmentName,
           });
 
           const signedUrl = await getSignedUrl(s3Client, getCommand, {
             expiresIn: 600,
           });
 
-          file.attachmentUrl = signedUrl;
-
-          return signedUrl;
+          order.attachmentUrl = signedUrl;
         }),
       );
     } catch (error) {
@@ -92,20 +82,17 @@ function PackagePreview() {
 
   const deleteFileToAWS = async () => {
     try {
-      const fileList = orderPackage.filter(
-        (action) => action.action === "생성하기",
+      const ordersToCreate = orderPackage.filter(
+        (order) => order.action === "생성하기",
       );
 
-      if (
-        fileList.length === 0 ||
-        !fileList.every((action) => action.attachmentType === "file")
-      ) {
+      if (!ordersToCreate.every((action) => action.attachmentType === "file")) {
         setIsLoading(false);
         throw new Error("파일이 선택되지 않았습니다.");
       }
 
       await Promise.all(
-        fileList.map(async (file) => {
+        ordersToCreate.map(async (file) => {
           const deleteParams = {
             Bucket: import.meta.env.VITE_AWS_BUCKET,
             Key: file.attachmentName,
@@ -146,6 +133,12 @@ function PackagePreview() {
   };
 
   const handleFilePackage = async () => {
+    if (!orderPackage.length) {
+      setInfoMessage("패키지가 비어 있습니다.");
+      openInfoModal();
+      return;
+    }
+
     try {
       setIsLoading(true);
       await uploadFileToAWS();
@@ -158,7 +151,13 @@ function PackagePreview() {
       openModal();
     } catch (error) {
       deleteFileToAWS();
-      console.error("파일을 업로드하던중 문제가 발생하였습니다.", error);
+      console.error(
+        "파일을 업로드하던중 문제가 발생하였습니다.",
+        error.message,
+      );
+
+      setInfoMessage("첨부파일 업로드에 실패하였습니다. 다시 시도해 주세요.");
+      openInfoModal();
     } finally {
       clearOrders();
       setIsLoading(false);
@@ -171,7 +170,7 @@ function PackagePreview() {
   };
 
   return (
-    <div className="relative w-3/5 bg-white px-6 pb-8 pt-10 shadow-sm ring-1 ring-gray-900/5 sm:mr-3 sm:max-w-full sm:rounded-lg sm:px-10">
+    <div className="container-large">
       <label className="mb-2 block text-xl font-bold text-gray-700">
         패키지 미리보기
       </label>
@@ -187,11 +186,7 @@ function PackagePreview() {
       >
         패키징하기
       </button>
-      <Modal
-        title="DELIORDER"
-        isOpen={isModalOpen}
-        onClose={navigateToMainPage}
-      >
+      <Modal title="DELIORDER" isOpen={isOpen} onClose={navigateToMainPage}>
         <div>
           <div className="mb-4">
             <p>일련번호</p>
@@ -229,14 +224,6 @@ function PackagePreview() {
             {expiredTime ? expiredTime.toLocaleTimeString().slice(0, -3) : ""}
             )까지 유효합니다
           </p>
-          <div className="flex justify-center">
-            <button
-              className="mt-4 rounded-md bg-blue-400 px-4 py-2 font-bold text-white hover:bg-blue-500 focus:outline-none"
-              onClick={closeModal}
-            >
-              닫기
-            </button>
-          </div>
         </div>
       </Modal>
     </div>
