@@ -7,11 +7,8 @@ import ProcessConfirm from "./ProcessConfirm";
 
 import usePackageStore from "@renderer/store";
 import useModal from "@renderer/utils/useModal";
-import {
-  SERIAL_NUMBER_LENGTH,
-  RECEIVING_ALERT,
-  COMMON_ALERT,
-} from "@renderer/constants/config";
+import { SERIAL_NUMBER_LENGTH } from "@renderer/constants/config";
+import { RECEIVING_ALERT, COMMON_ALERT } from "@renderer/constants/messages";
 
 function ReceivingPackage() {
   const [currentPackage, setCurrentPackage] = useState([]);
