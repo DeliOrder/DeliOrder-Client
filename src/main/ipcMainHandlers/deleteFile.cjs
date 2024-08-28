@@ -11,6 +11,10 @@ const { convertPath } = require("../utils/convertPath.cjs");
 const deleteFile = () => {
   ipcMain.handle("delete-file", async (event, order) => {
     try {
+      if (order.action !== "삭제하기") {
+        return "수신받은 행동이 '삭제하기'가 아닙니다.";
+      }
+
       const fullPath =
         order.attachmentType === "folder"
           ? path.join(order.executionPath)
@@ -21,11 +25,11 @@ const deleteFile = () => {
         MAC_CRITICAL_PATHS.includes(convertedFullPath) ||
         WINDOWS_CRITICAL_PATHS.includes(convertedFullPath)
       ) {
-        throw new Error("해당 폴더는 삭제할 수 없습니다.");
+        return "해당 폴더는 삭제할 수 없습니다.";
       }
 
       if (!fs.existsSync(convertedFullPath)) {
-        throw new Error("해당 위치에 요청한 파일 또는 폴더가 없습니다.");
+        return "해당 위치에 요청한 파일 또는 폴더가 없습니다.";
       }
 
       const trash = (await import("trash")).default;
