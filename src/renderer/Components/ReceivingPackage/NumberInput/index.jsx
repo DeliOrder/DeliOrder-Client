@@ -1,4 +1,6 @@
-function NumberInput() {
+import PropTypes from "prop-types";
+
+function NumberInput({ inputValue = "" }) {
   const validateNumber = (event) => {
     const VALID_KEY = [
       "Tab",
@@ -50,9 +52,14 @@ function NumberInput() {
         validateNumber(event);
         shiftFocusOnKeyDown(event);
       }}
+      defaultValue={inputValue}
       onChange={shiftFocusOnChange}
     />
   );
 }
+
+NumberInput.propTypes = {
+  inputValue: PropTypes.string,
+};
 
 export default NumberInput;
