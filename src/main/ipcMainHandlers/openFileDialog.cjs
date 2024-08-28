@@ -1,6 +1,9 @@
 const { ipcMain, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs");
+const os = require("os");
+
+const homeDir = os.homedir();
 
 const openFileDialog = () => {
   ipcMain.handle("open-file-dialog", async (event, action) => {
@@ -17,6 +20,8 @@ const openFileDialog = () => {
         }),
       });
       const selectedFilePath = result.filePaths[0];
+      const relativeFilePath = path.relative(homeDir, selectedFilePath);
+      const relativeFileFolder = path.dirname(relativeFilePath);
       const { base: attachmentName, ext: extension } =
         path.parse(selectedFilePath);
 
@@ -26,7 +31,10 @@ const openFileDialog = () => {
       }
 
       if (action !== "생성하기") {
-        return { attachmentName };
+        return {
+          attachmentName: attachmentName.normalize("NFC"),
+          relativePath: relativeFileFolder.normalize("NFC"),
+        };
       }
 
       const mime = (await import("mime")).default;
@@ -39,6 +47,7 @@ const openFileDialog = () => {
         selectedFilePath,
         attachmentName: attachmentName.normalize("NFC"),
         fileBase64: fileBase64.normalize("NFC"),
+        relativePath: relativeFileFolder.normalize("NFC"),
         baseName,
         mimeType,
       };
