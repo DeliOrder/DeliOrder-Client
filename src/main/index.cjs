@@ -13,9 +13,12 @@ require("./ipcMainHandlers/deleteFile.cjs");
 require("./ipcMainHandlers/editFileName.cjs");
 require("./ipcMainHandlers/unzipFile.cjs");
 
-const createWindow = () => {
-  const BASE_URL = process.env.VITE_BASE_URL;
-  const win = new BrowserWindow({
+let mainWindow;
+
+const BASE_URL = process.env.VITE_BASE_URL || "http://localhost:5173";
+
+function createWindow() {
+  mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
     autoHideMenuBar: true,
@@ -31,20 +34,76 @@ const createWindow = () => {
     },
   });
 
-  win.loadURL(BASE_URL);
-};
+  mainWindow.loadURL(BASE_URL);
 
-async function createAppWindow() {
-  await app.whenReady();
-  createWindow();
-
-  app.on("active", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  mainWindow.on("ready-to-show", () => {
+    mainWindow.show();
   });
 }
 
-createAppWindow();
+function handleDeepLink(url) {
+  try {
+    const urlObj = new URL(url);
+    const packageId = urlObj.searchParams.get("packageId");
+    if (packageId) {
+      const targetUrl = `${BASE_URL}/package/receiving?packageId=${packageId}`;
+      mainWindow.loadURL(targetUrl);
+    } else {
+      mainWindow.loadURL(`${BASE_URL}/package/receiving`);
+    }
+  } catch (error) {
+    console.error("딥링크 처리 실패:", error);
+  }
+}
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
-});
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient("electron-deliorder", process.execPath, [
+      path.resolve(process.argv[1]),
+    ]);
+  }
+} else {
+  app.setAsDefaultProtocolClient("electron-deliorder");
+}
+
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", (event, commandLine, workingDirectory) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+
+      const deepLink = commandLine.find((cmd) =>
+        cmd.startsWith("electron-deliorder://"),
+      );
+
+      if (deepLink) {
+        handleDeepLink(deepLink);
+      }
+    } else {
+      createWindow();
+    }
+  });
+
+  app.whenReady().then(() => {
+    createWindow();
+
+    const deepLink = process.argv.find((arg) =>
+      arg.startsWith("electron-deliorder://"),
+    );
+    if (deepLink) {
+      handleDeepLink(deepLink);
+    }
+  });
+
+  app.on("window-all-closed", function () {
+    if (process.platform !== "darwin") app.quit();
+  });
+
+  app.on("activate", function () {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+}
