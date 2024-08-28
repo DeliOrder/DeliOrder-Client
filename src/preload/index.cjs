@@ -6,19 +6,16 @@ contextBridge.exposeInMainWorld("electronAPI", {
       return await ipcRenderer.invoke("open-folder-dialog");
     } catch (error) {
       console.error("Error in openFolderDialog:", error);
-      return {
-        canceled: true,
-        filePaths: "",
-      };
+      return { filePaths: "" };
     }
   },
   openFileDialog: async (action) => {
     try {
-      const { canceled, attachmentName, fileBase64, mimeType, baseName } =
+      const { attachmentName, fileBase64, mimeType, baseName } =
         await ipcRenderer.invoke("open-file-dialog", action);
 
       if (action !== "생성하기") {
-        return { attachmentName, canceled };
+        return { attachmentName };
       }
 
       const fileBuffer = Buffer.from(fileBase64, "base64");
@@ -32,13 +29,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
         type: mimeType,
       });
 
-      return { canceled, fileObj, attachmentName };
+      return { fileObj, attachmentName };
     } catch (error) {
       console.error("Error in openFolderDialog: ", error);
-      return {
-        canceled: true,
-        filePaths: "",
-      };
+      return { filePaths: "" };
     }
   },
   deleteFile: async (order) => {
