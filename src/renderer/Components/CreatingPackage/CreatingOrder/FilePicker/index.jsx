@@ -16,13 +16,22 @@ function FilePicker() {
 
   const openFilePicker = async () => {
     try {
-      const { attachmentName, fileObj } =
+      const { attachmentName, fileObj, relativePath } =
         await window.electronAPI.openFileDialog(currentOrder.action);
+
+      if (currentOrder.action === "생성하기" && !fileObj) {
+        console.error("폴더 선택이 취소되었습니다.");
+        return;
+      }
+
+      const pathType =
+        currentOrder.action === "이동하기" ? "sourcePath" : "executionPath";
 
       updateOrder({
         attachmentName: attachmentName,
         attachmentFile: fileObj,
         attachmentType: "file",
+        [pathType]: currentOrder[pathType] || relativePath,
       });
     } catch (error) {
       console.error("폴더 경로를 여는 중 에러가 발생 :", error);
