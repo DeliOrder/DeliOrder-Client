@@ -29,7 +29,7 @@ const downloadFile = () => {
             response.pipe(file);
 
             file.on("finish", () => {
-              file.close(resolve);
+              file.close(resolve("생성 완료"));
             });
           })
           .on("error", (error) => {

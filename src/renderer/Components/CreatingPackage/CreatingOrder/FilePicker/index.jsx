@@ -1,5 +1,5 @@
 import usePackageStore from "@renderer/store";
-import { GUIDE_MESSAGES } from "@renderer/constants/messages";
+import { GUIDE_MESSAGES, PLACEHOLDER } from "@renderer/constants/messages";
 
 function FilePicker() {
   const { updateOrder, getOrder, getClientStatus, setClientStatus } =
@@ -16,13 +16,8 @@ function FilePicker() {
 
   const openFilePicker = async () => {
     try {
-      const { attachmentName, canceled, fileObj } =
+      const { attachmentName, fileObj } =
         await window.electronAPI.openFileDialog(currentOrder.action);
-
-      if (canceled || (currentOrder.action === "생성하기" && !fileObj)) {
-        console.error("폴더 선택이 취소되었습니다.");
-        return;
-      }
 
       updateOrder({
         attachmentName: attachmentName,
@@ -37,7 +32,7 @@ function FilePicker() {
   return (
     <div className="my-3">
       <label className="label-small flex gap-4">
-        대상 선택하기:
+        대상 선택하기
         <label>
           <input
             type="radio"
@@ -61,7 +56,7 @@ function FilePicker() {
       {isPickFile && (
         <>
           <div className="my-1 flex justify-start space-x-4 text-gray-500">
-            <span>선택방법 :</span>
+            <span className="font-semibold">선택방법 :</span>
             <label>
               <input
                 type="radio"
@@ -90,19 +85,19 @@ function FilePicker() {
               className="input-base focus:shadow-outline"
               onClick={openFilePicker}
             >
-              파일을 선택해 주세요.
+              {PLACEHOLDER.FILE_PICKER}
             </button>
           ) : (
             <input
               type="text"
               className="input-text focus:shadow-outline file:bg-gray-00"
-              placeholder="파일명 입력하기 (예: dog.gif)"
+              placeholder={PLACEHOLDER.FILE_USER_DEFINE}
               onChange={setFileInfo}
             />
           )}
           <p className="text-xs-gray">{GUIDE_MESSAGES.COMPRESSION_NOTICE}</p>
           <p className="text-base-gray">
-            File Name: {currentOrder.attachmentName}
+            파일이름: {currentOrder.attachmentName}
           </p>
         </>
       )}

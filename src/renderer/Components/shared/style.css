@@ -6,6 +6,10 @@
   @apply relative w-2/5 bg-white px-6 pb-8 pt-10 shadow-sm ring-1 ring-gray-900/5 sm:ml-5 sm:max-w-lg sm:rounded-lg sm:px-10;
 }
 
+.container-large {
+  @apply relative w-3/5 bg-white px-6 pb-8 pt-10 shadow-sm ring-1 ring-gray-900/5 sm:mr-3 sm:max-w-full sm:rounded-lg sm:px-10;
+}
+
 .label-large {
   @apply mb-2 block text-xl font-bold text-gray-700;
 }

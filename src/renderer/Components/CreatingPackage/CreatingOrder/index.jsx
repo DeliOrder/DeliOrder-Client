@@ -5,8 +5,12 @@ import ActionPicker from "./ActionPicker";
 import FilePicker from "./FilePicker";
 import FolderPicker from "./FolderPicker";
 
+import {
+  VALIDATION_MESSAGES,
+  CREATE_ORDER_ALERT,
+  PLACEHOLDER,
+} from "@renderer/constants/messages";
 import usePackageStore from "@renderer/store";
-import { VALIDATION_MESSAGES } from "@renderer/constants/messages";
 
 import "../../shared/style.css";
 
@@ -22,6 +26,38 @@ function CreatingOrder() {
   const currentOrder = getOrder();
   const [message, setMessage] = useState("");
 
+  const clearMessage = () => {
+    setMessage("");
+  };
+
+  const validate = (order) => {
+    function hasExtension(fileName) {
+      return /\.[^/.]+$/.test(fileName);
+    }
+    if (!order.action) {
+      return CREATE_ORDER_ALERT.UNDEFINED_ACTION;
+    }
+
+    if (!order.attachmentName) {
+      return CREATE_ORDER_ALERT.UNDEFINED_ATTACHMENT;
+    }
+
+    if (!order.executionPath) {
+      return CREATE_ORDER_ALERT.UNDEFINED_EXECUTION_PATH;
+    }
+
+    if (order.action === "이동하기" && !order.sourcePath) {
+      return CREATE_ORDER_ALERT.UNDEFINED_SOURCE_PATH;
+    }
+
+    if (order.action === "수정하기") {
+      if (!order.editingName) return CREATE_ORDER_ALERT.UNDEFINED_EDITING_NAME;
+
+      if (!hasExtension(order.editingName))
+        return CREATE_ORDER_ALERT.UNDEFINED_EXTENSION_NAME;
+    }
+  };
+
   const handleInput = (event) => {
     updateOrder({ editingName: event.target.value });
   };
@@ -32,11 +68,18 @@ function CreatingOrder() {
     const MAXIMUM_ORDER_NUMBER = 5;
     const isOverMaxOrders = orders.length >= MAXIMUM_ORDER_NUMBER;
 
-    setMessage(isOverMaxOrders ? VALIDATION_MESSAGES.MAX_ORDER_LIMIT : "");
-
-    if (!isOverMaxOrders) {
-      addOrder(currentOrder);
+    if (isOverMaxOrders) {
+      setMessage(VALIDATION_MESSAGES.MAX_ORDER_LIMIT);
+      return;
     }
+
+    const validateResult = validate(currentOrder);
+    if (validateResult) {
+      setMessage(validateResult);
+      return;
+    }
+
+    addOrder(currentOrder);
 
     setClientStatus({ isSubmitted: true });
     clearOrder();
@@ -44,8 +87,8 @@ function CreatingOrder() {
 
   return (
     <div className="container-small">
-      <label className="label-large">제조하기</label>
-      <form onSubmit={handleSubmit}>
+      <label className="label-large">행동 조합 하기</label>
+      <form onSubmit={handleSubmit} onClick={clearMessage}>
         <ActionPicker />
         <div className="mx-auto max-w-md">
           <FilePicker />
@@ -59,7 +102,7 @@ function CreatingOrder() {
               <input
                 type="text"
                 className="input-text focus:shadow-outline"
-                placeholder="변경할 파일명을 적어주세요."
+                placeholder={PLACEHOLDER.EDITING_NAME}
                 onChange={handleInput}
                 value={currentOrder.editingName}
                 required

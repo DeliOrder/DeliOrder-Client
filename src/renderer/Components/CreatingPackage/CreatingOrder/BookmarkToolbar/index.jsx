@@ -2,10 +2,12 @@ import axios from "axios";
 import { useState } from "react";
 
 import Modal from "../../../Modal";
+import BookmarkList from "./BookmarkList";
+
 import usePackageStore from "@renderer/store";
 import useModal from "@renderer/utils/useModal";
 import refreshToken from "@renderer/utils/refreshToken";
-import { GUIDE_MESSAGES } from "@renderer/constants/messages.js";
+import { GUIDE_MESSAGES, COMMON_ALERT } from "@renderer/constants/messages.js";
 
 import addingIcon from "@images/addingIcon.svg";
 import downloadIcon from "@images/downloadIcon.svg";
@@ -16,9 +18,8 @@ function BookmarkToolbar() {
 
   const { openInfoModal, setInfoMessage } = usePackageStore();
   const {
-    clientStatus: { isLogin, isPickFile },
+    clientStatus: { isLogin },
     getOrder,
-    updateOrder,
   } = usePackageStore();
 
   const userId = window.localStorage.getItem("deliOrderUserId");
@@ -30,6 +31,11 @@ function BookmarkToolbar() {
     openInfoModal();
   };
 
+  const validateRequiredInputs = (inputs) => {
+    const requiredField = ["action", "executionPath"];
+    return requiredField.every((field) => inputs[field].length > 0);
+  };
+
   const handleAddBookmark = async () => {
     if (!isLogin) {
       notifyLoginRequired();
@@ -37,7 +43,6 @@ function BookmarkToolbar() {
     }
 
     const BookmarkTarget = getOrder();
-
     if (!validateRequiredInputs(BookmarkTarget)) {
       setInfoMessage(GUIDE_MESSAGES.BOOKMARK_REQUIREMENT);
       openInfoModal();
@@ -89,7 +94,7 @@ function BookmarkToolbar() {
         }
       } else {
         console.error("서버 응답 에러 :", error);
-        setInfoMessage("일시적 서버 에러입니다. 잠시 후 다시 시도해주세요");
+        setInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
         openInfoModal();
       }
 
@@ -139,27 +144,11 @@ function BookmarkToolbar() {
         }
       } else {
         console.error("서버 응답 에러 :", error);
-        setInfoMessage("일시적 서버 에러입니다. 잠시 후 다시 시도해주세요");
+        setInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
       }
 
       openInfoModal();
     }
-  };
-
-  const applyBookmark = (index) => {
-    delete bookmarks[index]._id;
-    delete bookmarks[index].updatedAt;
-    delete bookmarks[index].createdAt;
-
-    updateOrder(bookmarks[index]);
-    closeBookmarkList();
-  };
-
-  const validateRequiredInputs = (inputs) => {
-    const requiredField = isPickFile
-      ? ["action", "attachmentName", "executionPath"]
-      : ["action", "executionPath"];
-    return requiredField.every((field) => inputs[field].length > 0);
   };
 
   return (
@@ -192,17 +181,10 @@ function BookmarkToolbar() {
         isOpen={isBookmarkListOpen}
         onClose={closeBookmarkList}
       >
-        {bookmarks.map((bookmark, index) => (
-          <button
-            key={bookmark.createdAt}
-            className="button-base-blue"
-            onClick={() => {
-              applyBookmark(index);
-            }}
-          >
-            {bookmark.action}
-          </button>
-        ))}
+        <BookmarkList
+          bookmarks={bookmarks}
+          closeBookmarkList={closeBookmarkList}
+        />
       </Modal>
     </>
   );

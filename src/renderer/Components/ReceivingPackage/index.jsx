@@ -8,6 +8,7 @@ import ProcessConfirm from "./ProcessConfirm";
 import usePackageStore from "@renderer/store";
 import useModal from "@renderer/utils/useModal";
 import { SERIAL_NUMBER_LENGTH } from "@renderer/constants/config";
+import { RECEIVING_ALERT, COMMON_ALERT } from "@renderer/constants/messages";
 
 function ReceivingPackage() {
   const [currentPackage, setCurrentPackage] = useState([]);
@@ -25,7 +26,7 @@ function ReceivingPackage() {
 
       const serialNumber = inputNumbers.join("");
       if (serialNumber === "") {
-        setInfoMessage("일련 번호를 입력해 주세요.");
+        setInfoMessage(RECEIVING_ALERT.REQUIRE_SERIAL_NUMBER);
         openInfoModal();
 
         return;
@@ -45,9 +46,7 @@ function ReceivingPackage() {
       }
     } catch (error) {
       setInfoMessage(
-        error.response
-          ? error.response.data.message
-          : "실행중 오류가 발생하였습니다",
+        error.response ? error.response.data.error : COMMON_ALERT.ERROR_OCCUR,
       );
       openInfoModal();
     }

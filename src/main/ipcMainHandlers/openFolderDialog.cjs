@@ -17,15 +17,11 @@ const openFolderDialog = () => {
 
       return {
         attachmentName,
-        canceled: result.canceled,
         folderPaths: relativePath,
       };
     } catch (error) {
       console.error("open-folder-dialog handler 에러:", error);
-      return {
-        canceled: true,
-        filePaths: "",
-      };
+      return { filePaths: "" };
     }
   });
 };
