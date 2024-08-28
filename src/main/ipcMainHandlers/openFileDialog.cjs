@@ -26,7 +26,10 @@ const openFileDialog = () => {
       }
 
       if (action !== "생성하기") {
-        return { attachmentName, canceled: result.canceled };
+        return {
+          attachmentName: attachmentName.normalize("NFC"),
+          canceled: result.canceled,
+        };
       }
 
       const mime = (await import("mime")).default;
