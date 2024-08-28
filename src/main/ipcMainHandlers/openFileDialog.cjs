@@ -26,7 +26,7 @@ const openFileDialog = () => {
       }
 
       if (action !== "생성하기") {
-        return { attachmentName, canceled: result.canceled };
+        return { attachmentName };
       }
 
       const mime = (await import("mime")).default;
@@ -36,7 +36,6 @@ const openFileDialog = () => {
       const mimeType = mime.getType(extension);
 
       return {
-        canceled: result.canceled,
         selectedFilePath,
         attachmentName: attachmentName.normalize("NFC"),
         fileBase64: fileBase64.normalize("NFC"),
@@ -45,10 +44,7 @@ const openFileDialog = () => {
       };
     } catch (error) {
       console.error("open-file-dialog handler 에러:", error);
-      return {
-        canceled: true,
-        filePaths: "",
-      };
+      return { filePaths: "" };
     }
   });
 };
