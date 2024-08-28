@@ -8,12 +8,11 @@ function ActionPicker() {
   const handleActionChange = (event) => {
     const selectedAction = event.target.value;
 
-    clearOrder();
-
     if (selectedAction === "생성하기" || selectedAction === "압축해제하기") {
       setClientStatus({ isPickFile: true, isUsingFilePicker: true });
     }
 
+    clearOrder();
     updateOrder({ action: selectedAction });
   };
 
