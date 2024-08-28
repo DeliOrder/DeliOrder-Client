@@ -46,7 +46,7 @@ function ReceivingPackage() {
       }
     } catch (error) {
       setInfoMessage(
-        error.response ? error.response.data.message : COMMON_ALERT.ERROR_OCCUR,
+        error.response ? error.response.data.error : COMMON_ALERT.ERROR_OCCUR,
       );
       openInfoModal();
     }

@@ -7,6 +7,8 @@ export const VALIDATION_MESSAGES = {
 export const COMMON_ALERT = {
   INVALID_REQUEST: "비정상적인 접근입니다",
   ERROR_OCCUR: "실행중 오류가 발생하였습니다.",
+  SERVER_ERROR_TRY_AGAIN:
+    "서버에 일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주시기 바랍니다.",
 };
 
 export const SIGN_UP_ALERT = {
@@ -35,8 +37,6 @@ export const GUIDE_MESSAGES = {
   BOOKMARK_REQUIREMENT: "필수 항목(행동, 경로)을 작성해 주세요",
   REQUIRE_LOGIN: "로그인 유저 전용 기능입니다.",
   CONFIRMATION: "내용을 확인하고 진행 하시겠습니까?",
-  SERVER_ERROR_TRY_AGAIN:
-    "서버에 일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주시기 바랍니다.",
 };
 
 export const CREATE_ORDER_ALERT = {

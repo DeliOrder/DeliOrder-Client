@@ -12,11 +12,7 @@ import {
 import { auth } from "@renderer/firebase";
 import usePackageStore from "@renderer/store";
 
-import {
-  GUIDE_MESSAGES,
-  SIGN_IN_ALERT,
-  COMMON_ALERT,
-} from "../../constants/messages";
+import { SIGN_IN_ALERT, COMMON_ALERT } from "../../constants/messages";
 import googleLogo from "../../assets/images/googleLogo.svg";
 import kakaoLogo from "../../assets/images/kakaoLogo.svg";
 
@@ -84,7 +80,7 @@ function Login() {
       ) {
         notifyInfoMessage(COMMON_ALERT.INVALID_REQUEST);
       } else {
-        notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+        notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
       }
     }
   };
@@ -124,7 +120,7 @@ function Login() {
       if (error.code === "auth/invalid-credential") {
         notifyInfoMessage(SIGN_IN_ALERT.CHECK_ID_OR_PASSWORD);
       } else {
-        notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+        notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
       }
     }
   };
@@ -143,7 +139,7 @@ function Login() {
       );
     } catch (error) {
       console.error("카카오 로그인 실패: ", error);
-      notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+      notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
     }
   };
 

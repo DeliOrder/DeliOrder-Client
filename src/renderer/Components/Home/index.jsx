@@ -6,7 +6,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { auth } from "@renderer/firebase";
 import usePackageStore from "@renderer/store";
 
-import { GUIDE_MESSAGES } from "@renderer/constants/messages";
+import { COMMON_ALERT } from "@renderer/constants/messages";
 import DeliLogo from "@renderer/assets/images/logo.png";
 
 function Home() {
@@ -51,7 +51,7 @@ function Home() {
         navigate("/");
       } catch (error) {
         console.errors("카카오 로그인 실패: ", error);
-        notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+        notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
       }
     };
 
