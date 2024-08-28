@@ -44,7 +44,7 @@ function Nav() {
         ) {
           notifyInfoMessage(COMMON_ALERT.INVALID_REQUEST);
         } else {
-          notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+          notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
         }
       }
     } else {
@@ -55,7 +55,7 @@ function Nav() {
         setClientStatus({ isLogin: false });
       } catch (error) {
         console.error("파이어베이스 로그아웃 실패: ", error);
-        notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+        notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
       }
     }
   };

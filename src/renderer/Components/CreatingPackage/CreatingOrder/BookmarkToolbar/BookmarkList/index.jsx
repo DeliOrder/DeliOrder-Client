@@ -6,11 +6,9 @@ function BookmarkList({ bookmarks, closeBookmarkList }) {
   const { updateOrder } = usePackageStore();
 
   const applyBookmark = (index) => {
-    delete bookmarks[index]._id;
-    delete bookmarks[index].updatedAt;
-    delete bookmarks[index].createdAt;
+    const { _id, updateAt, createAt, ...essentialField } = bookmarks[index];
 
-    updateOrder(bookmarks[index]);
+    updateOrder(essentialField);
     closeBookmarkList();
   };
 
@@ -18,7 +16,7 @@ function BookmarkList({ bookmarks, closeBookmarkList }) {
     <>
       {bookmarks.map((bookmark, index) => (
         <button
-          key={bookmark.createdAt}
+          key={bookmark._id}
           className="button-base-blue"
           onClick={() => {
             applyBookmark(index);

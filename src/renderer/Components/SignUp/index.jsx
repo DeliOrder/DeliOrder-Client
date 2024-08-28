@@ -6,7 +6,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import Modal from "../Modal";
 import usePackageStore from "@renderer/store";
 import { validateEmail, validatePassword } from "../../utils/validate.js";
-import { SIGN_UP_ALERT, GUIDE_MESSAGES } from "../../constants/messages.js";
+import { SIGN_UP_ALERT, COMMON_ALERT } from "../../constants/messages.js";
 
 function SignUp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -129,7 +129,7 @@ function SignUp() {
       openModal();
     } catch (error) {
       console.error("가입실패", error);
-      notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+      notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
     }
   };
 

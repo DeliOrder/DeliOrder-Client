@@ -130,7 +130,8 @@ function PackagePreview() {
         refreshToken();
         uploadPackageToServer();
       }
-      throw new Error("패키지 등록중 오류 발생:", error);
+      console.error("패키지 등록중 오류 발생: ", error);
+      throw new Error(error.response?.data.error);
     }
   };
 
@@ -153,9 +154,9 @@ function PackagePreview() {
       openModal();
     } catch (error) {
       deleteFileToAWS();
-      console.error(error.message || error);
+      console.error("패키지 업로드 과정중 오류 발생: ", error.message || error);
 
-      setInfoMessage(PACKAGE_PREVIEW_ALERT.UPLOAD_FAIL_RETRY);
+      setInfoMessage(error.message || PACKAGE_PREVIEW_ALERT.UPLOAD_FAIL_RETRY);
       openInfoModal();
     } finally {
       clearOrders();

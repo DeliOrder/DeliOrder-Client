@@ -2,12 +2,12 @@ import axios from "axios";
 import { useState } from "react";
 
 import Modal from "../../../Modal";
-import BookmarkList from "./BookmarkList/BookmarkList";
+import BookmarkList from "./BookmarkList";
 
 import usePackageStore from "@renderer/store";
 import useModal from "@renderer/utils/useModal";
 import refreshToken from "@renderer/utils/refreshToken";
-import { GUIDE_MESSAGES } from "@renderer/constants/messages.js";
+import { GUIDE_MESSAGES, COMMON_ALERT } from "@renderer/constants/messages.js";
 
 import addingIcon from "@images/addingIcon.svg";
 import downloadIcon from "@images/downloadIcon.svg";
@@ -94,7 +94,7 @@ function BookmarkToolbar() {
         }
       } else {
         console.error("서버 응답 에러 :", error);
-        setInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+        setInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
         openInfoModal();
       }
 
@@ -144,7 +144,7 @@ function BookmarkToolbar() {
         }
       } else {
         console.error("서버 응답 에러 :", error);
-        setInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
+        setInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
       }
 
       openInfoModal();
