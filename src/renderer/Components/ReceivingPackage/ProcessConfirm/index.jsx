@@ -5,7 +5,7 @@ import Modal from "../../Modal";
 
 import usePackageStore from "@renderer/store";
 import useModal from "@renderer/utils/useModal";
-import { GUIDE_MESSAGES } from "@renderer/constants/messages";
+import { GUIDE_MESSAGES, COMMON_ALERT } from "@renderer/constants/messages";
 
 function ProcessConfirm({ orders, closeModal }) {
   const [processResults, setProcessResults] = useState([]);
@@ -66,9 +66,7 @@ function ProcessConfirm({ orders, closeModal }) {
       openResultModal();
     } catch (error) {
       setInfoMessage(
-        error.response
-          ? error.response.data.message
-          : "실행중 오류가 발생하였습니다",
+        error.response ? error.response.data.message : COMMON_ALERT.ERROR_OCCUR,
       );
       openInfoModal();
     }

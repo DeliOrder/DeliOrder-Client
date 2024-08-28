@@ -12,7 +12,11 @@ import {
 import { auth } from "@renderer/firebase";
 import usePackageStore from "@renderer/store";
 
-import { GUIDE_MESSAGES, SIGN_IN_ALERT } from "../../constants/messages";
+import {
+  GUIDE_MESSAGES,
+  SIGN_IN_ALERT,
+  COMMON_ALERT,
+} from "../../constants/messages";
 import googleLogo from "../../assets/images/googleLogo.svg";
 import kakaoLogo from "../../assets/images/kakaoLogo.svg";
 
@@ -78,7 +82,7 @@ function Login() {
         error.response.status >= 400 &&
         error.response.status < 500
       ) {
-        notifyInfoMessage(SIGN_IN_ALERT.INVALID_REQUEST);
+        notifyInfoMessage(COMMON_ALERT.INVALID_REQUEST);
       } else {
         notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
       }

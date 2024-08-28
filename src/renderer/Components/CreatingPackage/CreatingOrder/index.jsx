@@ -5,8 +5,12 @@ import ActionPicker from "./ActionPicker";
 import FilePicker from "./FilePicker";
 import FolderPicker from "./FolderPicker";
 
+import {
+  VALIDATION_MESSAGES,
+  CREATE_ORDER_ALERT,
+  PLACEHOLDER,
+} from "@renderer/constants/messages";
 import usePackageStore from "@renderer/store";
-import { VALIDATION_MESSAGES } from "@renderer/constants/messages";
 
 import "../../shared/style.css";
 
@@ -31,26 +35,26 @@ function CreatingOrder() {
       return /\.[^/.]+$/.test(fileName);
     }
     if (!order.action) {
-      return "행동을 선택해 주세요.";
+      return CREATE_ORDER_ALERT.UNDEFINED_ACTION;
     }
 
     if (!order.attachmentName) {
-      return "대상 파일을 선택해 주세요.";
+      return CREATE_ORDER_ALERT.UNDEFINED_ATTACHMENT;
     }
 
     if (!order.executionPath) {
-      return "명령을 수행할 최종 경로를 지정해주세요.";
+      return CREATE_ORDER_ALERT.UNDEFINED_EXECUTION_PATH;
     }
 
     if (order.action === "이동하기" && !order.sourcePath) {
-      return "이동할 파일이 있는 경로를 지정해주세요.";
+      return CREATE_ORDER_ALERT.UNDEFINED_SOURCE_PATH;
     }
 
     if (order.action === "수정하기") {
-      if (!order.editingName) return "수정할 이름을 적어주세요.";
+      if (!order.editingName) return CREATE_ORDER_ALERT.UNDEFINED_EDITING_NAME;
 
       if (!hasExtension(order.editingName))
-        return "확장자 이름까지 적어주세요.";
+        return CREATE_ORDER_ALERT.UNDEFINED_EXTENSION_NAME;
     }
   };
 
@@ -83,7 +87,7 @@ function CreatingOrder() {
 
   return (
     <div className="container-small">
-      <label className="label-large">제조하기</label>
+      <label className="label-large">행동 조합 하기</label>
       <form onSubmit={handleSubmit} onClick={clearMessage}>
         <ActionPicker />
         <div className="mx-auto max-w-md">
@@ -98,7 +102,7 @@ function CreatingOrder() {
               <input
                 type="text"
                 className="input-text focus:shadow-outline"
-                placeholder="변경할 파일명을 적어주세요."
+                placeholder={PLACEHOLDER.EDITING_NAME}
                 onChange={handleInput}
                 value={currentOrder.editingName}
                 required

@@ -18,7 +18,7 @@ function BookmarkToolbar() {
 
   const { openInfoModal, setInfoMessage } = usePackageStore();
   const {
-    clientStatus: { isLogin, isPickFile },
+    clientStatus: { isLogin },
     getOrder,
   } = usePackageStore();
 
@@ -43,7 +43,6 @@ function BookmarkToolbar() {
     }
 
     const BookmarkTarget = getOrder();
-
     if (!validateRequiredInputs(BookmarkTarget)) {
       setInfoMessage(GUIDE_MESSAGES.BOOKMARK_REQUIREMENT);
       openInfoModal();
@@ -95,7 +94,7 @@ function BookmarkToolbar() {
         }
       } else {
         console.error("서버 응답 에러 :", error);
-        setInfoMessage("일시적 서버 에러입니다. 잠시 후 다시 시도해주세요");
+        setInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
         openInfoModal();
       }
 
@@ -145,7 +144,7 @@ function BookmarkToolbar() {
         }
       } else {
         console.error("서버 응답 에러 :", error);
-        setInfoMessage("일시적 서버 에러입니다. 잠시 후 다시 시도해주세요");
+        setInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
       }
 
       openInfoModal();

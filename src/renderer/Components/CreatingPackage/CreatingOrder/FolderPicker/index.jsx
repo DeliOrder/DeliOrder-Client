@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import usePackageStore from "@renderer/store";
+import { PLACEHOLDER } from "@renderer/constants/messages";
 
 function FolderPicker({ isOptional }) {
   const [folderPath, setFolderPath] = useState("");
@@ -11,7 +12,7 @@ function FolderPicker({ isOptional }) {
   const currentOrder = getOrder();
 
   const pathType = isOptional ? "sourcePath" : "executionPath";
-  const description = isOptional ? "출발" : "목적";
+  const description = isOptional ? "출발경로" : "목적경로";
   const displayedPath = currentOrder[pathType] || folderPath;
 
   useEffect(() => {
@@ -41,16 +42,8 @@ function FolderPicker({ isOptional }) {
 
   const openFolderPicker = async () => {
     try {
-      const { canceled, folderPaths, attachmentName } =
+      const { folderPaths, attachmentName } =
         await window.electronAPI.openFolderDialog();
-
-      if (canceled) {
-        console.error("폴더 선택이 취소되었습니다.");
-      }
-
-      if (folderPaths.length === 0) {
-        console.error("선택된 경로가 없습니다.");
-      }
 
       if (!clientStatus.isPickFile) {
         updateOrder({ attachmentName, attachmentType: "folder" });
@@ -70,22 +63,22 @@ function FolderPicker({ isOptional }) {
 
   return (
     <div className="my-3">
-      <label className="label-small">{description}경로 선택하기</label>
+      <label className="label-small">{description} 선택하기</label>
       <button
         type="button"
         className="input-base focus:shadow-outline"
         onClick={openFolderPicker}
       >
-        경로를 선택해 주세요.
+        {PLACEHOLDER.FOLDER_PICKER}
       </button>
       <input
         type="text"
         className="input-text focus:shadow-outline"
-        placeholder="추가 경로 입력하기"
+        placeholder={PLACEHOLDER.PATH_USER_DEFINE}
         onChange={appendUserPath}
       />
       <p className="text-base-gray">
-        {pathType} : {displayedPath}
+        {description} : {displayedPath}
       </p>
     </div>
   );
