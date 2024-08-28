@@ -15,6 +15,7 @@ import Modal from "../../Modal";
 import usePackageStore from "@renderer/store";
 import useModal from "@renderer/utils/useModal";
 import refreshToken from "@renderer/utils/refreshToken";
+import { PACKAGE_PREVIEW_ALERT } from "@renderer/constants/messages";
 
 function PackagePreview() {
   const [isLoading, setIsLoading] = useState(false);
@@ -46,8 +47,9 @@ function PackagePreview() {
 
     if (!ordersToCreate.every((order) => order.attachmentType === "file")) {
       setIsLoading(false);
-      setInfoMessage("생성할 파일이 선택되지 않았습니다.");
+      setInfoMessage(PACKAGE_PREVIEW_ALERT.NO_FILE_TO_UPLOAD);
       openInfoModal();
+      return;
     }
 
     try {
@@ -76,23 +78,23 @@ function PackagePreview() {
         }),
       );
     } catch (error) {
-      throw new Error("AWS에 업로드중 문제가 발생하였습니다.", error);
+      throw new Error("AWS에 업로드중 오류 발생:", error);
     }
   };
 
   const deleteFileToAWS = async () => {
     try {
-      const ordersToCreate = orderPackage.filter(
+      const createOrders = orderPackage.filter(
         (order) => order.action === "생성하기",
       );
 
-      if (!ordersToCreate.every((action) => action.attachmentType === "file")) {
+      if (!createOrders.every((action) => action.attachmentType === "file")) {
         setIsLoading(false);
-        throw new Error("파일이 선택되지 않았습니다.");
+        return;
       }
 
       await Promise.all(
-        ordersToCreate.map(async (file) => {
+        createOrders.map(async (file) => {
           const deleteParams = {
             Bucket: import.meta.env.VITE_AWS_BUCKET,
             Key: file.attachmentName,
@@ -103,7 +105,7 @@ function PackagePreview() {
         }),
       );
     } catch (error) {
-      throw new Error("AWS 파일 삭제중 문제가 발생하였습니다.", error);
+      console.error("AWS 파일 삭제중 오류 발생:", error);
     }
   };
 
@@ -128,13 +130,13 @@ function PackagePreview() {
         refreshToken();
         uploadPackageToServer();
       }
-      throw new Error("패키지 업로드중 오류가 발생했습니다.", error);
+      throw new Error("패키지 등록중 오류 발생:", error);
     }
   };
 
   const handleFilePackage = async () => {
     if (!orderPackage.length) {
-      setInfoMessage("패키지가 비어 있습니다.");
+      setInfoMessage(PACKAGE_PREVIEW_ALERT.EMPTY_PACKAGE);
       openInfoModal();
       return;
     }
@@ -151,12 +153,9 @@ function PackagePreview() {
       openModal();
     } catch (error) {
       deleteFileToAWS();
-      console.error(
-        "파일을 업로드하던중 문제가 발생하였습니다.",
-        error.message,
-      );
+      console.error(error.message || error);
 
-      setInfoMessage("첨부파일 업로드에 실패하였습니다. 다시 시도해 주세요.");
+      setInfoMessage(PACKAGE_PREVIEW_ALERT.UPLOAD_FAIL_RETRY);
       openInfoModal();
     } finally {
       clearOrders();

@@ -5,7 +5,7 @@ import usePackageStore from "@renderer/store";
 import { getAuth, signOut } from "firebase/auth";
 
 import DeliLogo from "../../assets/images/logo.png";
-import { GUIDE_MESSAGES, SIGN_OUT_ALERT } from "@renderer/constants/messages";
+import { GUIDE_MESSAGES, COMMON_ALERT } from "@renderer/constants/messages";
 
 function Nav() {
   const {
@@ -42,7 +42,7 @@ function Nav() {
           error.response.status >= 400 &&
           error.response.status < 500
         ) {
-          notifyInfoMessage(SIGN_OUT_ALERT.INVALID_REQUEST);
+          notifyInfoMessage(COMMON_ALERT.INVALID_REQUEST);
         } else {
           notifyInfoMessage(GUIDE_MESSAGES.SERVER_ERROR_TRY_AGAIN);
         }
