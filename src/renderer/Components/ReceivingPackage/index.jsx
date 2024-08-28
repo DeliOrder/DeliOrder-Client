@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import Modal from "../Modal";
 import NumberInput from "./NumberInput";
@@ -13,7 +14,11 @@ import { RECEIVING_ALERT, COMMON_ALERT } from "@renderer/constants/messages";
 function ReceivingPackage() {
   const [currentPackage, setCurrentPackage] = useState([]);
   const { setInfoMessage, openInfoModal } = usePackageStore();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const target = useRef();
   const [isConfirmModalOpen, openConfirmModal, closeConfirmModal] = useModal();
+
+  const packageId = searchParams.get("packageId");
 
   const handleGetPackage = async (event) => {
     event.preventDefault();
@@ -52,6 +57,12 @@ function ReceivingPackage() {
     }
   };
 
+  useEffect(() => {
+    if (packageId) {
+      target.current.click();
+    }
+  }, [target]);
+
   return (
     <div className="flex h-[90.5vh] items-center justify-center bg-blue-100">
       <form
@@ -65,10 +76,13 @@ function ReceivingPackage() {
           {Array(SERIAL_NUMBER_LENGTH)
             .fill("")
             .map((_, index) => (
-              <NumberInput key={index} />
+              <NumberInput
+                key={index}
+                inputValue={packageId ? packageId[index] : ""}
+              />
             ))}
         </div>
-        <button type="submit" className="button-slate-round">
+        <button type="submit" className="button-slate-round" ref={target}>
           받기
         </button>
       </form>

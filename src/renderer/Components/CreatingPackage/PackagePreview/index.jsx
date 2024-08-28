@@ -36,8 +36,8 @@ function PackagePreview() {
     },
   });
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(serialNumber);
+  const copyToClipboard = (content) => {
+    navigator.clipboard.writeText(content);
   };
 
   const uploadFileToAWS = async () => {
@@ -199,7 +199,7 @@ function PackagePreview() {
               />
               <button
                 className="rounded-r-md bg-blue-400 px-4 py-1 text-white hover:bg-blue-500"
-                onClick={copyToClipboard}
+                onClick={() => copyToClipboard(serialNumber)}
               >
                 복사
               </button>
@@ -210,11 +210,18 @@ function PackagePreview() {
             <div className="flex">
               <input
                 type="text"
-                defaultValue="링크기능은 현재 준비중입니다."
-                className="flex-grow rounded-l-md border bg-gray-300 px-2 py-1"
+                defaultValue={`electron-deliorder://open?packageId=${serialNumber}`}
+                className="flex-grow rounded-l-md border px-2 py-1"
                 readOnly
               />
-              <button className="disabled cursor-default rounded-r-md bg-gray-400 px-4 py-1 text-black">
+              <button
+                className="rounded-r-md bg-blue-400 px-4 py-1 text-white hover:bg-blue-500"
+                onClick={() =>
+                  copyToClipboard(
+                    `electron-deliorder://open?packageId=${serialNumber}`,
+                  )
+                }
+              >
                 복사
               </button>
             </div>

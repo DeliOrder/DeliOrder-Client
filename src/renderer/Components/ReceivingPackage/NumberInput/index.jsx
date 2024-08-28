@@ -1,6 +1,6 @@
 import { VALID_KEY } from "../../../constants/validKey";
 
-function NumberInput() {
+function NumberInput({ inputValue = "" }) {
   const validateNumber = (event) => {
     const value = event.target.value;
     const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value);
@@ -30,9 +30,14 @@ function NumberInput() {
         validateNumber(event);
         shiftFocusOnKeyDown(event);
       }}
+      defaultValue={inputValue}
       onChange={validateNumber}
     />
   );
 }
+
+NumberInput.propTypes = {
+  inputValue: PropTypes.string,
+};
 
 export default NumberInput;
