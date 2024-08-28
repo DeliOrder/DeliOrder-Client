@@ -47,7 +47,7 @@ const convertPath = (targetPath) => {
       convertedPath = path.join(homeDir, targetPath);
   }
 
-  const normalizedPath = normalizePath(convertedPath);
+  const normalizedPath = normalizePath(convertedPath).normalize("NFC");
 
   return normalizedPath;
 };
