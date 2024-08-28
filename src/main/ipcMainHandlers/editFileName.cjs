@@ -7,6 +7,10 @@ const { convertPath } = require("../utils/convertPath.cjs");
 const editFileName = () => {
   ipcMain.handle("edit-file-name", async (event, order) => {
     try {
+      if (order.action !== "수정하기") {
+        return "수신받은 행동이 '수정하기'가 아닙니다.";
+      }
+
       const folderPath = path.dirname(order.executionPath);
       const oldFullPath =
         order.attachmentType === "folder"

@@ -13,10 +13,8 @@ const downloadFile = () => {
       }
 
       const fullPath = path.join(order.executionPath, order.attachmentName);
-
       const convertedFullPath = convertPath(fullPath);
       const convertedFolderPath = convertPath(order.executionPath);
-
       const file = fs.createWriteStream(convertedFullPath);
 
       if (!fs.existsSync(convertedFolderPath)) {
@@ -35,7 +33,8 @@ const downloadFile = () => {
           .on("error", (error) => {
             fs.unlink(convertedFullPath);
             console.error("파일 다운로드 중 오류 발생", error);
-            throw new Error("파일 다운로드 중 오류 발생");
+            reject("생성 실패");
+            return;
           });
       });
 
