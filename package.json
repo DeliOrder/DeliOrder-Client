@@ -7,6 +7,7 @@
   "preload": "src/preload/index.cjs",
   "scripts": {
     "start": "concurrently \"vite\" \"npm run lint\" \"npm run electron\" ",
+    "start-server": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
