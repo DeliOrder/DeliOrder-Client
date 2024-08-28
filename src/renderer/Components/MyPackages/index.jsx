@@ -72,14 +72,16 @@ function MyPackages() {
   };
 
   return (
-    <div className="flex min-h-screen items-start justify-center bg-gradient-to-r from-blue-50 to-blue-100 p-8">
+    <div className="flex min-h-screen items-start justify-center bg-blue-100 bg-gradient-to-r p-8">
       <div className="mt-6 w-full max-w-3xl space-y-8">
         <div
           className="flex cursor-pointer flex-row items-center text-lg font-bold text-blue-700 hover:text-blue-900"
           onClick={toggleSort}
         >
           <img
-            className="mr-2 h-5 w-5 transform transition-transform duration-300"
+            className={`mr-2 h-5 w-5 ${
+              currentSort === "sortByNewest" ? "" : "rotate-180"
+            }`}
             src={triangleArrowDown}
             alt="Sort Icon"
           />
@@ -90,19 +92,18 @@ function MyPackages() {
         {userHistoryData.map((userPackage, index) => (
           <div
             key={userPackage.serialNumber}
-            className="rounded-xl border border-gray-200 bg-white p-8 shadow-lg transition-shadow duration-300 hover:shadow-2xl"
+            className="bg- rounded-xl border border-gray-200 bg-white p-8 shadow-lg transition-shadow duration-300 hover:shadow-2xl"
           >
             <div className="mb-4 flex items-center justify-between border-b pb-4">
               <span className="text-xl font-semibold text-blue-800">
                 패키지 {index + 1}
               </span>
-              <time className="text-sm text-gray-600">
+              <time className="text-right text-sm text-gray-600">
                 <p>
                   만료일시: {new Date(userPackage.expireAt).toLocaleString()}{" "}
-                  {" / "}
                 </p>
                 <span
-                  className={`font-bold ${
+                  className={`text-right font-bold ${
                     Date.parse(userPackage.expireAt) > Date.parse(new Date())
                       ? "text-green-600"
                       : "text-red-600"
@@ -117,11 +118,11 @@ function MyPackages() {
             <div className="space-y-4">
               {userPackage.orders.map((order, orderIndex) => (
                 <div key={order._id} className="text-gray-700">
-                  <span className="font-medium text-blue-700">
-                    {`${orderIndex + 1}. ${order.action}`}
+                  <span className="button-blue-round text-white">
+                    {`${orderIndex + 1}`}
                   </span>
                   <span className="text-gray-600">
-                    :{" "}
+                    {" "}
                     {`"${order.attachmentName}" 을 "${order.executionPath}" 에서`}
                   </span>
                   {order.editingName && (
@@ -134,13 +135,36 @@ function MyPackages() {
                       {` "${order.sourcePath}" 로`}
                     </span>
                   )}
+                  <span className="font-bold text-blue-700">
+                    {` ${order.action}`}
+                  </span>
                 </div>
               ))}
             </div>
-            <div className="mt-6 flex justify-between text-right">
-              {/* TODO: 추후에 링크 기능 추가 */}
-              <p className="text-sm text-gray-400">
-                일련번호: {userPackage.serialNumber}
+            <div className="mt-6 flex flex-col justify-between text-left">
+              <p className="mb-2 text-sm text-gray-500">
+                <span className="font-bold">링크: </span>
+                <span
+                  className="cursor-pointer hover:font-bold"
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      `electron-deliorder://open?packageId=${userPackage.serialNumber}`,
+                    );
+                  }}
+                >
+                  {`electron-deliorder://open?packageId=${userPackage.serialNumber}`}
+                </span>
+              </p>
+              <p className="text-sm text-gray-500">
+                <span className="font-bold">일련번호: </span>
+                <span
+                  className="cursor-pointer hover:font-bold"
+                  onClick={() =>
+                    navigator.clipboard.writeText(userPackage.serialNumber)
+                  }
+                >
+                  {userPackage.serialNumber}
+                </span>
               </p>
             </div>
           </div>
