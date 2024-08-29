@@ -12,7 +12,7 @@ import {
 } from "@renderer/constants/messages";
 import usePackageStore from "@renderer/store";
 
-import "../../shared/style.css";
+import "@renderer/shared/style.css";
 
 function CreatingOrder() {
   const {

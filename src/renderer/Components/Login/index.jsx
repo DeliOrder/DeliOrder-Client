@@ -9,7 +9,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
-import { auth } from "@renderer/firebase";
+import { auth } from "@renderer/services/firebaseService/firebase.js";
 import usePackageStore from "@renderer/store";
 
 import { SIGN_IN_ALERT, COMMON_ALERT } from "../../constants/messages";
