@@ -86,7 +86,7 @@ function CreatingOrder() {
   };
 
   return (
-    <div className="container-small">
+    <div className="container-small max-h-[90vh] min-h-[672px] min-w-[460px]">
       <label className="label-large">행동 조합 하기</label>
       <form onSubmit={handleSubmit} onClick={clearMessage}>
         <ActionPicker />

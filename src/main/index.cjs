@@ -19,10 +19,10 @@ const BASE_URL = process.env.VITE_BASE_URL || "http://localhost:5173";
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 800,
+    minWidth: 1600,
+    minHeight: 900,
     autoHideMenuBar: true,
-    resizable: false,
+    resizable: true,
     backgroundColor: "#DBEAFE",
     icon: path.join(__dirname, "../renderer/assets/images/logo.png"),
     roundedCorners: true,
