@@ -14,10 +14,14 @@ require("./ipcMainHandlers/editFileName.cjs");
 require("./ipcMainHandlers/unzipFile.cjs");
 
 const { handleDeepLink } = require("./utils/handleDeeplink.cjs");
+const {
+  setDefaultProtocolClient,
+} = require("./utils/setDefaultProtocolClient.cjs");
 
 let mainWindow;
 
 const BASE_URL = process.env.VITE_BASE_URL;
+const PROTOCOL_NAME = "electron-deliorder";
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -43,15 +47,7 @@ const createWindow = () => {
   });
 };
 
-if (process.defaultApp) {
-  if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient("electron-deliorder", process.execPath, [
-      path.resolve(process.argv[1]),
-    ]);
-  }
-} else {
-  app.setAsDefaultProtocolClient("electron-deliorder");
-}
+setDefaultProtocolClient(app, PROTOCOL_NAME);
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -68,7 +64,7 @@ app.on("second-instance", (event, commandLine, workingDirectory) => {
   mainWindow.focus();
 
   const deepLink = commandLine.find((cmd) =>
-    cmd.startsWith("electron-deliorder://"),
+    cmd.startsWith(`${PROTOCOL_NAME}://`),
   );
 
   if (deepLink) {
@@ -80,7 +76,7 @@ app.on("ready", () => {
   createWindow();
 
   const deepLink = process.argv.find((arg) =>
-    arg.startsWith("electron-deliorder://"),
+    arg.startsWith(`${PROTOCOL_NAME}://`),
   );
   if (deepLink) {
     handleDeepLink(deepLink, BASE_URL, mainWindow);
