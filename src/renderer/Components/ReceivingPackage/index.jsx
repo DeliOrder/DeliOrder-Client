@@ -14,8 +14,8 @@ import { RECEIVING_ALERT, COMMON_ALERT } from "@renderer/constants/messages";
 function ReceivingPackage() {
   const [currentPackage, setCurrentPackage] = useState([]);
   const { setInfoMessage, openInfoModal } = usePackageStore();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const target = useRef();
+  const [searchParams] = useSearchParams();
+  const targetButton = useRef();
   const [isConfirmModalOpen, openConfirmModal, closeConfirmModal] = useModal();
 
   const packageId = searchParams.get("packageId");
