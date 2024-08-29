@@ -56,6 +56,7 @@ export const PACKAGE_PREVIEW_ALERT = {
 
 export const RECEIVING_ALERT = {
   REQUIRE_SERIAL_NUMBER: "일련 번호를 입력해 주세요.",
+  EXPIRED_SERIAL_NUMBER: "만료된 일련번호 입니다.",
 };
 
 export const PLACEHOLDER = {

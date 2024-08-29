@@ -1,28 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import PropTypes from "prop-types";
 
 import usePackageStore from "@renderer/store";
 import { PLACEHOLDER } from "@renderer/constants/messages";
 
 function FolderPicker({ isOptional }) {
-  const { updateOrder, getOrder, setClientStatus, clientStatus } =
-    usePackageStore();
+  const { updateOrder, getOrder, clientStatus } = usePackageStore();
   const currentOrder = getOrder();
 
   const pathType = isOptional ? "sourcePath" : "executionPath";
   const description = isOptional ? "출발경로" : "목적경로";
 
   useEffect(() => {
-    if (clientStatus.isSubmitted) {
-      updateOrder({ [pathType]: "" });
-      setClientStatus({ isSubmitted: false });
-    }
-  }, [clientStatus.isSubmitted, setClientStatus]);
-
-  useEffect(() => {
-    const updateAttachmentName = (path) => {
-      const pathArray = path.split("/");
-      const attachmentName = pathArray[pathArray.length - 1];
+    const updateAttachmentName = async (path) => {
+      const attachmentName = await window.electronAPI.getAttachmentName(path);
 
       updateOrder({ attachmentName });
     };

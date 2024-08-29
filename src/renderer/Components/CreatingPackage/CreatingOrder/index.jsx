@@ -80,8 +80,6 @@ function CreatingOrder() {
     }
 
     addOrder(currentOrder);
-
-    setClientStatus({ isSubmitted: true });
     clearOrder();
   };
 

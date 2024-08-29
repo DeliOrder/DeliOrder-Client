@@ -68,11 +68,12 @@ function FilePicker() {
             <label className="ml-20">
               <input
                 type="checkbox"
+                className="mr-2"
                 onChange={(event) => {
                   updateOrder({ useVscode: event.target.checked });
                 }}
               />
-              {" vscode 실행"}
+              vscode 실행
             </label>
           )}
         </div>
