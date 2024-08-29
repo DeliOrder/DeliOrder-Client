@@ -148,7 +148,7 @@ function PackagePreview() {
       await uploadPackageToServer();
 
       const now = new Date();
-      const tenMinutesLater = new Date(now.getTime() + 10 * 60000);
+      const tenMinutesLater = new Date(now.getTime() + 30 * 60 * 1000);
 
       setExpiredTime(tenMinutesLater);
       openModal();
