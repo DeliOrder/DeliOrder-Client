@@ -45,7 +45,7 @@ function ReceivingPackage() {
         `${import.meta.env.VITE_SERVER_URL}/packages/${serialNumber}`,
       );
 
-      if (validUntil <= new Date()) {
+      if (Date.parse(validUntil) <= Date.parse(new Date())) {
         setInfoMessage(RECEIVING_ALERT.EXPIRED_SERIAL_NUMBER);
         openInfoModal();
 

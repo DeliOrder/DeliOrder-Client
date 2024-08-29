@@ -100,16 +100,16 @@ function MyPackages() {
               </span>
               <time className="text-right text-sm text-gray-600">
                 <p>
-                  만료일시: {new Date(userPackage.expireAt).toLocaleString()}{" "}
+                  만료일시: {new Date(userPackage.validUntil).toLocaleString()}{" "}
                 </p>
                 <span
                   className={`text-right font-bold ${
-                    Date.parse(userPackage.expireAt) > Date.parse(new Date())
+                    Date.parse(userPackage.validUntil) > Date.parse(new Date())
                       ? "text-green-600"
                       : "text-red-600"
                   }`}
                 >
-                  {Date.parse(userPackage.expireAt) > Date.parse(new Date())
+                  {Date.parse(userPackage.validUntil) > Date.parse(new Date())
                     ? "전송 가능"
                     : "만료됨"}
                 </span>
