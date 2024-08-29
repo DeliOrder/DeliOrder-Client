@@ -4,7 +4,7 @@ import { useState } from "react";
 import Modal from "../../Modal";
 
 import usePackageStore from "@renderer/store";
-import useModal from "@renderer/utils/useModal";
+import useModal from "@renderer/hooks/useModal";
 import { GUIDE_MESSAGES, COMMON_ALERT } from "@renderer/constants/messages";
 
 function ProcessConfirm({ orders, closeModal }) {

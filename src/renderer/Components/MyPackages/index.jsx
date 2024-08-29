@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import triangleArrowDown from "@images/triangleArrowDown.svg";
 import axios from "axios";
-import refreshToken from "../../utils/refreshToken";
+import refreshToken from "@renderer/services/utils/refreshToken";
 
 function MyPackages() {
   const [userHistoryData, setUserHistoryData] = useState([]);
