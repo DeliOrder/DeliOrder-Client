@@ -1,7 +1,7 @@
-require("dotenv").config();
-
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
+
+require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
 
 require("./ipcMainHandlers/openFolderDialog.cjs");
 require("./ipcMainHandlers/openFileDialog.cjs");
@@ -13,13 +13,22 @@ require("./ipcMainHandlers/deleteFile.cjs");
 require("./ipcMainHandlers/editFileName.cjs");
 require("./ipcMainHandlers/unzipFile.cjs");
 
+const { handleDeepLink } = require("./utils/handleDeeplink.cjs");
+const {
+  setDefaultProtocolClient,
+} = require("./utils/setDefaultProtocolClient.cjs");
+
+let mainWindow;
+
+const BASE_URL = process.env.VITE_BASE_URL;
+const PROTOCOL_NAME = "electron-deliorder";
+
 const createWindow = () => {
-  const BASE_URL = process.env.VITE_BASE_URL;
-  const win = new BrowserWindow({
-    width: 1280,
-    height: 800,
+  mainWindow = new BrowserWindow({
+    minWidth: 1600,
+    minHeight: 900,
     autoHideMenuBar: true,
-    resizable: false,
+    resizable: true,
     backgroundColor: "#DBEAFE",
     icon: path.join(__dirname, "../renderer/assets/images/logo.png"),
     roundedCorners: true,
@@ -31,20 +40,53 @@ const createWindow = () => {
     },
   });
 
-  win.loadURL(BASE_URL);
+  mainWindow.loadURL(BASE_URL);
+
+  mainWindow.on("ready-to-show", () => {
+    mainWindow.show();
+  });
 };
 
-async function createAppWindow() {
-  await app.whenReady();
-  createWindow();
+setDefaultProtocolClient(app, PROTOCOL_NAME);
 
-  app.on("active", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  return app.quit();
 }
 
-createAppWindow();
+app.on("second-instance", (event, commandLine, workingDirectory) => {
+  if (!mainWindow) {
+    return createWindow();
+  }
+
+  if (mainWindow.isMinimized()) mainWindow.restore();
+  mainWindow.focus();
+
+  const deepLink = commandLine.find((cmd) =>
+    cmd.startsWith(`${PROTOCOL_NAME}://`),
+  );
+
+  if (deepLink) {
+    handleDeepLink(deepLink, BASE_URL, mainWindow);
+  }
+});
+
+app.on("ready", () => {
+  createWindow();
+
+  const deepLink = process.argv.find((arg) =>
+    arg.startsWith(`${PROTOCOL_NAME}://`),
+  );
+  if (deepLink) {
+    handleDeepLink(deepLink, BASE_URL, mainWindow);
+  }
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
+});
+
+app.on("activate", () => {
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });

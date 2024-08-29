@@ -13,8 +13,10 @@ import Order from "./Order";
 import Modal from "../../Modal";
 
 import usePackageStore from "@renderer/store";
-import useModal from "@renderer/utils/useModal";
-import refreshToken from "@renderer/utils/refreshToken";
+import useModal from "@renderer/hooks/useModal";
+import refreshToken from "@renderer/services/utils/refreshToken";
+import { copyToClipboard } from "@renderer/services/utils/copyToClipboard";
+import { convertToDeepLink } from "@renderer/services/utils/convertToDeepLink";
 import { PACKAGE_PREVIEW_ALERT } from "@renderer/constants/messages";
 
 function PackagePreview() {
@@ -28,6 +30,8 @@ function PackagePreview() {
   const orderPackage = getOrders();
   const navigate = useNavigate();
 
+  const deepLinkURL = convertToDeepLink(serialNumber);
+
   const s3Client = new S3Client({
     region: import.meta.env.VITE_AWS_REGION,
     credentials: {
@@ -35,10 +39,6 @@ function PackagePreview() {
       secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY_ID,
     },
   });
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(serialNumber);
-  };
 
   const uploadFileToAWS = async () => {
     const ordersToCreate = orderPackage.filter(
@@ -170,11 +170,11 @@ function PackagePreview() {
   };
 
   return (
-    <div className="container-large">
+    <div className="container-large max-h-[90vh] min-h-[672px]">
       <label className="mb-2 block text-xl font-bold text-gray-700">
         패키지 미리보기
       </label>
-      <div className="overflow-y-scroll">
+      <div className="overflow-y-auto">
         {orders.map((order, index) => (
           <Order key={index} order={order} index={index} />
         ))}
@@ -199,7 +199,7 @@ function PackagePreview() {
               />
               <button
                 className="rounded-r-md bg-blue-400 px-4 py-1 text-white hover:bg-blue-500"
-                onClick={copyToClipboard}
+                onClick={() => copyToClipboard(serialNumber)}
               >
                 복사
               </button>
@@ -210,11 +210,14 @@ function PackagePreview() {
             <div className="flex">
               <input
                 type="text"
-                defaultValue="링크기능은 현재 준비중입니다."
-                className="flex-grow rounded-l-md border bg-gray-300 px-2 py-1"
+                defaultValue={deepLinkURL}
+                className="flex-grow rounded-l-md border px-2 py-1"
                 readOnly
               />
-              <button className="disabled cursor-default rounded-r-md bg-gray-400 px-4 py-1 text-black">
+              <button
+                className="rounded-r-md bg-blue-400 px-4 py-1 text-white hover:bg-blue-500"
+                onClick={() => copyToClipboard(deepLinkURL)}
+              >
                 복사
               </button>
             </div>

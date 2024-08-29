@@ -5,8 +5,8 @@ import Modal from "../../../Modal";
 import BookmarkList from "./BookmarkList";
 
 import usePackageStore from "@renderer/store";
-import useModal from "@renderer/utils/useModal";
-import refreshToken from "@renderer/utils/refreshToken";
+import useModal from "@renderer/hooks/useModal";
+import refreshToken from "@renderer/services/utils/refreshToken";
 import { GUIDE_MESSAGES, COMMON_ALERT } from "@renderer/constants/messages.js";
 
 import addingIcon from "@images/addingIcon.svg";

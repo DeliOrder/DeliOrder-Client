@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { signInWithCustomToken } from "firebase/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { auth } from "@renderer/firebase";
+import { auth } from "@renderer/services/firebaseService/firebase.js";
 import usePackageStore from "@renderer/store";
 
 import { COMMON_ALERT } from "@renderer/constants/messages";

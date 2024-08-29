@@ -1,19 +1,24 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import Modal from "../Modal";
 import NumberInput from "./NumberInput";
 import ProcessConfirm from "./ProcessConfirm";
 
 import usePackageStore from "@renderer/store";
-import useModal from "@renderer/utils/useModal";
+import useModal from "@renderer/hooks/useModal";
 import { SERIAL_NUMBER_LENGTH } from "@renderer/constants/config";
 import { RECEIVING_ALERT, COMMON_ALERT } from "@renderer/constants/messages";
 
 function ReceivingPackage() {
   const [currentPackage, setCurrentPackage] = useState([]);
   const { setInfoMessage, openInfoModal } = usePackageStore();
+  const [searchParams] = useSearchParams();
+  const targetButton = useRef();
   const [isConfirmModalOpen, openConfirmModal, closeConfirmModal] = useModal();
+
+  const packageId = searchParams.get("packageId");
 
   const handleGetPackage = async (event) => {
     event.preventDefault();
@@ -52,23 +57,36 @@ function ReceivingPackage() {
     }
   };
 
+  useEffect(() => {
+    if (packageId) {
+      targetButton.current.click();
+    }
+  }, [targetButton]);
+
   return (
-    <div className="flex h-[90.5vh] items-center justify-center bg-blue-100">
+    <div className="flex flex-grow items-center justify-center bg-blue-100">
       <form
         onSubmit={handleGetPackage}
-        className="flex h-3/5 w-3/5 flex-col items-center gap-20 rounded-xl bg-white p-10 shadow-2xl"
+        className="flex h-3/5 w-3/5 flex-col items-center justify-center gap-20 rounded-xl bg-white p-10 shadow-2xl"
       >
-        <label className="text-6xl font-semibold tracking-wide text-gray-800">
+        <label className="py-2 text-6xl font-semibold tracking-wide text-gray-800">
           일련번호
         </label>
         <div className="flex justify-center">
           {Array(SERIAL_NUMBER_LENGTH)
             .fill("")
             .map((_, index) => (
-              <NumberInput key={index} />
+              <NumberInput
+                key={index}
+                inputValue={packageId ? packageId[index] : ""}
+              />
             ))}
         </div>
-        <button type="submit" className="button-slate-round">
+        <button
+          type="submit"
+          className="button-slate-round hover:bg-blue-600 hover:text-white"
+          ref={targetButton}
+        >
           받기
         </button>
       </form>

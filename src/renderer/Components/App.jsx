@@ -11,7 +11,7 @@ import SignUp from "./SignUp";
 import ReceivingPackage from "./ReceivingPackage";
 import CreatingPackage from "./CreatingPackage";
 import MyPackages from "./MyPackages";
-import refreshToken from "../utils/refreshToken";
+import refreshToken from "@renderer/services/utils/refreshToken";
 import InfoModal from "./Modal/InfoModal";
 
 function App() {
@@ -67,16 +67,14 @@ function App() {
   return (
     <div className="flex min-h-screen flex-col">
       <Nav />
-      <div className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signUp" element={<SignUp />} />
-          <Route path="/package/new" element={<CreatingPackage />} />
-          <Route path="/package/receiving" element={<ReceivingPackage />} />
-          <Route path="/myPackages" element={<MyPackages />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/package/new" element={<CreatingPackage />} />
+        <Route path="/package/receiving" element={<ReceivingPackage />} />
+        <Route path="/myPackages" element={<MyPackages />} />
+      </Routes>
       <InfoModal />
     </div>
   );

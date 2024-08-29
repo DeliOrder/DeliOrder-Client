@@ -61,7 +61,7 @@ function Nav() {
   };
 
   return (
-    <nav className="flex flex-wrap items-center justify-between bg-blue-700 p-6">
+    <nav className="sticky top-0 z-10 flex flex-shrink-0 flex-wrap items-center justify-between bg-blue-700 p-6">
       <div className="mr-6 flex flex-shrink-0 items-center text-white">
         <Link
           to="/"
@@ -70,9 +70,6 @@ function Nav() {
           <img src={DeliLogo} className="logo size-10" alt="DeliOrder logo" />
           DELIORDER
         </Link>
-      </div>
-      <div className="block lg:hidden">
-        <button className="flex items-center rounded border border-teal-400 px-3 py-2 text-teal-200 hover:border-white hover:text-white"></button>
       </div>
       <div className="block w-full flex-grow lg:flex lg:w-auto lg:items-center">
         <div className="text-sm lg:flex-grow">
