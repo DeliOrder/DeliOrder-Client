@@ -4,8 +4,15 @@ import PropTypes from "prop-types";
 function Order({ order, index }) {
   const { deleteOrder } = usePackageStore();
 
-  const { action, attachmentName, sourcePath, executionPath, editingName } =
-    order;
+  const {
+    action,
+    attachmentName,
+    attachmentType,
+    sourcePath,
+    executionPath,
+    editingName,
+    useVscode,
+  } = order;
 
   const handleDelete = () => {
     deleteOrder(index);
@@ -19,11 +26,22 @@ function Order({ order, index }) {
         </div>
       </div>
       <div className="mx-auto my-2 flex w-fit flex-row items-center justify-start justify-items-start space-x-4 rounded border border-solid border-gray-300 p-2">
-        {sourcePath && <div className="text-block-blue">{sourcePath} 의</div>}
-        <div className="text-block-blue">{attachmentName} 을(를)</div>
-        <div className="text-block-blue">{executionPath} 에</div>
-        {editingName && (
-          <div className="text-block-blue">{editingName} 으로</div>
+        {sourcePath && attachmentType !== "folder" && (
+          <div className="text-block-blue">{sourcePath} 의</div>
+        )}
+        <div className="text-block-blue">
+          {attachmentType === "folder"
+            ? sourcePath || executionPath
+            : attachmentName}{" "}
+          을(를)
+        </div>
+        {(sourcePath || attachmentType !== "folder") && (
+          <div className="text-block-blue">{executionPath} 에</div>
+        )}
+        {(useVscode || editingName) && (
+          <div className="text-block-blue">
+            {useVscode ? "vscode" : editingName} 으로
+          </div>
         )}
         <div className="text-block-blue">{action}</div>
         <button

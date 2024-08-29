@@ -42,25 +42,40 @@ function FilePicker() {
     <div className="my-3">
       <label className="label-small flex gap-4">
         대상 선택하기
-        <label>
-          <input
-            type="radio"
-            checked={isPickFile}
-            onChange={() => setClientStatus({ isPickFile: true })}
-          />
-          파일
-        </label>
-        {currentOrder.action !== "생성하기" &&
-          currentOrder.action !== "압축해제하기" && (
-            <label>
+        <div className="flex justify-around gap-4">
+          <label>
+            <input
+              type="radio"
+              checked={isPickFile}
+              onChange={() => setClientStatus({ isPickFile: true })}
+            />
+            파일
+          </label>
+          {currentOrder.action !== "생성하기" &&
+            currentOrder.action !== "압축해제하기" && (
+              <label>
+                <input
+                  type="radio"
+                  checked={!isPickFile}
+                  onChange={() => setClientStatus({ isPickFile: false })}
+                />
+                폴더
+              </label>
+            )}
+        </div>
+        <div>
+          {!isPickFile && currentOrder.action === "실행하기" && (
+            <label className="ml-20">
               <input
-                type="radio"
-                checked={!isPickFile}
-                onChange={() => setClientStatus({ isPickFile: false })}
+                type="checkbox"
+                onChange={(event) => {
+                  updateOrder({ useVscode: event.target.checked });
+                }}
               />
-              폴더
+              {" vscode 실행"}
             </label>
           )}
+        </div>
       </label>
       {isPickFile && (
         <>

@@ -24,13 +24,25 @@ const executeFile = () => {
     }
 
     try {
-      execSync(
-        `${platform === "win32" ? "explorer" : "open"} "${convertedFullPath}"`,
-      );
+      const command = order.useVscode
+        ? `code ${convertedFullPath}`
+        : `${platform === "win32" ? "explorer" : "open"} "${convertedFullPath}"`;
+
+      execSync(command);
 
       return "실행 성공";
     } catch (error) {
+      const STATUS_UNDEFINED_COMMAND = 127;
+
       console.error("execute-file main handler 에러:", error);
+      if (error.status === STATUS_UNDEFINED_COMMAND) {
+        execSync(
+          `${platform === "win32" ? "explorer" : "open"} "${convertedFullPath}"`,
+        );
+
+        return "해당 명령어가 존재하지 않습니다.";
+      }
+
       return "실행 실패";
     }
   });
