@@ -39,11 +39,18 @@ function ReceivingPackage() {
 
       const {
         data: {
-          existPackage: { orders },
+          existPackage: { orders, validUntil },
         },
       } = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/packages/${serialNumber}`,
       );
+
+      if (validUntil <= new Date()) {
+        setInfoMessage(RECEIVING_ALERT.EXPIRED_SERIAL_NUMBER);
+        openInfoModal();
+
+        return;
+      }
 
       if (orders) {
         setCurrentPackage(orders);

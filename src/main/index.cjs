@@ -12,6 +12,7 @@ require("./ipcMainHandlers/moveFile.cjs");
 require("./ipcMainHandlers/deleteFile.cjs");
 require("./ipcMainHandlers/editFileName.cjs");
 require("./ipcMainHandlers/unzipFile.cjs");
+require("./ipcMainHandlers/getAttachmentName.cjs");
 
 const { handleDeepLink } = require("./utils/handleDeeplink.cjs");
 const {

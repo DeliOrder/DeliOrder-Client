@@ -32,7 +32,7 @@ function Order({ order, index }) {
         <div className="text-block-blue">
           {attachmentType === "folder"
             ? sourcePath || executionPath
-            : attachmentName}{" "}
+            : attachmentName}
           을(를)
         </div>
         {(sourcePath || attachmentType !== "folder") && (

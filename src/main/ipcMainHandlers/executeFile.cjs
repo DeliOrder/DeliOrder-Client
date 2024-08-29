@@ -32,10 +32,14 @@ const executeFile = () => {
 
       return "실행 성공";
     } catch (error) {
-      const STATUS_UNDEFINED_COMMAND = 127;
+      const MAC_COMMAND_NOT_FOUND_STATUS = 127;
+      const WINDOWS_COMMAND_NOT_FOUND_STATUS = 1;
 
       console.error("execute-file main handler 에러:", error);
-      if (error.status === STATUS_UNDEFINED_COMMAND) {
+      if (
+        error.status === MAC_COMMAND_NOT_FOUND_STATUS ||
+        error.status === WINDOWS_COMMAND_NOT_FOUND_STATUS
+      ) {
         execSync(
           `${platform === "win32" ? `start ""` : "open"} "${convertedFullPath}"`,
         );

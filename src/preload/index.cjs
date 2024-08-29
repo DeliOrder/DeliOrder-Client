@@ -1,4 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
+// const path = require("path");
 
 contextBridge.exposeInMainWorld("electronAPI", {
   openFolderDialog: async () => {
@@ -82,6 +83,13 @@ contextBridge.exposeInMainWorld("electronAPI", {
       return await ipcRenderer.invoke("unzip-file", order);
     } catch (error) {
       console.error("Error in unzipFile: ", error);
+    }
+  },
+  getAttachmentName: async (path) => {
+    try {
+      return await ipcRenderer.invoke("get-attachmentName", path);
+    } catch (error) {
+      console.error("Error in get-attachmentName: ", error);
     }
   },
 });
