@@ -61,7 +61,7 @@ function Nav() {
   };
 
   return (
-    <nav className="flex flex-wrap items-center justify-between bg-blue-700 p-6">
+    <nav className="sticky top-0 z-10 flex flex-shrink-0 flex-wrap items-center justify-between bg-blue-700 p-6">
       <div className="mr-6 flex flex-shrink-0 items-center text-white">
         <Link
           to="/"

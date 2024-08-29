@@ -66,8 +66,8 @@ function App() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Nav />
-      <div className="flex-grow">
+      <div className="flex min-h-screen flex-col">
+        <Nav />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -76,8 +76,8 @@ function App() {
           <Route path="/package/receiving" element={<ReceivingPackage />} />
           <Route path="/myPackages" element={<MyPackages />} />
         </Routes>
+        <InfoModal />
       </div>
-      <InfoModal />
     </div>
   );
 }

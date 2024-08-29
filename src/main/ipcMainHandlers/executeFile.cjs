@@ -26,7 +26,7 @@ const executeFile = () => {
     try {
       const command = order.useVscode
         ? `code ${convertedFullPath}`
-        : `${platform === "win32" ? "explorer" : "open"} "${convertedFullPath}"`;
+        : `${platform === "win32" ? `start ""` : "open"} "${convertedFullPath}"`;
 
       execSync(command);
 
@@ -37,7 +37,7 @@ const executeFile = () => {
       console.error("execute-file main handler 에러:", error);
       if (error.status === STATUS_UNDEFINED_COMMAND) {
         execSync(
-          `${platform === "win32" ? "explorer" : "open"} "${convertedFullPath}"`,
+          `${platform === "win32" ? `start ""` : "open"} "${convertedFullPath}"`,
         );
 
         return "해당 명령어가 존재하지 않습니다.";

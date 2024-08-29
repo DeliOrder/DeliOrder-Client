@@ -64,12 +64,12 @@ function ReceivingPackage() {
   }, [target]);
 
   return (
-    <div className="flex h-[90.5vh] items-center justify-center bg-blue-100">
+    <div className="flex flex-grow items-center justify-center bg-blue-100">
       <form
         onSubmit={handleGetPackage}
-        className="flex h-3/5 w-3/5 flex-col items-center gap-20 rounded-xl bg-white p-10 shadow-2xl"
+        className="flex h-3/5 w-3/5 flex-col items-center justify-center gap-20 rounded-xl bg-white p-10 shadow-2xl"
       >
-        <label className="text-6xl font-semibold tracking-wide text-gray-800">
+        <label className="py-2 text-6xl font-semibold tracking-wide text-gray-800">
           일련번호
         </label>
         <div className="flex justify-center">
@@ -82,7 +82,11 @@ function ReceivingPackage() {
               />
             ))}
         </div>
-        <button type="submit" className="button-slate-round" ref={target}>
+        <button
+          type="submit"
+          className="button-slate-round hover:bg-blue-600 hover:text-white"
+          ref={target}
+        >
           받기
         </button>
       </form>
