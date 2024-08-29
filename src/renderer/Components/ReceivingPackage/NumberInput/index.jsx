@@ -1,9 +1,9 @@
-import { VALID_KEY } from "../../../constants/validKey";
+import { VALID_KEY } from "@renderer/constants/validKey";
 import PropTypes from "prop-types";
 
 function NumberInput({ inputValue = "" }) {
   const validateNumber = (event) => {
-    const value = event.target.value;
+    const value = event.target.value.normalize("NFC");
     const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value);
 
     if (isKorean || !VALID_KEY.includes(value)) {
