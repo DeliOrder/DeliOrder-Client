@@ -24,7 +24,7 @@ function ProcessConfirm({ orders, closeModal }) {
     if (order.action === "수정하기") {
       return `${indexNumber}. ${order.attachmentName} 을(를) ${order.editingName}로 ${order.action}`;
     } else {
-      return `${indexNumber}. ${order.attachmentName} 을(를) ${order.action}`;
+      return `${indexNumber}. ${order.attachmentName} 을(를) ${order.useVscode ? "vscode 로" : ""} ${order.action}`;
     }
   });
 

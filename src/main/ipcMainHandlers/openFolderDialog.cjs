@@ -16,8 +16,8 @@ const openFolderDialog = () => {
       const { base: attachmentName } = path.parse(relativePath);
 
       return {
-        attachmentName,
-        folderPaths: relativePath,
+        attachmentName: attachmentName.normalize("NFC"),
+        folderPaths: relativePath.normalize("NFC"),
       };
     } catch (error) {
       console.error("open-folder-dialog handler 에러:", error);

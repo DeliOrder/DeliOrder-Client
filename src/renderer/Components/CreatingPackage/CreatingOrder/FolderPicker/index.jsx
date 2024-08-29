@@ -1,31 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import PropTypes from "prop-types";
 
 import usePackageStore from "@renderer/store";
 import { PLACEHOLDER } from "@renderer/constants/messages";
 
 function FolderPicker({ isOptional }) {
-  const [folderPath, setFolderPath] = useState("");
-
-  const { updateOrder, getOrder, setClientStatus, clientStatus } =
-    usePackageStore();
+  const { updateOrder, getOrder, clientStatus } = usePackageStore();
   const currentOrder = getOrder();
 
   const pathType = isOptional ? "sourcePath" : "executionPath";
   const description = isOptional ? "출발경로" : "목적경로";
-  const displayedPath = currentOrder[pathType] || folderPath;
 
   useEffect(() => {
-    if (clientStatus.isSubmitted) {
-      setFolderPath("");
-      setClientStatus({ isSubmitted: false });
-    }
-  }, [clientStatus.isSubmitted, setFolderPath, setClientStatus]);
-
-  useEffect(() => {
-    const updateAttachmentName = (path) => {
-      const pathArray = path.split("/");
-      const attachmentName = pathArray[pathArray.length - 1];
+    const updateAttachmentName = async (path) => {
+      const attachmentName = await window.electronAPI.getAttachmentName(path);
 
       updateOrder({ attachmentName });
     };
@@ -49,7 +37,6 @@ function FolderPicker({ isOptional }) {
         updateOrder({ attachmentName, attachmentType: "folder" });
       }
 
-      setFolderPath(folderPaths);
       updateOrder({ [pathType]: folderPaths });
     } catch (error) {
       console.error("폴더 경로를 여는 중 에러가 발생 :", error);
@@ -58,7 +45,8 @@ function FolderPicker({ isOptional }) {
 
   const appendUserPath = (event) => {
     const userDefinedPath = event.target.value;
-    updateOrder({ [pathType]: folderPath + userDefinedPath });
+
+    updateOrder({ [pathType]: userDefinedPath });
   };
 
   return (
@@ -75,10 +63,11 @@ function FolderPicker({ isOptional }) {
         type="text"
         className="input-text focus:shadow-outline"
         placeholder={PLACEHOLDER.PATH_USER_DEFINE}
+        value={currentOrder[pathType]}
         onChange={appendUserPath}
       />
       <p className="text-base-gray">
-        {description} : {displayedPath}
+        {description} : {currentOrder[pathType]}
       </p>
     </div>
   );

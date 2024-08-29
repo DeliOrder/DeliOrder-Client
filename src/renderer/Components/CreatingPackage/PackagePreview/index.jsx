@@ -71,7 +71,7 @@ function PackagePreview() {
           });
 
           const signedUrl = await getSignedUrl(s3Client, getCommand, {
-            expiresIn: 600,
+            expiresIn: 1800,
           });
 
           order.attachmentUrl = signedUrl;
@@ -148,7 +148,7 @@ function PackagePreview() {
       await uploadPackageToServer();
 
       const now = new Date();
-      const tenMinutesLater = new Date(now.getTime() + 10 * 60000);
+      const tenMinutesLater = new Date(now.getTime() + 30 * 60 * 1000);
 
       setExpiredTime(tenMinutesLater);
       openModal();

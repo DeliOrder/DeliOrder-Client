@@ -15,14 +15,8 @@ import usePackageStore from "@renderer/store";
 import "@renderer/shared/style.css";
 
 function CreatingOrder() {
-  const {
-    setClientStatus,
-    updateOrder,
-    getOrder,
-    clearOrder,
-    addOrder,
-    orders,
-  } = usePackageStore();
+  const { updateOrder, getOrder, clearOrder, addOrder, orders } =
+    usePackageStore();
   const currentOrder = getOrder();
   const [message, setMessage] = useState("");
 
@@ -80,8 +74,6 @@ function CreatingOrder() {
     }
 
     addOrder(currentOrder);
-
-    setClientStatus({ isSubmitted: true });
     clearOrder();
   };
 

@@ -1,4 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
+// const path = require("path");
 
 contextBridge.exposeInMainWorld("electronAPI", {
   openFolderDialog: async () => {
@@ -11,11 +12,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
   },
   openFileDialog: async (action) => {
     try {
-      const { attachmentName, fileBase64, mimeType, baseName } =
+      const { attachmentName, relativePath, fileBase64, mimeType, baseName } =
         await ipcRenderer.invoke("open-file-dialog", action);
 
       if (action !== "생성하기") {
-        return { attachmentName };
+        return { attachmentName, relativePath };
       }
 
       const fileBuffer = Buffer.from(fileBase64, "base64");
@@ -29,7 +30,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
         type: mimeType,
       });
 
-      return { fileObj, attachmentName };
+      return { fileObj, attachmentName, relativePath };
     } catch (error) {
       console.error("Error in openFolderDialog: ", error);
       return { filePaths: "" };
@@ -82,6 +83,13 @@ contextBridge.exposeInMainWorld("electronAPI", {
       return await ipcRenderer.invoke("unzip-file", order);
     } catch (error) {
       console.error("Error in unzipFile: ", error);
+    }
+  },
+  getAttachmentName: async (path) => {
+    try {
+      return await ipcRenderer.invoke("get-attachmentName", path);
+    } catch (error) {
+      console.error("Error in get-attachmentName: ", error);
     }
   },
 });

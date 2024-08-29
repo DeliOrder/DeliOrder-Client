@@ -12,6 +12,17 @@ require("./ipcMainHandlers/moveFile.cjs");
 require("./ipcMainHandlers/deleteFile.cjs");
 require("./ipcMainHandlers/editFileName.cjs");
 require("./ipcMainHandlers/unzipFile.cjs");
+require("./ipcMainHandlers/getAttachmentName.cjs");
+
+const { handleDeepLink } = require("./utils/handleDeeplink.cjs");
+const {
+  setDefaultProtocolClient,
+} = require("./utils/setDefaultProtocolClient.cjs");
+
+let mainWindow;
+
+const BASE_URL = process.env.VITE_BASE_URL;
+const PROTOCOL_NAME = "electron-deliorder";
 
 const { handleDeepLink } = require("./utils/handleDeeplink.cjs");
 const {

@@ -1,26 +1,16 @@
+import { VALID_KEY } from "@renderer/constants/validKey";
 import PropTypes from "prop-types";
 
 function NumberInput({ inputValue = "" }) {
   const validateNumber = (event) => {
-    const VALID_KEY = [
-      "Tab",
-      "Backspace",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "0",
-    ];
+    const value = event.target.value.normalize("NFC");
+    const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value);
 
-    if (!VALID_KEY.includes(event.key) || event.key === " ") {
-      event.preventDefault();
+    if (isKorean || !VALID_KEY.includes(value)) {
+      event.target.value = "";
     }
   };
+
   const shiftFocusOnKeyDown = (event) => {
     if (event.target.value && event.code !== "Backspace") {
       event.target.nextSibling?.focus();
@@ -29,17 +19,6 @@ function NumberInput({ inputValue = "" }) {
 
     if (!event.target.value && event.code === "Backspace") {
       event.target.previousSibling?.focus();
-    }
-  };
-
-  const shiftFocusOnChange = (event) => {
-    if (event.nativeEvent.data === null) {
-      event.target.previousSibling?.focus();
-      return;
-    }
-
-    if (event) {
-      event.target.nextSibling?.focus();
     }
   };
 
@@ -53,7 +32,8 @@ function NumberInput({ inputValue = "" }) {
         shiftFocusOnKeyDown(event);
       }}
       defaultValue={inputValue}
-      onChange={shiftFocusOnChange}
+      onChange={validateNumber}
+
     />
   );
 }
