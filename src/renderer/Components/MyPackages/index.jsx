@@ -107,6 +107,7 @@ function MyPackages() {
                 <span
                   className={`text-right font-bold ${
                     Date.parse(userPackage.validUntil) > Date.parse(new Date())
+
                       ? "text-green-600"
                       : "text-red-600"
                   }`}

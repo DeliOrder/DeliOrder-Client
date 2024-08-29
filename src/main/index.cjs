@@ -24,6 +24,16 @@ let mainWindow;
 const BASE_URL = process.env.VITE_BASE_URL;
 const PROTOCOL_NAME = "electron-deliorder";
 
+const { handleDeepLink } = require("./utils/handleDeeplink.cjs");
+const {
+  setDefaultProtocolClient,
+} = require("./utils/setDefaultProtocolClient.cjs");
+
+let mainWindow;
+
+const BASE_URL = process.env.VITE_BASE_URL;
+const PROTOCOL_NAME = "electron-deliorder";
+
 const createWindow = () => {
   mainWindow = new BrowserWindow({
     minWidth: 1600,

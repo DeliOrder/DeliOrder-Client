@@ -33,6 +33,7 @@ function NumberInput({ inputValue = "" }) {
       }}
       defaultValue={inputValue}
       onChange={validateNumber}
+
     />
   );
 }
