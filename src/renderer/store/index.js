@@ -23,6 +23,7 @@ const initialOrder = {
   sourcePath: "",
   executionPath: "",
   editingName: "",
+  useVscode: "",
 };
 
 const createOrderSlice = (set, get) => ({
