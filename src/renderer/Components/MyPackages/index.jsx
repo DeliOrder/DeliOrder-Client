@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import triangleArrowDown from "@images/triangleArrowDown.svg";
 import axios from "axios";
 import refreshToken from "@renderer/services/utils/refreshToken";
+import { copyToClipboard } from "@renderer/services/utils/copyToClipboard";
+import { convertToDeepLink } from "@renderer/services/utils/convertToDeepLink";
 
 function MyPackages() {
   const [userHistoryData, setUserHistoryData] = useState([]);
@@ -119,24 +121,20 @@ function MyPackages() {
               {userPackage.orders.map((order, orderIndex) => (
                 <div key={order._id} className="text-gray-700">
                   <span className="button-blue-round text-white">
-                    {`${orderIndex + 1}`}
+                    {orderIndex + 1}
                   </span>
                   <span className="text-gray-600">
                     {" "}
-                    {`"${order.attachmentName}" 을 "${order.executionPath}" 에서`}
+                    {`"${order.attachmentName}" 을 "${order.executionPath}" 에서 `}
                   </span>
                   {order.editingName && (
-                    <span className="text-gray-600">
-                      {` "${order.editingName}" 로`}
-                    </span>
+                    <span className="text-gray-600">{order.editingName}</span>
                   )}
                   {order.sourcePath && (
-                    <span className="text-gray-600">
-                      {` "${order.sourcePath}" 로`}
-                    </span>
+                    <span className="text-gray-600">{order.sourcePath}</span>
                   )}
                   <span className="font-bold text-blue-700">
-                    {` ${order.action}`}
+                    {order.action}
                   </span>
                 </div>
               ))}
@@ -147,21 +145,19 @@ function MyPackages() {
                 <span
                   className="cursor-pointer hover:font-bold"
                   onClick={() => {
-                    navigator.clipboard.writeText(
-                      `electron-deliorder://open?packageId=${userPackage.serialNumber}`,
+                    copyToClipboard(
+                      convertToDeepLink(userPackage.serialNumber),
                     );
                   }}
                 >
-                  {`electron-deliorder://open?packageId=${userPackage.serialNumber}`}
+                  {convertToDeepLink(userPackage.serialNumber)}
                 </span>
               </p>
               <p className="text-sm text-gray-500">
                 <span className="font-bold">일련번호: </span>
                 <span
                   className="cursor-pointer hover:font-bold"
-                  onClick={() =>
-                    navigator.clipboard.writeText(userPackage.serialNumber)
-                  }
+                  onClick={() => copyToClipboard(userPackage.serialNumber)}
                 >
                   {userPackage.serialNumber}
                 </span>

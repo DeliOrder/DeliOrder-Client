@@ -15,7 +15,7 @@ function ReceivingPackage() {
   const [currentPackage, setCurrentPackage] = useState([]);
   const { setInfoMessage, openInfoModal } = usePackageStore();
   const [searchParams, setSearchParams] = useSearchParams();
-  const target = useRef();
+  const targetButton = useRef();
   const [isConfirmModalOpen, openConfirmModal, closeConfirmModal] = useModal();
 
   const packageId = searchParams.get("packageId");
@@ -59,9 +59,9 @@ function ReceivingPackage() {
 
   useEffect(() => {
     if (packageId) {
-      target.current.click();
+      targetButton.current.click();
     }
-  }, [target]);
+  }, [targetButton]);
 
   return (
     <div className="flex flex-grow items-center justify-center bg-blue-100">
@@ -85,7 +85,7 @@ function ReceivingPackage() {
         <button
           type="submit"
           className="button-slate-round hover:bg-blue-600 hover:text-white"
-          ref={target}
+          ref={targetButton}
         >
           받기
         </button>
