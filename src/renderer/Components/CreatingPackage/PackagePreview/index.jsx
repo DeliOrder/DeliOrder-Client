@@ -170,11 +170,11 @@ function PackagePreview() {
   };
 
   return (
-    <div className="container-large">
+    <div className="container-large max-h-[90vh] min-h-[672px]">
       <label className="mb-2 block text-xl font-bold text-gray-700">
         패키지 미리보기
       </label>
-      <div className="overflow-y-scroll">
+      <div className="overflow-y-auto">
         {orders.map((order, index) => (
           <Order key={index} order={order} index={index} />
         ))}
