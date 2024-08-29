@@ -43,5 +43,3 @@ const deleteFile = () => {
     }
   });
 };
-
-deleteFile();
