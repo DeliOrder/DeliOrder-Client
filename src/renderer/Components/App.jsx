@@ -11,7 +11,7 @@ import SignUp from "./SignUp";
 import ReceivingPackage from "./ReceivingPackage";
 import CreatingPackage from "./CreatingPackage";
 import MyPackages from "./MyPackages";
-import refreshToken from "../utils/refreshToken";
+import refreshToken from "@renderer/services/utils/refreshToken";
 import InfoModal from "./Modal/InfoModal";
 
 function App() {

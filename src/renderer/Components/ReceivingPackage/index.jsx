@@ -7,7 +7,7 @@ import NumberInput from "./NumberInput";
 import ProcessConfirm from "./ProcessConfirm";
 
 import usePackageStore from "@renderer/store";
-import useModal from "@renderer/utils/useModal";
+import useModal from "@renderer/hooks/useModal";
 import { SERIAL_NUMBER_LENGTH } from "@renderer/constants/config";
 import { RECEIVING_ALERT, COMMON_ALERT } from "@renderer/constants/messages";
 

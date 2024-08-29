@@ -13,8 +13,8 @@ import Order from "./Order";
 import Modal from "../../Modal";
 
 import usePackageStore from "@renderer/store";
-import useModal from "@renderer/utils/useModal";
-import refreshToken from "@renderer/utils/refreshToken";
+import useModal from "@renderer/hooks/useModal";
+import refreshToken from "@renderer/services/utils/refreshToken";
 import { PACKAGE_PREVIEW_ALERT } from "@renderer/constants/messages";
 
 function PackagePreview() {

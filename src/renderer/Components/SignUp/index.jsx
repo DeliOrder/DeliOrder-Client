@@ -5,7 +5,10 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 import Modal from "../Modal";
 import usePackageStore from "@renderer/store";
-import { validateEmail, validatePassword } from "../../utils/validate.js";
+import {
+  validateEmail,
+  validatePassword,
+} from "@renderer/services/utils/validate.js";
 import { SIGN_UP_ALERT, COMMON_ALERT } from "../../constants/messages.js";
 
 function SignUp() {
