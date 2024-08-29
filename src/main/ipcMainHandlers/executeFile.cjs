@@ -25,7 +25,9 @@ const executeFile = () => {
 
     try {
       execSync(
-        `${platform === "win32" ? `start ""` : "open"} "${convertedFullPath}"`,
+        platform === "win32"
+          ? `start "" "${convertedFullPath}"`
+          : `open "${convertedFullPath}"`,
       );
 
       return "실행 성공";

@@ -15,6 +15,8 @@ import Modal from "../../Modal";
 import usePackageStore from "@renderer/store";
 import useModal from "@renderer/hooks/useModal";
 import refreshToken from "@renderer/services/utils/refreshToken";
+import { copyToClipboard } from "@renderer/services/utils/copyToClipboard";
+import { convertToDeepLink } from "@renderer/services/utils/convertToDeepLink";
 import { PACKAGE_PREVIEW_ALERT } from "@renderer/constants/messages";
 
 function PackagePreview() {
@@ -28,6 +30,8 @@ function PackagePreview() {
   const orderPackage = getOrders();
   const navigate = useNavigate();
 
+  const deepLinkURL = convertToDeepLink(serialNumber);
+
   const s3Client = new S3Client({
     region: import.meta.env.VITE_AWS_REGION,
     credentials: {
@@ -35,10 +39,6 @@ function PackagePreview() {
       secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY_ID,
     },
   });
-
-  const copyToClipboard = (content) => {
-    navigator.clipboard.writeText(content);
-  };
 
   const uploadFileToAWS = async () => {
     const ordersToCreate = orderPackage.filter(
@@ -210,17 +210,13 @@ function PackagePreview() {
             <div className="flex">
               <input
                 type="text"
-                defaultValue={`electron-deliorder://open?packageId=${serialNumber}`}
+                defaultValue={deepLinkURL}
                 className="flex-grow rounded-l-md border px-2 py-1"
                 readOnly
               />
               <button
                 className="rounded-r-md bg-blue-400 px-4 py-1 text-white hover:bg-blue-500"
-                onClick={() =>
-                  copyToClipboard(
-                    `electron-deliorder://open?packageId=${serialNumber}`,
-                  )
-                }
+                onClick={() => copyToClipboard(deepLinkURL)}
               >
                 복사
               </button>

@@ -71,9 +71,6 @@ function Nav() {
           DELIORDER
         </Link>
       </div>
-      <div className="block lg:hidden">
-        <button className="flex items-center rounded border border-teal-400 px-3 py-2 text-teal-200 hover:border-white hover:text-white"></button>
-      </div>
       <div className="block w-full flex-grow lg:flex lg:w-auto lg:items-center">
         <div className="text-sm lg:flex-grow">
           <Link to="/" className="text-teal-hover-white mr-4">
