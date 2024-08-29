@@ -1,24 +1,15 @@
+import { VALID_KEY } from "../../../constants/validKey";
+
 function NumberInput() {
   const validateNumber = (event) => {
-    const VALID_KEY = [
-      "Tab",
-      "Backspace",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "0",
-    ];
+    const value = event.target.value;
+    const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value);
 
-    if (!VALID_KEY.includes(event.key) || event.key === " ") {
-      event.preventDefault();
+    if (isKorean || !VALID_KEY.includes(value)) {
+      event.target.value = "";
     }
   };
+
   const shiftFocusOnKeyDown = (event) => {
     if (event.target.value && event.code !== "Backspace") {
       event.target.nextSibling?.focus();
@@ -27,17 +18,6 @@ function NumberInput() {
 
     if (!event.target.value && event.code === "Backspace") {
       event.target.previousSibling?.focus();
-    }
-  };
-
-  const shiftFocusOnChange = (event) => {
-    if (event.nativeEvent.data === null) {
-      event.target.previousSibling?.focus();
-      return;
-    }
-
-    if (event) {
-      event.target.nextSibling?.focus();
     }
   };
 
@@ -50,7 +30,7 @@ function NumberInput() {
         validateNumber(event);
         shiftFocusOnKeyDown(event);
       }}
-      onChange={shiftFocusOnChange}
+      onChange={validateNumber}
     />
   );
 }
