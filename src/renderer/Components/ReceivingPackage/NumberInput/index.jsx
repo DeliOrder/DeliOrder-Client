@@ -1,4 +1,5 @@
 import { VALID_KEY } from "../../../constants/validKey";
+import PropTypes from "prop-types";
 
 function NumberInput({ inputValue = "" }) {
   const validateNumber = (event) => {
