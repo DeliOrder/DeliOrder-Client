@@ -65,10 +65,10 @@ function FilePicker() {
         </div>
         <div>
           {!isPickFile && currentOrder.action === "실행하기" && (
-            <label className="ml-20">
+            <label className="ml-24">
               <input
                 type="checkbox"
-                className="mr-2"
+                className="mr-3"
                 onChange={(event) => {
                   updateOrder({ useVscode: event.target.checked });
                 }}
