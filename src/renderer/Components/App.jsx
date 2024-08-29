@@ -66,16 +66,18 @@ function App() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Nav />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signUp" element={<SignUp />} />
-        <Route path="/package/new" element={<CreatingPackage />} />
-        <Route path="/package/receiving" element={<ReceivingPackage />} />
-        <Route path="/myPackages" element={<MyPackages />} />
-      </Routes>
-      <InfoModal />
+      <div className="flex min-h-screen flex-col">
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/package/new" element={<CreatingPackage />} />
+          <Route path="/package/receiving" element={<ReceivingPackage />} />
+          <Route path="/myPackages" element={<MyPackages />} />
+        </Routes>
+        <InfoModal />
+      </div>
     </div>
   );
 }
