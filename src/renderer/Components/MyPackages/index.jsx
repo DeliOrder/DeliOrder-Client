@@ -122,8 +122,7 @@ function MyPackages() {
                     {orderIndex + 1}
                   </span>
                   <span className="text-gray-600">
-                    {" "}
-                    {`"${order.attachmentName}" 을(를) `}
+                    {` "${order.attachmentName}" 을(를) `}
                   </span>
                   {order.sourcePath && (
                     <span className="text-gray-600">
@@ -137,7 +136,7 @@ function MyPackages() {
                   </span>
                   {order.editingName && (
                     <span className="text-gray-600">
-                      {order.editingName}(으)로{" "}
+                      {`"${order.editingName}"(으)로 `}
                     </span>
                   )}
                   <span className="font-bold text-blue-700">
