@@ -159,7 +159,7 @@ function BookmarkToolbar() {
           <span className="text-sm-gray-centered font-bold">추가하기</span>
           <button
             type="button"
-            className="button-blue-round"
+            className="button-green-bright"
             onClick={handleAddBookmark}
           >
             <img src={addingIcon} alt="adding Icon" />
