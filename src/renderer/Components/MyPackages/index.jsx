@@ -72,7 +72,7 @@ function MyPackages() {
   };
 
   return (
-    <div className="flex min-h-screen items-start justify-center bg-blue-100 bg-gradient-to-r p-8">
+    <div className="flex min-h-screen items-start justify-center p-8">
       <div className="mt-6 w-full max-w-3xl space-y-8">
         <div
           className="flex cursor-pointer flex-row items-center text-lg font-bold text-blue-700 hover:text-blue-900"
@@ -118,8 +118,8 @@ function MyPackages() {
             <div className="space-y-4">
               {userPackage.orders.map((order, orderIndex) => (
                 <div key={order._id} className="text-gray-700">
-                  <span className="button-blue-round text-white">
-                    {`${orderIndex + 1}`}
+                  <span className="button-blue-round font-bold text-black">
+                    {orderIndex + 1}
                   </span>
                   <span className="text-gray-600">
                     {" "}

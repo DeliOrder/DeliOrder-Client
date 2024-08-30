@@ -71,42 +71,44 @@ function ReceivingPackage() {
   }, [target]);
 
   return (
-    <div className="flex flex-grow items-center justify-center bg-blue-100">
-      <form
-        onSubmit={handleGetPackage}
-        className="flex h-3/5 w-3/5 flex-col items-center justify-center gap-20 rounded-xl bg-white p-10 shadow-2xl"
-      >
-        <label className="py-2 text-6xl font-semibold tracking-wide text-gray-800">
-          일련번호
-        </label>
-        <div className="flex justify-center">
-          {Array(SERIAL_NUMBER_LENGTH)
-            .fill("")
-            .map((_, index) => (
-              <NumberInput
-                key={index}
-                inputValue={packageId ? packageId[index] : ""}
-              />
-            ))}
-        </div>
-        <button
-          type="submit"
-          className="button-slate-round hover:bg-blue-600 hover:text-white"
-          ref={target}
+    <div className="bg-gray-light flex flex-1 flex-col overflow-y-auto">
+      <div className="flex h-full flex-col items-center justify-center">
+        <form
+          onSubmit={handleGetPackage}
+          className="flex h-[400px] w-fit flex-col items-center justify-center gap-10 rounded-xl bg-white p-10 shadow-2xl"
         >
-          받기
-        </button>
-      </form>
-      <Modal
-        title="패키지 내용 확인"
-        isOpen={isConfirmModalOpen}
-        onClose={closeConfirmModal}
-      >
-        <ProcessConfirm
-          orders={currentPackage}
-          closeModal={closeConfirmModal}
-        />
-      </Modal>
+          <label className="mb-2 mt-6 py-2 text-5xl font-bold tracking-wide text-gray-800">
+            일련번호
+          </label>
+          <div className="flex justify-center">
+            {Array(SERIAL_NUMBER_LENGTH)
+              .fill("")
+              .map((_, index) => (
+                <NumberInput
+                  key={index}
+                  inputValue={packageId ? packageId[index] : ""}
+                />
+              ))}
+          </div>
+          <button
+            type="submit"
+            className="button-slate-round hover:bg-green-bright bg-blue-light text-white hover:text-black"
+            ref={targetButton}
+          >
+            받기
+          </button>
+        </form>
+        <Modal
+          title="패키지 내용 확인"
+          isOpen={isConfirmModalOpen}
+          onClose={closeConfirmModal}
+        >
+          <ProcessConfirm
+            orders={currentPackage}
+            closeModal={closeConfirmModal}
+          />
+        </Modal>
+      </div>
     </div>
   );
 }

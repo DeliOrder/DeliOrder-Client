@@ -61,7 +61,7 @@ function Nav() {
   };
 
   return (
-    <nav className="sticky top-0 z-10 flex flex-shrink-0 flex-wrap items-center justify-between bg-blue-700 p-6">
+    <nav className="bg-blue-medium sticky top-0 z-10 flex flex-shrink-0 flex-wrap items-center justify-between p-6">
       <div className="mr-6 flex flex-shrink-0 items-center text-white">
         <Link
           to="/"
@@ -76,13 +76,22 @@ function Nav() {
       </div>
       <div className="block w-full flex-grow lg:flex lg:w-auto lg:items-center">
         <div className="text-sm lg:flex-grow">
-          <Link to="/" className="text-teal-hover-white mr-4">
+          <Link
+            to="/introduction"
+            className="hover:text-yellow-bright mr-4 text-lg text-white"
+          >
             소개
           </Link>
-          <Link to="/package/new" className="text-teal-hover-white mr-4">
+          <Link
+            to="/package/new"
+            className="hover:text-yellow-bright mr-4 text-lg text-white"
+          >
             보내기
           </Link>
-          <Link to="/package/receiving" className="text-teal-hover-white">
+          <Link
+            to="/package/receiving"
+            className="hover:text-yellow-bright text-lg text-white"
+          >
             받기
           </Link>
         </div>

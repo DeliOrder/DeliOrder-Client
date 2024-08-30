@@ -13,6 +13,7 @@ import CreatingPackage from "./CreatingPackage";
 import MyPackages from "./MyPackages";
 import refreshToken from "@renderer/services/utils/refreshToken";
 import InfoModal from "./Modal/InfoModal";
+import Introduction from "./Introduction";
 
 function App() {
   const { setClientStatus } = usePackageStore();
@@ -65,10 +66,11 @@ function App() {
   }, [setClientStatus]);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-screen flex-col">
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/introduction" element={<Introduction />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/package/new" element={<CreatingPackage />} />

@@ -144,7 +144,7 @@ function Login() {
   };
 
   return (
-    <div className="flex flex-grow items-center justify-center p-4">
+    <div className="bg-gray-light flex flex-grow items-center justify-center p-4">
       <form
         className="m-4 w-[400px] rounded border-gray-600 bg-white p-6 shadow-md"
         onSubmit={handleEmailLogin}
