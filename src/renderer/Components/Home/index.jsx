@@ -50,7 +50,7 @@ function Home() {
         setClientStatus({ isLogin: true });
         navigate("/");
       } catch (error) {
-        console.errors("카카오 로그인 실패: ", error);
+        console.error("카카오 로그인 실패: ", error);
         notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
       }
     };
