@@ -73,7 +73,7 @@ function MyPackages() {
 
   return (
     <div className="flex min-h-screen items-start justify-center p-8">
-      <div className="mt-6 w-full max-w-3xl space-y-8">
+      <div className="mt-6 w-full max-w-5xl space-y-8">
         <div
           className="flex cursor-pointer flex-row items-center text-lg font-bold text-blue-700 hover:text-blue-900"
           onClick={toggleSort}
@@ -118,21 +118,26 @@ function MyPackages() {
             <div className="space-y-4">
               {userPackage.orders.map((order, orderIndex) => (
                 <div key={order._id} className="text-gray-700">
-                  <span className="button-blue-round font-bold text-black">
+                  <span className="button-green-bright font-bold text-black">
                     {orderIndex + 1}
                   </span>
                   <span className="text-gray-600">
                     {" "}
-                    {`"${order.attachmentName}" 을 "${order.executionPath}" 에서`}
+                    {`"${order.attachmentName}" 을(를) `}
+                  </span>
+                  {order.sourcePath && (
+                    <span className="text-gray-600">
+                      {order.sourcePath}에서{" "}
+                    </span>
+                  )}
+                  <span className="text-gray-600">
+                    {" "}
+                    {order.executionPath}
+                    {order.action === "이동하기" ? "(으)로 " : "에서 "}
                   </span>
                   {order.editingName && (
                     <span className="text-gray-600">
-                      {` "${order.editingName}" 로`}
-                    </span>
-                  )}
-                  {order.sourcePath && (
-                    <span className="text-gray-600">
-                      {` "${order.sourcePath}" 로`}
+                      {order.editingName}(으)로{" "}
                     </span>
                   )}
                   <span className="font-bold text-blue-700">
