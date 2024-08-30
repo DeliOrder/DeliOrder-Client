@@ -7,7 +7,7 @@ import { auth } from "@renderer/services/firebaseService/firebase.js";
 import usePackageStore from "@renderer/store";
 
 import { COMMON_ALERT } from "@renderer/constants/messages";
-import DeliLogo from "@renderer/assets/images/logo.png";
+import deliMan from "@images/deliMan.png";
 
 function Home() {
   const navigate = useNavigate();
@@ -69,23 +69,23 @@ function Home() {
   };
 
   return (
-    <div className="flex h-[90.5vh] items-center justify-between bg-blue-100">
+    <div className="flex flex-1 items-center justify-center overflow-y-auto bg-white">
       <div className="flex w-1/2 flex-col items-center justify-between">
         <button
           onClick={navigateToCreatePage}
-          className="m-7 w-3/5 rounded-full bg-blue-500 p-7 text-3xl text-white hover:bg-blue-700"
+          className="bg-green-bright hover:bg-yellow-bright m-7 w-3/5 rounded-full p-7 text-3xl font-semibold text-black"
         >
           보내기
         </button>
         <button
           onClick={navigateToReceivingPage}
-          className="m-7 w-3/5 rounded-full bg-blue-500 p-7 text-3xl text-white hover:bg-blue-700"
+          className="bg-green-bright hover:bg-yellow-bright m-7 w-3/5 rounded-full p-7 text-3xl font-semibold text-black"
         >
           받기
         </button>
       </div>
       <div className="flex w-1/2 items-center justify-center">
-        <img src={DeliLogo} className="size-3/5" alt="DeliOrder logo" />
+        <img src={deliMan} className="mr-40" alt="DeliOrder logo" />
       </div>
     </div>
   );

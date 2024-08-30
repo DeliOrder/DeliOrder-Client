@@ -170,7 +170,7 @@ function PackagePreview() {
   };
 
   return (
-    <div className="container-large max-h-[90vh] min-h-[672px]">
+    <div className="container-large flex-1">
       <label className="mb-2 block text-xl font-bold text-gray-700">
         패키지 미리보기
       </label>
@@ -223,7 +223,7 @@ function PackagePreview() {
             </div>
           </div>
           <p className="mt-4">
-            이 일련번호와 링크주소는 10분 뒤(
+            이 일련번호와 링크주소는 30분 뒤(
             {expiredTime ? expiredTime.toLocaleTimeString().slice(0, -3) : ""}
             )까지 유효합니다
           </p>
