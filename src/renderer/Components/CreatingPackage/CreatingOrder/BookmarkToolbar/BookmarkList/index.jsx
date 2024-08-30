@@ -35,12 +35,12 @@ function BookmarkList({ bookmarks, closeBookmarkList }) {
             </span>
           )}
           <span className="text-lg font-light">
-            {` "${bookmark.executionPath}" `}
+            {bookmark.executionPath}
             {bookmark.action === "이동하기" ? "(으)로 " : "에서 "}
           </span>
           {bookmark.editingName && (
             <span className="text-lg font-light">
-              {bookmark.editingName} (으)로{" "}
+              {`"${bookmark.editingName}"(으)로 `}
             </span>
           )}
           <span className="text-lg font-bold">{bookmark.action}</span>
