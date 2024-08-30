@@ -126,17 +126,9 @@ function Login() {
   };
   const handleKakaoLogin = async () => {
     try {
-      const response = await window.Kakao.Auth.authorize({
+      await window.Kakao.Auth.authorize({
         redirectUri: `${import.meta.env.VITE_BASE_URL}`,
       });
-      const { access_token } = response;
-
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/sign-in/kakao`,
-        {
-          token: access_token,
-        },
-      );
     } catch (error) {
       console.error("카카오 로그인 실패: ", error);
       notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
@@ -144,7 +136,7 @@ function Login() {
   };
 
   return (
-    <div className="flex flex-grow items-center justify-center p-4">
+    <div className="bg-gray-light flex flex-grow items-center justify-center p-4">
       <form
         className="m-4 w-[400px] rounded border-gray-600 bg-white p-6 shadow-md"
         onSubmit={handleEmailLogin}

@@ -156,17 +156,17 @@ function BookmarkToolbar() {
       <span className="label-large">즐겨찾기</span>
       <div className="flex flex-row justify-around py-1">
         <div className="flex flex-row">
-          <span className="text-sm-gray-centered">추가하기</span>
+          <span className="text-sm-gray-centered font-bold">추가하기</span>
           <button
             type="button"
-            className="button-blue-round"
+            className="button-green-bright"
             onClick={handleAddBookmark}
           >
             <img src={addingIcon} alt="adding Icon" />
           </button>
         </div>
         <div className="flex flex-row">
-          <span className="text-sm-gray-centered">가져오기</span>
+          <span className="text-sm-gray-centered font-bold">가져오기</span>
           <button
             type="button"
             className="button-yellow-square"

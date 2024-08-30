@@ -3,7 +3,7 @@ import PackagePreview from "./PackagePreview";
 
 function CreatingPackage() {
   return (
-    <div className="relative flex min-h-fit flex-grow flex-row items-center justify-center justify-items-stretch overflow-hidden bg-blue-100 px-3 py-6 sm:py-12">
+    <div className="bg-gray-light relative flex min-h-fit flex-1 flex-row items-stretch px-3 py-6">
       <CreatingOrder />
       <PackagePreview />
     </div>

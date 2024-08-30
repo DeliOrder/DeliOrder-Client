@@ -30,8 +30,12 @@
   @apply my-3 w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700;
 }
 
-.button-blue-round {
-  @apply inline-flex h-10 w-10 items-center justify-center rounded-full border-none bg-blue-600 outline-none hover:bg-blue-700 active:bg-blue-600;
+.button-gray-light {
+  @apply bg-gray-light hover:bg-yellow-bright my-3 w-full rounded border border-gray-300 px-4 py-2 font-bold text-black;
+}
+
+.button-green-bright {
+  @apply bg-green-bright inline-flex h-10 w-10 items-center justify-center rounded-full border-none text-black outline-none hover:bg-blue-700 active:bg-blue-600;
 }
 
 .button-yellow-square {
