@@ -28,6 +28,7 @@ const editFileName = () => {
       }
 
       fs.renameSync(convertedOldFullPath, convertedNewFullPath);
+      return "수정 성공";
     } catch (error) {
       console.error("edit-file-Name main handler 에러:", error);
       return "파일명 수정 실패";

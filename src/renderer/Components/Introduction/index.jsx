@@ -5,8 +5,9 @@ function Introduction() {
     { icon: "📂", text: "파일 전송이 가능합니다" },
     { icon: "📂", text: "파일 이동이 가능합니다" },
     { icon: "📂", text: "파일 복제가 가능합니다" },
-    { icon: "🗑️", text: "파일 삭제가 가능합니다" },
+    { icon: "📂", text: "파일 수정이 가능합니다" },
     { icon: "🚀", text: "파일 실행이 가능합니다" },
+    { icon: "🗑️", text: "파일 삭제가 가능합니다" },
     { icon: "📦", text: "압축 해제가 가능합니다" },
   ];
 
@@ -36,7 +37,7 @@ function Introduction() {
         </div>
         <div className="flex flex-1 flex-col justify-center bg-gray-50 p-12">
           <h2 className="mb-8 text-4xl font-bold text-gray-800">주요 기능</h2>
-          <ul className="space-y-6">
+          <ul className="space-y-4">
             {features.map((item, index) => (
               <li
                 key={index}
