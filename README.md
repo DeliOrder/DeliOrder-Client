@@ -1,35 +1,59 @@
 # DeliOrder
 
-<img width="" alt="image" src="https://github.com/user-attachments/assets/e47a0f43-b409-4e4b-833b-d5fa9fa45256">
+<div align="center">
+<img width="50%" alt="image" src="https://github.com/user-attachments/assets/e47a0f43-b409-4e4b-833b-d5fa9fa45256">
+</div>
 
----
+<div align="center">
+<a href="https://github.com/DeliOrder/DeliOrder-Client">클라이언트 </a> | <a href="https://github.com/DeliOrder/DeliOrder-  Server">서버 </a> | <a href="https://www.notion.so/5be754c5d84e4491b52d52b93b2624f9?pvs=21">정리 노션 </a>
+</div>
+<br>
 
-**[클라이언트](https://github.com/DeliOrder/DeliOrder-Client) | [서버](https://github.com/DeliOrder/DeliOrder-Server) | [정리 노션](https://www.notion.so/5be754c5d84e4491b52d52b93b2624f9?pvs=21)**
+<div align="center">
 
-**DeliOrder**는 사용자의 지시를 배달한다는 뜻의 Deliver + Order의 합성어로, 사용자가 **파일 작업 자동화 매크로**를 만들고 쉽게 **공유**하여 **실행**할 수 있는 서비스를 제공하는 데스크탑 애플리케이션 입니다.
+**DeliOrder**는 사용자의 지시를 배달한다는 뜻의 Deliver + Order의 합성어로,<br> 사용자가 **파일 작업 자동화 매크로**를 만들고 쉽게 **공유**하여 **실행**할 수 있는 서비스를 제공하는 데스크탑 애플리케이션 입니다.
+
+</div>
 
 ## 🔷 목차
 
-## 소개영상
+<!-- toc -->
 
-<iframe src="https://drive.google.com/file/d/1ruEw0t26s_Q1U8bZ_WQzp2PnbBUNK-4N/preview" width="640" height="480" allow="autoplay"></iframe>
+- [🔷 소개영상](#%F0%9F%94%B7-%EC%86%8C%EA%B0%9C%EC%98%81%EC%83%81)
+- [**🔷 개발 환경**](#%F0%9F%94%B7-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD)
+  * [**데이터베이스가 2개인 이유**](#%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4%EA%B0%80-2%EA%B0%9C%EC%9D%B8-%EC%9D%B4%EC%9C%A0)
+  * [**Node.js 와 Elctron**](#nodejs-%EC%99%80-elctron)
+  * [**라이브러리 간단 소개**](#%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EA%B0%84%EB%8B%A8-%EC%86%8C%EA%B0%9C)
+- [**🔷 문제 해결하기: (1) macOS 와 Windows 호환하기**](#%F0%9F%94%B7-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0-1-macos-%EC%99%80-windows-%ED%98%B8%ED%99%98%ED%95%98%EA%B8%B0)
+  * [**1. 자소 분리 통합시키기**](#1-%EC%9E%90%EC%86%8C-%EB%B6%84%EB%A6%AC-%ED%86%B5%ED%95%A9%EC%8B%9C%ED%82%A4%EA%B8%B0)
+  * [**2. 달라도 너무 다른 경로 표기 통일시키기**](#2-%EB%8B%AC%EB%9D%BC%EB%8F%84-%EB%84%88%EB%AC%B4-%EB%8B%A4%EB%A5%B8-%EA%B2%BD%EB%A1%9C-%ED%91%9C%EA%B8%B0-%ED%86%B5%EC%9D%BC%EC%8B%9C%ED%82%A4%EA%B8%B0)
+- [**🔷 문제 해결하기: (2) 실행 파일 전송 가능하게 하기**](#%F0%9F%94%B7-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0-2-%EC%8B%A4%ED%96%89-%ED%8C%8C%EC%9D%BC-%EC%A0%84%EC%86%A1-%EA%B0%80%EB%8A%A5%ED%95%98%EA%B2%8C-%ED%95%98%EA%B8%B0)
+  * [**“.app” 전송 가능하게 하기**](#app-%EC%A0%84%EC%86%A1-%EA%B0%80%EB%8A%A5%ED%95%98%EA%B2%8C-%ED%95%98%EA%B8%B0)
+  * [**파일 선택기 구현을 통한 문제 해결**](#%ED%8C%8C%EC%9D%BC-%EC%84%A0%ED%83%9D%EA%B8%B0-%EA%B5%AC%ED%98%84%EC%9D%84-%ED%86%B5%ED%95%9C-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0)
+  * [**파일 객체 구현을 통한 파일 업로드**](#%ED%8C%8C%EC%9D%BC-%EA%B0%9D%EC%B2%B4-%EA%B5%AC%ED%98%84%EC%9D%84-%ED%86%B5%ED%95%9C-%ED%8C%8C%EC%9D%BC-%EC%97%85%EB%A1%9C%EB%93%9C)
+- [**🔷 협업일지**](#%F0%9F%94%B7-%ED%98%91%EC%97%85%EC%9D%BC%EC%A7%80)
+  * [**1. 적극적인 소통은 협업의 기본!**](#1-%EC%A0%81%EA%B7%B9%EC%A0%81%EC%9D%B8-%EC%86%8C%ED%86%B5%EC%9D%80-%ED%98%91%EC%97%85%EC%9D%98-%EA%B8%B0%EB%B3%B8)
+  * [**2. 중요한 건 문서로**](#2-%EC%A4%91%EC%9A%94%ED%95%9C-%EA%B1%B4-%EB%AC%B8%EC%84%9C%EB%A1%9C)
+  * [**3. 공유는 업무 효율을 높일 뿐**](#3-%EA%B3%B5%EC%9C%A0%EB%8A%94-%EC%97%85%EB%AC%B4-%ED%9A%A8%EC%9C%A8%EC%9D%84-%EB%86%92%EC%9D%BC-%EB%BF%90)
+  * [**4. 3인이라는 소수 구성원의 함정에서 벗어나 의사결정하기**](#4-3%EC%9D%B8%EC%9D%B4%EB%9D%BC%EB%8A%94-%EC%86%8C%EC%88%98-%EA%B5%AC%EC%84%B1%EC%9B%90%EC%9D%98-%ED%95%A8%EC%A0%95%EC%97%90%EC%84%9C-%EB%B2%97%EC%96%B4%EB%82%98-%EC%9D%98%EC%82%AC%EA%B2%B0%EC%A0%95%ED%95%98%EA%B8%B0)
+- [🔷 팀원 소개](#%F0%9F%94%B7-%ED%8C%80%EC%9B%90-%EC%86%8C%EA%B0%9C)
 
-| 생성하기                                                                                                            | 삭제하기                                                                                                            | 이동하기                                                                                                            | 수정하기                                                                                                            |
-| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| <img width="400" alt="image" src="https://github.com/user-attachments/assets/a4bbfe71-c112-4f74-9209-724633970872"> | <img width="400" alt="image" src="https://github.com/user-attachments/assets/7e38c986-42ba-47c2-ab01-dcbd1a99c966"> | <img width="400" alt="image" src="https://github.com/user-attachments/assets/2660c0e7-8a17-402d-80c7-46ce85ab8348"> | <img width="400" alt="image" src="https://github.com/user-attachments/assets/b8e897d1-898e-4c4e-8c7f-3bd93f1721e4"> |
+<!-- tocstop -->
 
-| 실행하기                                                                                                            | 복제하기                                                                                                            | 압축풀기                                                                                                            |
-| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| <img width="220" alt="image" src="https://github.com/user-attachments/assets/7135036b-8cf4-4ff8-956c-fe6ecfde290d"> | <img width="220" alt="image" src="https://github.com/user-attachments/assets/0a3efd53-db1e-4112-b9ec-67e79b47305d"> | <img width="220" alt="image" src="https://github.com/user-attachments/assets/7165684e-4986-42ed-8a97-1f7b6a051206"> |
+## 🔷 소개영상
+
+<iframe width="400" height="300" src="https://www.youtube.com/embed/41U4q4W2nkQ" title="소개영상" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen> </iframe>
+<br>
 
 ## **🔷 개발 환경**
 
-| **개발 언어**    | **Javascript**                            |
-| ---------------- | ----------------------------------------- |
-| **클라이언트**   | React (Vite), Electron, Zustand, Tailwind |
-| **서버**         | Node.js, Express, Axios                   |
-| **데이터베이스** | AWS S3, MongoDB, Mongoose                 |
-| **라이브러리**   | trash, MIME, yauzl                        |
+| 분류             | 기술                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **개발 언어**    | <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **클라이언트**   | <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/vite-646CFF?style=for-the-badge&logo=vite&logoColor=white"> <img src="https://img.shields.io/badge/electron-47848F?style=for-the-badge&logo=electron&logoColor=black"> <img src="https://img.shields.io/badge/zustand-54283c?style=for-the-badge&logo=zustand&logoColor=black"> <img src="https://img.shields.io/badge/tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=black"> |
+| **서버**         | <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white"> <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white"> <img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white">                                                                                                                                                                                                                    |
+| **데이터베이스** | <img src="https://img.shields.io/badge/amazons3-569A31?style=for-the-badge&logo=amazons3&logoColor=white"> <img src="https://img.shields.io/badge/mongodb-47A248?style=for-the-badge&logo=mongodb&logoColor=white"> <img src="https://img.shields.io/badge/mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white">                                                                                                                                                                                                            |
+| **라이브러리**   | **trash**, **MIME**, **yauzl**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
 ### **데이터베이스가 2개인 이유**
 
@@ -61,7 +85,7 @@ Node.js 에서 제공되는 파일 시스템 모듈을 활용하여 조작이 �
 
 > 다른 운영체제 간 한글명 파일을 주고받던 중 한글 깨짐 증상이 발생하였습니다.
 
-![image](https://github.com/user-attachments/assets/8b46e7c5-d9f9-4342-9f1d-2e9dd536bc27)
+![자소분리 예시](https://github.com/user-attachments/assets/8b46e7c5-d9f9-4342-9f1d-2e9dd536bc27)
 
 위 사진처럼 사진이나 압축된 폴더, 여러 다른 파일 제목에 대해서 **글자가 분리돼서 나오는 현상을 자소 분리 현상**이라고 하고 이러한 문제가 발생하는 이유는 **운영체제 간에 인코딩 디코딩 방식이 달라서**입니다.
 
@@ -109,7 +133,7 @@ Node.js 에서 제공되는 파일 시스템 모듈을 활용하여 조작이 �
 
 구현 시 사용한 파일 시스템 모듈은 매개변수로 파일 경로를 포함한 파일 문자열을 받습니다. 운영체제마다 경로 표현 방식이 다르기 때문에 이 경로를 그대로 사용할 경우 문제가 발생할 수 있습니다. 그 차이는 주로 다음과 같은 부분에서 나타납니다.
 
-1. 드라이브의 사용 : Windows에는 드라이브 개념이 있어 C 드라이브에서부터 경로가 시작됩니다. (C:) macOS의 경우 루트 디렉터리부터 시작합니다.
+1. 드라이브의 사용 : Windows에는 드라이브 개념이 있어 C 드라이브에서부터 경로가 시작됩니다. macOS의 경우 루트 디렉터리부터 시작합니다.
 2. 경로 구분자의 차이 : Windows 는 백슬래쉬 (`\\`)를 사용하는 반면, OS의 경우 슬래쉬(`/`)를 사용합니다.
 
    파일 시스템 모듈의 normalize 메서드를 사용해 이 차이를 해결하려 했지만, 경로 구분자가 혼용된 경우 정규화가 제대로 이루어지지 않는 문제가 있었습니다.
@@ -127,13 +151,10 @@ Node.js 에서 제공되는 파일 시스템 모듈을 활용하여 조작이 �
 
 이러한 문제들을 해결하기 위해 **만든 normalize 유틸 함수**의 동작은 아래와 같습니다.
 
-⓵ 패키지를 받은 수신자의 운영체제를 확인하고 경로 구분자의 방향을 바꿔줍니다.
-
-⓶ 경로를 홈 디렉터리(homedir)로부터 시작하도록 정정합니다.
-
-⓷ 각 운영체제 별 호환 가능한 특수한 디렉터리가 있다면 경로 이름을 바꿔줍니다.
-
-⓸ Library 와 AppData 와 같이 좀 더 민감한 설정 데이터를 가지고 있는 경우 경로를 호환하지 않습니다.
+1. 패키지를 받은 수신자의 운영체제를 확인하고 경로 구분자의 방향을 바꿔줍니다.
+2. 경로를 홈 디렉터리(homedir)로부터 시작하도록 정정합니다.
+3. 각 운영체제 별 호환 가능한 특수한 디렉터리가 있다면 경로 이름을 바꿔줍니다.
+4. Library 와 AppData 와 같이 좀 더 민감한 설정 데이터를 가지고 있는 경우 경로를 호환하지 않습니다.
 
 이 과정은 비교적 단순해 보이지만, 실제로는 여러 엣지 케이스를 처리하는 데 많은 노력이 필요했습니다. 덕분에 **윈도우와 유닉스 계열 OS 간의 경로 호환성을 개선**할 수 있었습니다.
 
@@ -145,7 +166,7 @@ Node.js 에서 제공되는 파일 시스템 모듈을 활용하여 조작이 �
 
 문제가 발생하는 원인을 조사해 보니 app 확장자가 Mac에서 실행되도록 만들어진 프로그램 파일로써 해당 애플리케이션을 실행하는데 필요한 모든 파일을 포함한 특별한 유형의 폴더이기 때문이라는 것을 알게 되었습니다.
 
-![image](https://github.com/user-attachments/assets/9d784901-1c39-4342-b20d-12bdc7c62366)
+![잘못된 앱 인식과정](https://github.com/user-attachments/assets/9d784901-1c39-4342-b20d-12bdc7c62366)
 
 ### **파일 선택기 구현을 통한 문제 해결**
 
@@ -229,7 +250,7 @@ PR 리뷰도 즉각 즉각 진행했기 때문에, 수정사항 등에 대한 �
 
 > 중요한 의사결정 결과 혹은 흔적을 회의록으로 남겼습니다. 회의 이후 기억이 나지 않더라도 회의록을 통해 협의된 내용을 확인할 수 있습니다. [**[🔗 회의록 리스트]**](https://www.notion.so/6564428a53024453bddbd35729a9b0bf?pvs=21)
 
-![image](https://github.com/user-attachments/assets/29f8059f-2c9f-4292-bfe4-16cfb25508d4)
+![회의록](https://github.com/user-attachments/assets/29f8059f-2c9f-4292-bfe4-16cfb25508d4)
 회의록 부분발췌
 
 처음부터 문서화를 적극적으로 했던 부분은 아니었습니다. 첫 주는 회의하고 구현 사항을 만들기 바빴고 실무에 문서화 작업을 뒤로 제쳐두었습니다. 하지만 서로 회차가 거듭해 갈수록 협의된 내용이 기억 속에서 조금씩 다르다는 것이 확인되었고 이를 명확히 해둘 필요가 있겠다고 생각했습니다.
@@ -246,7 +267,7 @@ PR 리뷰도 즉각 즉각 진행했기 때문에, 수정사항 등에 대한 �
 
 활용 예)
 
-![image](https://github.com/user-attachments/assets/414cd412-1822-4afb-b87a-9237583b53f9)
+![노션 첨부 예시](https://github.com/user-attachments/assets/414cd412-1822-4afb-b87a-9237583b53f9)
 
 PR 리뷰를 이용해 자료를 공유하는 모습
 
@@ -262,10 +283,10 @@ PR 리뷰를 이용해 자료를 공유하는 모습
 
 활용 예) 회의록에 동의하거나 동의하지 않는 내용이 추가되었습니다.
 
-![스크린샷 2024-08-30 오전 11 37 16](https://github.com/user-attachments/assets/adb0018c-940a-4fc5-bd2e-d212497d9c86)
+![레드팀 전략 예시](https://github.com/user-attachments/assets/adb0018c-940a-4fc5-bd2e-d212497d9c86)
 
 덕분에 의사 결정 단계를 세분화하여 더욱 신중한 결정을 내리는 데 도움이 됐고, 밸런스를 맞춰가며 조율을 할 수 있게 됐습니다. 목적은 달성했지만 반대로 회의나 의사결정에 시간이 조금 더 든다는 부작용 때문에, 빠르게 체크하고 넘어가는 방향으로 추가 조율했습니다.
 
 ## 🔷 팀원 소개
 
-![스크린샷 2024-08-30 오전 11 37 16](https://github.com/user-attachments/assets/adb0018c-940a-4fc5-bd2e-d212497d9c86)
+![팀원 소개](https://github.com/user-attachments/assets/fb81e964-9c19-453b-a134-ed789a3290ab)
