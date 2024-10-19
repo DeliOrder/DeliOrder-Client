@@ -67,7 +67,10 @@ const unzipFile = () => {
                 return;
               }
 
-              if (decodedFileName.startsWith("__MACOSX/")) {
+              if (
+                decodedFileName.startsWith("__MACOSX/") ||
+                decodedFileName.includes(".DS_Store")
+              ) {
                 zipFile.readEntry();
                 return;
               }

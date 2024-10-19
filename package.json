@@ -12,7 +12,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "electron": "wait-on http://localhost:5173 && electron .",
-    "test": "jest"
+    "test": "jest",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "jest": {
     "testEnvironment": "node",
@@ -26,6 +28,7 @@
     "axios": "^1.7.4",
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
+    "electron-squirrel-startup": "^1.0.1",
     "firebase": "^10.13.0",
     "iconv-lite": "^0.6.3",
     "mime": "^4.0.4",
@@ -40,6 +43,14 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.5.0",
+    "@electron-forge/maker-deb": "^7.5.0",
+    "@electron-forge/maker-rpm": "^7.5.0",
+    "@electron-forge/maker-squirrel": "^7.5.0",
+    "@electron-forge/maker-zip": "^7.5.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.5.0",
+    "@electron-forge/plugin-fuses": "^7.5.0",
+    "@electron/fuses": "^1.8.0",
     "@eslint/js": "^9.8.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
