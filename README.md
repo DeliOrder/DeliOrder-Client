@@ -21,16 +21,19 @@
 
 - [🔷 소개영상](#%F0%9F%94%B7-%EC%86%8C%EA%B0%9C%EC%98%81%EC%83%81)
 - [🔷 개발 환경](#%F0%9F%94%B7-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD)
-  - [데이터베이스가 2개인 이유](#%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4%EA%B0%80-2%EA%B0%9C%EC%9D%B8-%EC%9D%B4%EC%9C%A0)
+  - [AWS S3 를 추가한 이유](#aws-s3-%EB%A5%BC-%EC%B6%94%EA%B0%80%ED%95%9C-%EC%9D%B4%EC%9C%A0)
   - [Node.js 와 Elctron](#nodejs-%EC%99%80-elctron)
   - [주요 라이브러리 소개](#%EC%A3%BC%EC%9A%94-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EC%86%8C%EA%B0%9C)
 - [🔷 문제 해결하기: (1) macOS 와 Windows 호환성 이슈](#%F0%9F%94%B7-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0-1-macos-%EC%99%80-windows-%ED%98%B8%ED%99%98%EC%84%B1-%EC%9D%B4%EC%8A%88)
   - [1. 자소 분리 통합시키기](#1-%EC%9E%90%EC%86%8C-%EB%B6%84%EB%A6%AC-%ED%86%B5%ED%95%A9%EC%8B%9C%ED%82%A4%EA%B8%B0)
   - [2. 경로 표기 통일시키기](#2-%EA%B2%BD%EB%A1%9C-%ED%91%9C%EA%B8%B0-%ED%86%B5%EC%9D%BC%EC%8B%9C%ED%82%A4%EA%B8%B0)
 - [🔷 문제 해결하기: (2) 실행 파일 전송 가능하게 하기](#%F0%9F%94%B7-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0-2-%EC%8B%A4%ED%96%89-%ED%8C%8C%EC%9D%BC-%EC%A0%84%EC%86%A1-%EA%B0%80%EB%8A%A5%ED%95%98%EA%B2%8C-%ED%95%98%EA%B8%B0)
-  - [“.app” 전송 가능하게 하기](#app-%EC%A0%84%EC%86%A1-%EA%B0%80%EB%8A%A5%ED%95%98%EA%B2%8C-%ED%95%98%EA%B8%B0)
+  - [“.app” 확장자 인식가능하게 하기](#app-%ED%99%95%EC%9E%A5%EC%9E%90-%EC%9D%B8%EC%8B%9D%EA%B0%80%EB%8A%A5%ED%95%98%EA%B2%8C-%ED%95%98%EA%B8%B0)
     - [파일 선택기 구현을 통한 문제 해결](#%ED%8C%8C%EC%9D%BC-%EC%84%A0%ED%83%9D%EA%B8%B0-%EA%B5%AC%ED%98%84%EC%9D%84-%ED%86%B5%ED%95%9C-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0)
     - [파일 객체를 이용한 업로드 기능](#%ED%8C%8C%EC%9D%BC-%EA%B0%9D%EC%B2%B4%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%97%85%EB%A1%9C%EB%93%9C-%EA%B8%B0%EB%8A%A5)
+- [🔷 문제 해결하기 : (3) 모달 관리 문제, 관심사 분리로 해결하기](#%F0%9F%94%B7-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0--3-%EB%AA%A8%EB%8B%AC-%EA%B4%80%EB%A6%AC-%EB%AC%B8%EC%A0%9C-%EA%B4%80%EC%8B%AC%EC%82%AC-%EB%B6%84%EB%A6%AC%EB%A1%9C-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0)
+  - [중복된 형태의 상태값 사용, 커스텀 훅으로 캡슐화 하기](#%EC%A4%91%EB%B3%B5%EB%90%9C-%ED%98%95%ED%83%9C%EC%9D%98-%EC%83%81%ED%83%9C%EA%B0%92-%EC%82%AC%EC%9A%A9-%EC%BB%A4%EC%8A%A4%ED%85%80-%ED%9B%85%EC%9C%BC%EB%A1%9C-%EC%BA%A1%EC%8A%90%ED%99%94-%ED%95%98%EA%B8%B0)
+  - [알림 메시지 모달은 전역에서 단 1개로 관리하기](#%EC%95%8C%EB%A6%BC-%EB%A9%94%EC%8B%9C%EC%A7%80-%EB%AA%A8%EB%8B%AC%EC%9D%80-%EC%A0%84%EC%97%AD%EC%97%90%EC%84%9C-%EB%8B%A8-1%EA%B0%9C%EB%A1%9C-%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0)
 - [🔷 협업일지](#%F0%9F%94%B7-%ED%98%91%EC%97%85%EC%9D%BC%EC%A7%80)
   - [1. 적극적인 소통은 협업의 기본](#1-%EC%A0%81%EA%B7%B9%EC%A0%81%EC%9D%B8-%EC%86%8C%ED%86%B5%EC%9D%80-%ED%98%91%EC%97%85%EC%9D%98-%EA%B8%B0%EB%B3%B8)
   - [2. 문서화의 중요성](#2-%EB%AC%B8%EC%84%9C%ED%99%94%EC%9D%98-%EC%A4%91%EC%9A%94%EC%84%B1)
@@ -42,7 +45,7 @@
 
 ## 🔷 소개영상
 
-[![소개 영상](https://github.com/user-attachments/assets/e209fc6a-37b2-4c93-ad07-de688ed24af3)](https://www.youtube.com/watch?v=41U4q4W2nkQ)
+[![소개 영상](https://github.com/user-attachments/assets/ba71fc71-10b6-4a9e-aaba-8a0567136067)](https://www.youtube.com/watch?v=aAUX4gzjYWI)
 <br>
 
 ## **🔷 개발 환경**
@@ -55,15 +58,9 @@
 | **데이터베이스** | <img src="https://img.shields.io/badge/amazons3-569A31?style=for-the-badge&logo=amazons3&logoColor=white"> <img src="https://img.shields.io/badge/mongodb-47A248?style=for-the-badge&logo=mongodb&logoColor=white"> <img src="https://img.shields.io/badge/mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white">                                                                                                                                                                                                            |
 | **라이브러리**   | **trash**, **MIME**, **yauzl**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
-### **데이터베이스가 2개인 이유**
+### **AWS S3 를 추가한 이유**
 
-이번 서비스에서는 2종의 DB를 연결하여 사용하고 있습니다. AWS S3 와 MongoDB입니다. 왜 2가지 저장소를 사용하게 되었을까요? 그것은 서비스 내에 첨부파일이라는 추가 데이터를 받아 저장한다는 점과 깊은 연관이 있습니다.
-
-Amazon S3는 대량의 데이터를 처리하도록 설계된 확장성이 뛰어난 클라우드 스토리지 서비스로, 사용자가 어디서든 원하는 양의 데이터를 저장하고 검색할 수 있습니다. 다만 데이터 간의 관계성에 대해선 지원하지 않습니다.
-
-반면에 MongoDB는 유연하고 확장 가능한 NoSQL 데이터베이스로, 여러 서버에 데이터를 분산하여 수평적 확장이 가능합니다. 특히 소규모 데이터에 대하여 빠른 퍼포먼스를 보여줍니다.
-
-이러한 면모로 인해 첨부파일용 저장소로 AWS S3를 사용하고 값, 객체 등의 데이터를 저장하기 위해 MongoDB를 사용하였습니다.
+본 서비스에서는 “생성” 이라는 매크로 행동시 첨부파일을 전달할 수 있게 설계되었습니다. 대용량 데이터인 첨부파일을 처리하기 위해 AWS S3를 연결하였습니다. AWS S3는 대량의 데이터를 처리하도록 설계된 확장성이 뛰어난 클라우드 스토리지 서비스로, 원하는 양의 데이터를 저장하고 사용할 수 있습니다. 대용량 파일을 전송하는 데에는 비용 부담이 있기 때문에 AWS S3 에 첨부파일을 업로드 하고 다운로드하는 동작은 클라이언트(Electron 의 renderer process)에서 처리해 서버의 부담을 줄였습니다.
 
 ### **Node.js 와 Elctron**
 
@@ -162,25 +159,26 @@ Node.js 에서 제공되는 파일 시스템 모듈을 활용하여 조작이 �
 
 > “생성하기” 명령을 수행할 경우 Mac에서 브라우저 파일 선택기를 이용해서. app 파일을 Window 에 보낼 경우 이때. zip 파일로 인식되는 문제가 발생하는 문제가 있었습니다.
 
-### **“.app” 전송 가능하게 하기**
+### **“.app” 확장자 인식가능하게 하기**
 
 문제가 발생하는 원인을 조사해 보니 app 확장자가 Mac에서 실행되도록 만들어진 프로그램 파일로써 해당 애플리케이션을 실행하는데 필요한 모든 파일을 포함한 특별한 유형의 폴더이기 때문이라는 것을 알게 되었습니다.
 
-![잘못된 앱 인식과정](https://github.com/user-attachments/assets/9d784901-1c39-4342-b20d-12bdc7c62366)
+![잘못된 앱 인식과정](https://github.com/user-attachments/assets/856e97e2-c40e-4664-82fc-11120a3a266d)
 
 ### **파일 선택기 구현을 통한 문제 해결**
 
-그렇게 단순히 app 확장자를 exe 확장자로 바꿔서 보내주려고 보니 브라우저에서 제공하는 파일 선택기를 사용할 경우 확장자에 대해 접근을 할 수 없어서 수정하는데 어려움이 발생하였습니다.
-
-그래서 **해결할 방법으로 Electron에서 파일 선택기를 구현하는 방법**을 택하였습니다.
+브라우저에서 제공하는 파일 선택기를 사용해서 app 확장자 파일에 접근할 경ㄴ우 폴더로 인식하여서 하위 폴더로 진입하는 문제가 발생하였습니다. 이렇게 app 확장자를 폴더로 인식하는 문제를 해결하기 위해 Electron에서 파일 선택기를 구현하는 방법을 택하였습니다.
 
 ```jsx
 const result = await dialog.showOpenDialog({
   properties: ["openFile"],
 });
+
+const selectedFilePath = result.filePaths[0];
+const { base: attachmentName, ext: extension } = path.parse(selectedFilePath);
 ```
 
-위처럼 Electron에서 파일 선택기를 구현해서 파일을 선택할 경우 확장자에 대해 접근하여 수정할 수 있으므로 어렵지 않게 app → exe 확장자로 바꿀 수 있었습니다. 그런데 해당 파일을 S3에 전송하려고 보니 업로드가 되지 않는 현상이 발생하였습니다.
+위처럼 Electron에서 파일 선택기를 구현해서 파일을 선택할 경우 파일의 각각 이름과 확장자에 접근이 가능하므로 '.app' 확장자 파일에 . 그런데 해당 파일을 S3에 전송하려고 보니 업로드가 되지 않는 현상이 발생하였습니다.
 
 ### **파일 객체를 이용한 업로드 기능**
 
@@ -195,7 +193,7 @@ const fileObj = new File(fileBuffer, baseName, {
 });
 ```
 
-그렇게 모든 문제가 해결되는 듯 보였으나 해당 파일 객체로 업로드를 할 시 파일이 이상하게 깨져서 올라가는 문제가 발생하여서 이번에도 원인을 조사해 보니 브라우저 파일 선택기로 만들어지는 파일 객체 경우 blob 객체를 통해서 만들어지기 때문에 버퍼 객체 대신 blob 객체를 이용해서 만들어주어야 했습니다.
+그렇게 모든 문제가 해결되는 듯 보였으나 파일 객체로 업로드를 할 시, 파일이 이상하게 깨져서 올라가는 문제가 발생하였습니다. 원인을 조사해 보니 브라우저 파일 선택기로 만들어지는 파일 객체 경우 blob 객체를 통해서 만들어지기 때문이었습니다. 이에 맞춰 버퍼 객체 대신 blob 객체를 이용해서 만들어 해결하였습니다.
 
 ```jsx
 const fileBuffer = Buffer.from(fileBase64, "base64");
@@ -211,6 +209,71 @@ const fileObj = new File([blobObj], baseName, {
 ```
 
 아까 만들어두었던 버퍼 객체를 이용해서 blob 객체를 만들어 다시 파일 객체를 만들어주니 잘 해결이 되는 것을 볼 수 있습니다.
+
+## **🔷 문제 해결하기 : (3) 모달 관리 문제, 관심사 분리로 해결하기**
+
+<img width=80% alt="모달 충돌 상황" src="https://github.com/user-attachments/assets/055b218c-f841-4248-987a-e3d09850f560">
+
+> 모달형 UI와 알림 메시지 모달을 동시에 사용하면서 여러 상태를 관리해야 했고, 이로 인해 유지 보수가 어려워졌습니다. 잘못된 상태값 처리로 인해 엉뚱한 메시지가 출력되거나, 상태 정리가 제때 이루어지지 않아 모달이 겹쳐 보이지 않는 문제도 발생했습니다.
+
+대표적으로 모달을 사용하는 컴포넌트 중 하나인 ‘받기’ 화면입니다.
+
+<img width=80% alt="이전 모달 상태값(1)" src="https://github.com/user-attachments/assets/710cb4b5-30f7-4e03-88ce-f404559c946f">
+<img width=80% alt="이전 모달 상태값(2)" src="https://github.com/user-attachments/assets/35ef4599-1501-402c-b7ab-5f3c68f0c514">
+
+모달을 위한 상태값이 무분별하게 증가했습니다. 단지 디자인에 따라 Modal 컴포넌트는 1개, InfoModal 컴포넌트는 2개를 사용하고 있었으며, 이를 위해 5개의 상태값이 존재했습니다. 이로 인해 각 컴포넌트가 평균 1.6개의 상태값을 가지게 되었고, 상태값 관리의 복잡도가 높아졌습니다.
+
+### 중복된 형태의 상태값 사용, 커스텀 훅으로 캡슐화 하기
+
+모달을 닫기 위한 최소한의 상태값을 사용하기 위해 전용 커스텀 훅을 만들었습니다. 이 훅은 모달의 열림 상태와 여는 함수, 닫는 함수를 반환합니다.
+
+```jsx
+const useModal = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  return [isOpen, openModal, closeModal];
+};
+```
+
+이 커스텀 훅을 통해 모달을 관리하는 방식으로 전환하면서 컴포넌트당 1개의 모달 상태만 관리하게 되어 코드가 간결해졌고 유지 보수도 용이해졌습니다. 또한, 컴포넌트 언마운트 시 자동으로 상태가 정리되는 장점이 있어 상태값 누락으로 인한 오류도 방지할 수 있었습니다.
+
+![이후 모달 상태값](https://github.com/user-attachments/assets/f74c399f-d420-4740-b924-51364357d24f)
+
+1개의 상태값만 사용하게 되었습니다.
+
+### 알림 메시지 모달은 전역에서 단 1개로 관리하기
+
+사용자는 일반적으로 현재 발생하고 있는 동작에 관한 알림 단 1개면 충분합니다. 그중 ‘닫기’ 버튼을 누르면서까지 뜨는 알림은 비교적 중요한 알림으로 관심을 집중시켜야 합니다. 이 경우 여기저기 알림이 떠 있다면 메시지 전달력도 떨어지고 사용자에게 피로감을 가중시킵니다.
+
+알림 모달 상태 관리를 중앙 스토어에 맡기고, 컴포넌트는 App.jsx에서 렌더링하도록 설계했습니다.
+
+```jsx
+//알림 전용 모달 컴포넌트
+function InfoModal() {
+  // 중앙에서 관리하는 상태값
+  const { infoModal, closeInfoModal } = usePackageStore();
+
+  return (
+    <Modal title="알림" isOpen={infoModal.isOpen} onClose={closeInfoModal}>
+      {infoModal.message}
+    </Modal>
+  );
+}
+```
+
+이로써 알람은 중요한 순간에 한 번에 하나씩만 뜨도록 관리됩니다.
+
+![modal_success](https://github.com/user-attachments/assets/b3fbf107-97a9-43df-b987-c1533c163166)
+
+결과적으로 상태를 분리하여 모달 관리의 복잡성을 줄이고 컴포넌트 사용을 용이하게 만들면서 사용자 경험을 최적화하는 데 성공했습니다.
 
 ## **🔷 협업일지**
 
