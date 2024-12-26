@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import usePackageStore from "@renderer/store";
 import { getAuth, signOut } from "firebase/auth";
@@ -15,8 +15,8 @@ function Nav() {
 
   const { openInfoModal, setInfoMessage } = usePackageStore();
 
-  const notifyInfoMessage = () => {
-    setInfoMessage(GUIDE_MESSAGES.REQUIRE_LOGIN);
+  const notifyInfoMessage = (message = GUIDE_MESSAGES.REQUIRE_LOGIN) => {
+    setInfoMessage(message);
     openInfoModal();
   };
 
@@ -38,6 +38,7 @@ function Nav() {
         console.error("카카오 로그아웃 실패: ", error);
         console.error("이메일 로그인 실패: ", error);
         if (
+          error instanceof AxiosError &&
           error.response &&
           error.response.status >= 400 &&
           error.response.status < 500
@@ -61,7 +62,7 @@ function Nav() {
   };
 
   return (
-    <nav className="bg-blue-medium sticky top-0 z-10 flex flex-shrink-0 flex-wrap items-center justify-between p-6">
+    <nav className="sticky top-0 z-10 flex flex-shrink-0 flex-wrap items-center justify-between bg-blue-medium p-6">
       <div className="mr-6 flex flex-shrink-0 items-center text-white">
         <Link
           to="/"
@@ -78,19 +79,19 @@ function Nav() {
         <div className="text-sm lg:flex-grow">
           <Link
             to="/introduction"
-            className="hover:text-yellow-bright mr-4 text-lg text-white"
+            className="mr-4 text-lg text-white hover:text-yellow-bright"
           >
             소개
           </Link>
           <Link
             to="/package/new"
-            className="hover:text-yellow-bright mr-4 text-lg text-white"
+            className="mr-4 text-lg text-white hover:text-yellow-bright"
           >
             보내기
           </Link>
           <Link
             to="/package/receiving"
-            className="hover:text-yellow-bright text-lg text-white"
+            className="text-lg text-white hover:text-yellow-bright"
           >
             받기
           </Link>

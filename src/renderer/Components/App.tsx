@@ -46,7 +46,7 @@ function App() {
         setClientStatus({ isLogin: true });
       } catch (error) {
         console.error("앱초기진입 로그인에러: ", error);
-        if (error.name !== "TokenExpiredError") {
+        if (error instanceof Error && error.name !== "TokenExpiredError") {
           window.localStorage.clear();
           setClientStatus({ isLogin: false });
           return;

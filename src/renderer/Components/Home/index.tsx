@@ -14,7 +14,7 @@ function Home() {
   const [searchParams] = useSearchParams();
   const { setClientStatus, openInfoModal, setInfoMessage } = usePackageStore();
 
-  const notifyInfoMessage = (message) => {
+  const notifyInfoMessage = (message: string) => {
     setInfoMessage(message);
     openInfoModal();
   };
@@ -73,13 +73,13 @@ function Home() {
       <div className="flex w-1/2 flex-col items-center justify-between">
         <button
           onClick={navigateToCreatePage}
-          className="bg-green-bright hover:bg-yellow-bright m-7 w-3/5 rounded-full p-7 text-3xl font-semibold text-black"
+          className="m-7 w-3/5 rounded-full bg-green-bright p-7 text-3xl font-semibold text-black hover:bg-yellow-bright"
         >
           보내기
         </button>
         <button
           onClick={navigateToReceivingPage}
-          className="bg-green-bright hover:bg-yellow-bright m-7 w-3/5 rounded-full p-7 text-3xl font-semibold text-black"
+          className="m-7 w-3/5 rounded-full bg-green-bright p-7 text-3xl font-semibold text-black hover:bg-yellow-bright"
         >
           받기
         </button>

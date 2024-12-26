@@ -1,4 +1,4 @@
-export const VALID_KEY = [
+export const VALID_KEY: Array<string> = [
   "Tab",
   "Backspace",
   "1",
