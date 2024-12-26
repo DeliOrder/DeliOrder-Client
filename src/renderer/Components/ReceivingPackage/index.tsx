@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -15,18 +15,19 @@ function ReceivingPackage() {
   const [currentPackage, setCurrentPackage] = useState([]);
   const { setInfoMessage, openInfoModal } = usePackageStore();
   const [searchParams] = useSearchParams();
-  const targetButton = useRef();
+  const targetButton = useRef(null);
   const [isConfirmModalOpen, openConfirmModal, closeConfirmModal] = useModal();
 
   const packageId = searchParams.get("packageId");
 
-  const handleGetPackage = async (event) => {
+  const handleGetPackage = async (event: React.FocusEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     try {
+      const form = event.target as HTMLFormElement;
+
       const inputNumbers = Array.from(
-        event.target.elements,
-        (element) => element.value,
+        form.elements,
+        (element) => (element as HTMLInputElement).value,
       );
 
       const serialNumber = inputNumbers.join("");
@@ -57,21 +58,23 @@ function ReceivingPackage() {
         openConfirmModal();
       }
     } catch (error) {
-      setInfoMessage(
-        error.response ? error.response.data.error : COMMON_ALERT.ERROR_OCCUR,
-      );
+      if (error instanceof AxiosError) {
+        setInfoMessage(
+          error.response ? error.response.data.error : COMMON_ALERT.ERROR_OCCUR,
+        );
+      }
       openInfoModal();
     }
   };
 
   useEffect(() => {
-    if (packageId) {
-      target.current.click();
+    if (packageId && targetButton.current) {
+      (targetButton.current as HTMLInputElement).click();
     }
-  }, [target]);
+  }, [packageId]);
 
   return (
-    <div className="bg-gray-light flex flex-1 flex-col overflow-y-auto">
+    <div className="flex flex-1 flex-col overflow-y-auto bg-gray-light">
       <div className="flex h-full flex-col items-center justify-center">
         <form
           onSubmit={handleGetPackage}
@@ -92,7 +95,7 @@ function ReceivingPackage() {
           </div>
           <button
             type="submit"
-            className="button-slate-round hover:bg-green-bright bg-blue-light text-white hover:text-black"
+            className="button-slate-round bg-blue-light text-white hover:bg-green-bright hover:text-black"
             ref={targetButton}
           >
             받기

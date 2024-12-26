@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "outDir": "dist",
+    "strict": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "typeRoots": ["./node_modules/@types/", "./types", "./node_modules"],
+    "baseUrl": "./",
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@images/*": ["src/renderer/assets/images/*"],
+      "@renderer/*": ["src/renderer/*"]
+    }
+  },
+  "ts-node": {
+    "esm": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/*.js", "**/*.css", "**/*.json"]
+}
