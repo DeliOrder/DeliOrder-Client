@@ -13,8 +13,19 @@ interface ClientStatusSlice {
   getClientStatus: () => ClientStatusType;
 }
 
-interface OrderType {
+interface File extends Blob {
+  name: string;
+  path: string;
+  lastModified: number;
+  lastModifiedDate: Date;
+  size: number;
+  type: string;
+  webkitRelativePath: string;
+}
+
+export interface OrderType {
   action: string;
+  attachmentFile?: File;
   attachmentName: string;
   attachmentType: string;
   attachmentUrl: string;

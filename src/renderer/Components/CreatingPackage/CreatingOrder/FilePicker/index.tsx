@@ -7,7 +7,7 @@ function FilePicker() {
   const currentOrder = getOrder();
   const { isPickFile, isUsingFilePicker } = getClientStatus();
 
-  const setFileInfo = (event) => {
+  const setFileInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateOrder({
       attachmentName: event.target.value,
       attachmentType: "string",

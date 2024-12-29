@@ -1,10 +1,13 @@
 import { useEffect } from "react";
-import PropTypes from "prop-types";
 
 import usePackageStore from "@renderer/store";
 import { PLACEHOLDER } from "@renderer/constants/messages";
 
-function FolderPicker({ isOptional }) {
+interface FolderPickerProp {
+  isOptional: boolean;
+}
+
+function FolderPicker({ isOptional }: FolderPickerProp) {
   const { updateOrder, getOrder, clientStatus } = usePackageStore();
   const currentOrder = getOrder();
 
@@ -12,7 +15,7 @@ function FolderPicker({ isOptional }) {
   const description = isOptional ? "출발경로" : "목적경로";
 
   useEffect(() => {
-    const updateAttachmentName = async (path) => {
+    const updateAttachmentName = async (path: string) => {
       const attachmentName = await window.electronAPI.getAttachmentName(path);
 
       updateOrder({ attachmentName });
@@ -43,7 +46,7 @@ function FolderPicker({ isOptional }) {
     }
   };
 
-  const appendUserPath = (event) => {
+  const appendUserPath = (event: React.ChangeEvent<HTMLInputElement>) => {
     const userDefinedPath = event.target.value;
 
     updateOrder({ [pathType]: userDefinedPath });
@@ -72,9 +75,5 @@ function FolderPicker({ isOptional }) {
     </div>
   );
 }
-
-FolderPicker.propTypes = {
-  isOptional: PropTypes.bool.isRequired,
-};
 
 export default FolderPicker;

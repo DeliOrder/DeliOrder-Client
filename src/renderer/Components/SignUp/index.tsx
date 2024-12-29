@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
@@ -8,11 +8,11 @@ import usePackageStore from "@renderer/store";
 import {
   validateEmail,
   validatePassword,
-} from "@renderer/services/utils/validate.js";
-import { SIGN_UP_ALERT, COMMON_ALERT } from "../../constants/messages.js";
+} from "@renderer/services/utils/validate";
+import { SIGN_UP_ALERT, COMMON_ALERT } from "../../constants/messages";
 
 function SignUp() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [emailValue, setEmailValue] = useState("");
   const [emailValidate, setEmailValidate] = useState(false);
   const [nicknameValue, setNicknameValue] = useState("");
@@ -29,8 +29,8 @@ function SignUp() {
     navigate("/");
   };
 
-  const notifyInfoMessage = (message) => {
-    setInfoMessage(message);
+  const notifyInfoMessage = (message: string | React.ReactNode) => {
+    setInfoMessage(message as string);
     openInfoModal();
   };
 
@@ -49,9 +49,11 @@ function SignUp() {
     } catch (error) {
       console.error(
         "이메일 중복검증 실패: ",
-        error.response?.data?.error || error.message,
+        error instanceof AxiosError &&
+          (error.response?.data?.error || error.message),
       );
-      if (error.response) {
+
+      if (error instanceof AxiosError && error.response) {
         notifyInfoMessage(SIGN_UP_ALERT.EMAIL_ALREADY_REGISTERED);
       } else {
         notifyInfoMessage(SIGN_UP_ALERT.INVALID_EMAIL_FORMAT);
@@ -60,7 +62,7 @@ function SignUp() {
     }
   };
 
-  const handleEmailSignUp = async (event) => {
+  const handleEmailSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
     const signUpFormValue = {
       emailValue,
@@ -83,7 +85,7 @@ function SignUp() {
       const passwordErrorList = passwordValidationResult.errors;
       notifyInfoMessage(
         <>
-          {passwordErrorList.map((errorMessage, index) => {
+          {passwordErrorList!.map((errorMessage, index) => {
             let errorText;
 
             switch (errorMessage) {

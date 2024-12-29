@@ -1,14 +1,19 @@
-import PropTypes from "prop-types";
 import { useState } from "react";
 
 import Modal from "../../Modal";
 
-import usePackageStore from "@renderer/store";
+import usePackageStore, { OrderType } from "@renderer/store";
 import useModal from "@renderer/hooks/useModal";
 import { GUIDE_MESSAGES, COMMON_ALERT } from "@renderer/constants/messages";
+import { AxiosError } from "axios";
 
-function ProcessConfirm({ orders, closeModal }) {
-  const [processResults, setProcessResults] = useState([]);
+interface ProcessConfirmProps {
+  orders: Array<OrderType>;
+  closeModal: () => void;
+}
+
+function ProcessConfirm({ orders, closeModal }: ProcessConfirmProps) {
+  const [processResults, setProcessResults] = useState<Array<string>>([]);
   const [isResultModalOpen, openResultModal, closeResultModal] = useModal();
   const { setInfoMessage, openInfoModal } = usePackageStore();
 
@@ -18,7 +23,7 @@ function ProcessConfirm({ orders, closeModal }) {
   const startPath = orders[startIndex].executionPath;
   const endPath = orders[endIndex].executionPath;
 
-  const overview = orders.map((order, index) => {
+  const overview = orders.map((order: OrderType, index: number) => {
     const indexNumber = index + 1;
 
     if (order.action === "수정하기") {
@@ -28,7 +33,7 @@ function ProcessConfirm({ orders, closeModal }) {
     }
   });
 
-  const handleProcessPackage = async (receivedPackage) => {
+  const handleProcessPackage = async (receivedPackage: Array<OrderType>) => {
     try {
       const results = [];
 
@@ -65,10 +70,14 @@ function ProcessConfirm({ orders, closeModal }) {
       setProcessResults(results);
       openResultModal();
     } catch (error) {
-      setInfoMessage(
-        error.response ? error.response.data.message : COMMON_ALERT.ERROR_OCCUR,
-      );
-      openInfoModal();
+      if (error instanceof AxiosError) {
+        setInfoMessage(
+          error.response
+            ? error.response.data.message
+            : COMMON_ALERT.ERROR_OCCUR,
+        );
+        openInfoModal();
+      }
     }
   };
 
@@ -113,10 +122,5 @@ function ProcessConfirm({ orders, closeModal }) {
     </>
   );
 }
-
-ProcessConfirm.propTypes = {
-  orders: PropTypes.array.isRequired,
-  closeModal: PropTypes.func.isRequired,
-};
 
 export default ProcessConfirm;

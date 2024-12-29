@@ -4,10 +4,12 @@ dist
 build
 
 *.min.js
-*.min.css
+*.main.css
 
 public/*.html
 
 config.js
 
 src/legacy/**/*.js
+
+.eslintrc

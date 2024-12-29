@@ -5,7 +5,7 @@ function ActionPicker() {
   const { setClientStatus } = usePackageStore();
   const currentOrder = getOrder();
 
-  const handleActionChange = (event) => {
+  const handleActionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedAction = event.target.value;
 
     if (selectedAction === "생성하기" || selectedAction === "압축해제하기") {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import {
   signInWithPopup,
@@ -9,12 +9,12 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
-import { auth } from "@renderer/services/firebaseService/firebase.js";
 import usePackageStore from "@renderer/store";
 
 import { SIGN_IN_ALERT, COMMON_ALERT } from "../../constants/messages";
 import googleLogo from "../../assets/images/googleLogo.svg";
 import kakaoLogo from "../../assets/images/kakaoLogo.svg";
+import { auth } from "@renderer/services/firebaseService/firebase";
 
 function Login() {
   const navigate = useNavigate();
@@ -30,12 +30,12 @@ function Login() {
     }
   }, []);
 
-  const notifyInfoMessage = (message) => {
+  const notifyInfoMessage = (message: string) => {
     setInfoMessage(message);
     openInfoModal();
   };
 
-  const handleEmailLogin = async (event) => {
+  const handleEmailLogin = async (event: React.FormEvent) => {
     event.preventDefault();
 
     try {
@@ -71,9 +71,13 @@ function Login() {
       navigate("/");
     } catch (error) {
       console.error("이메일 로그인 실패: ", error);
-      if (error.code === "auth/invalid-credential") {
+      if (
+        error instanceof AxiosError &&
+        error.code === "auth/invalid-credential"
+      ) {
         notifyInfoMessage(SIGN_IN_ALERT.CHECK_ID_OR_PASSWORD);
       } else if (
+        error instanceof AxiosError &&
         error.response &&
         error.response.status >= 400 &&
         error.response.status < 500
@@ -117,7 +121,10 @@ function Login() {
       navigate("/");
     } catch (error) {
       console.error("구글 로그인 실패: ", error);
-      if (error.code === "auth/invalid-credential") {
+      if (
+        error instanceof AxiosError &&
+        error.code === "auth/invalid-credential"
+      ) {
         notifyInfoMessage(SIGN_IN_ALERT.CHECK_ID_OR_PASSWORD);
       } else {
         notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
