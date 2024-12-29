@@ -1,11 +1,11 @@
-export default {
-  extends: [
+ {
+  "extends": [
     "airbnb",
     "plugin:react/recommended",
-    "plugin:prettier/recommended",
+    "plugin:prettier/recommended"
   ],
-  rules: {
-    semi: "warn",
+  "rules": {
+    "semi": "warn",
     "no-unused-vars": "warn",
     "unused-imports/no-unused-imports": "warn",
     "import/no-extraneous-dependencies": "off",
@@ -14,12 +14,12 @@ export default {
     "react/jsx-props-no-spreading": "off",
     "react/self-closing-comp": "off",
     "react/react-in-jsx-scope": "off",
-    "react/jsx-filename-extension": ["warn", { extensions: [".js", ".jsx"] }],
+    "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx"] }],
     "no-underscore-dangle": "off",
     "prefer-arrow-callback": "warn",
-    "func-style": ["error", "expression", { allowArrowFunctions: true }],
+    "func-style": ["error", "expression", { "allowArrowFunctions": true }],
     "no-console": "warn",
-    "prettier/prettier": "error",
+    "prettier/prettier": "error"
   },
-  plugins: ["react", "prettier", "react-hooks", "unused-imports"],
-};
+  "plugins": ["react", "prettier", "react-hooks", "unused-imports"]
+}

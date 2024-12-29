@@ -1,12 +1,16 @@
-import PropTypes from "prop-types";
+import usePackageStore, { OrderType } from "@renderer/store";
+import { ExtendedOrderType } from "..";
 
-import usePackageStore from "@renderer/store";
+interface BookmarkListProps {
+  bookmarks: Array<ExtendedOrderType>;
+  closeBookmarkList: () => void;
+}
 
-function BookmarkList({ bookmarks, closeBookmarkList }) {
+function BookmarkList({ bookmarks, closeBookmarkList }: BookmarkListProps) {
   const { updateOrder } = usePackageStore();
 
-  const applyBookmark = (index) => {
-    const { _id, updateAt, createAt, ...essentialField } = bookmarks[index];
+  const applyBookmark = (index: number) => {
+    const { _id, updatedAt, createdAt, ...essentialField } = bookmarks[index];
 
     updateOrder(essentialField);
     closeBookmarkList();
@@ -14,7 +18,7 @@ function BookmarkList({ bookmarks, closeBookmarkList }) {
 
   return (
     <>
-      {bookmarks.map((bookmark, index) => (
+      {bookmarks.map((bookmark, index: number) => (
         <button
           key={bookmark._id}
           className="button-gray-light block text-left"
@@ -49,10 +53,5 @@ function BookmarkList({ bookmarks, closeBookmarkList }) {
     </>
   );
 }
-
-BookmarkList.propTypes = {
-  bookmarks: PropTypes.array.isRequired,
-  closeBookmarkList: PropTypes.func.isRequired,
-};
 
 export default BookmarkList;

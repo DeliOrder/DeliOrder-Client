@@ -1,5 +1,10 @@
 import axios from "axios";
 
+interface TokenType {
+  newDeliOrderToken: string;
+  newDeliOrderRefreshToken: string;
+}
+
 const refreshToken = async () => {
   try {
     const deliOrderUserId = window.localStorage.getItem("deliOrderUserId");
@@ -9,16 +14,17 @@ const refreshToken = async () => {
     const authorization = "Bearer " + deliOrderRefreshToken;
 
     if (deliOrderUserId && deliOrderRefreshToken) {
-      const { newDeliOrderToken, newDeliOrderRefreshToken } = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/token/refresh`,
-        { deliOrderRefreshToken, deliOrderUserId },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            authorization,
+      const { newDeliOrderToken, newDeliOrderRefreshToken }: TokenType =
+        await axios.post(
+          `${import.meta.env.VITE_SERVER_URL}/auth/token/refresh`,
+          { deliOrderRefreshToken, deliOrderUserId },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              authorization,
+            },
           },
-        },
-      );
+        );
 
       window.localStorage.setItem("deliOrderToken", newDeliOrderToken);
       window.localStorage.setItem(

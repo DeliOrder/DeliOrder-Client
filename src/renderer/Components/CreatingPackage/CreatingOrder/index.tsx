@@ -10,7 +10,7 @@ import {
   CREATE_ORDER_ALERT,
   PLACEHOLDER,
 } from "@renderer/constants/messages";
-import usePackageStore from "@renderer/store";
+import usePackageStore, { OrderType } from "@renderer/store";
 
 import "@renderer/shared/style.css";
 
@@ -24,8 +24,8 @@ function CreatingOrder() {
     setMessage("");
   };
 
-  const validate = (order) => {
-    function hasExtension(fileName) {
+  const validate = (order: OrderType) => {
+    function hasExtension(fileName: string) {
       return /\.[^/.]+$/.test(fileName);
     }
     if (!order.action) {
@@ -52,11 +52,11 @@ function CreatingOrder() {
     }
   };
 
-  const handleInput = (event) => {
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateOrder({ editingName: event.target.value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const MAXIMUM_ORDER_NUMBER = 5;

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
     "module": "ESNext",
+    "target": "ESNext",
     "outDir": "dist",
     "strict": true,
     "moduleDetection": "force",
@@ -20,6 +20,6 @@
   "ts-node": {
     "esm": true
   },
-  "include": ["src"],
+  "include": ["src", "src/vite-env.d.ts"],
   "exclude": ["node_modules", "**/*.js", "**/*.css", "**/*.json"]
 }

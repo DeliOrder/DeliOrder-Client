@@ -1,7 +1,11 @@
-import usePackageStore from "../../../../store";
-import PropTypes from "prop-types";
+import usePackageStore, { OrderType } from "../../../../store";
 
-function Order({ order, index }) {
+interface OrderComponentType {
+  order: OrderType;
+  index: number;
+}
+
+function Order({ order, index }: OrderComponentType) {
   const { deleteOrder } = usePackageStore();
 
   const {
@@ -54,10 +58,5 @@ function Order({ order, index }) {
     </div>
   );
 }
-
-Order.propTypes = {
-  order: PropTypes.object.isRequired,
-  index: PropTypes.number.isRequired,
-};
 
 export default Order;

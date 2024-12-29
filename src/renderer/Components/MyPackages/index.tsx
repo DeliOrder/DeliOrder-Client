@@ -2,11 +2,27 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import triangleArrowDown from "@images/triangleArrowDown.svg";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import refreshToken from "@renderer/services/utils/refreshToken";
+import { OrderType } from "@renderer/store";
+import { ExtendedOrderType } from "../CreatingPackage/CreatingOrder/BookmarkToolbar";
+
+interface histroyDataTypes {
+  author: string;
+  createdAt: Date;
+  expireAt: Date;
+  orders: Array<ExtendedOrderType>;
+  serialNumber: string;
+  updatedAt: Date;
+  validUntil: Date;
+  __v: number;
+  _id: string;
+}
 
 function MyPackages() {
-  const [userHistoryData, setUserHistoryData] = useState([]);
+  const [userHistoryData, setUserHistoryData] = useState<
+    Array<histroyDataTypes>
+  >([]);
   const [currentSort, setCurrentSort] = useState("sortByNewest");
   const navigate = useNavigate();
 
@@ -31,16 +47,23 @@ function MyPackages() {
 
         setUserHistoryData(
           history.sort(
-            (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
+            (a: ExtendedOrderType, b: ExtendedOrderType) =>
+              Date.parse(b.createdAt as Date) - Date.parse(a.createdAt as Date),
           ),
         );
       } catch (error) {
-        if (error.response.data.error === "Unauthorized") {
+        if (
+          error instanceof AxiosError &&
+          error.response?.data.error === "Unauthorized"
+        ) {
           alert("로그인이 필요합니다.");
           navigate("/login");
         }
 
-        if (error.response.data.error === "Token expired") {
+        if (
+          error instanceof AxiosError &&
+          error.response?.data.error === "Token expired"
+        ) {
           refreshToken();
           getUserHistoryData();
         }
@@ -58,13 +81,15 @@ function MyPackages() {
       setCurrentSort("sortByOldest");
 
       sortedUserHistory = userHistoryData.sort(
-        (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt),
+        (a, b) =>
+          Date.parse(a.createdAt as Date) - Date.parse(b.createdAt as Date),
       );
     } else {
       setCurrentSort("sortByNewest");
 
       sortedUserHistory = userHistoryData.sort(
-        (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
+        (a, b) =>
+          Date.parse(b.createdAt as Date) - Date.parse(a.createdAt as Date),
       );
     }
 
