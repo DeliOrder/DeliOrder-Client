@@ -1,6 +1,13 @@
-import PropTypes from "prop-types";
+import { ReactNode } from "react";
 
-function Modal({ title = "", isOpen, onClose, children }) {
+interface ModalType {
+  title?: string;
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}
+
+function Modal({ title = "", isOpen, onClose, children }: ModalType) {
   if (!isOpen) return null;
 
   return (
@@ -23,12 +30,5 @@ function Modal({ title = "", isOpen, onClose, children }) {
     </div>
   );
 }
-
-Modal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  title: PropTypes.string,
-  children: PropTypes.node,
-  onClose: PropTypes.func,
-};
 
 export default Modal;

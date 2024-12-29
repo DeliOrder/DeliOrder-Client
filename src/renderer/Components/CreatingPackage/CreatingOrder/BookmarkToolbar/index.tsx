@@ -1,19 +1,26 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 
 import Modal from "../../../Modal";
 import BookmarkList from "./BookmarkList";
 
-import usePackageStore from "@renderer/store";
+import usePackageStore, { OrderType } from "@renderer/store";
 import useModal from "@renderer/hooks/useModal";
 import refreshToken from "@renderer/services/utils/refreshToken";
-import { GUIDE_MESSAGES, COMMON_ALERT } from "@renderer/constants/messages.js";
 
 import addingIcon from "@images/addingIcon.svg";
 import downloadIcon from "@images/downloadIcon.svg";
+import { COMMON_ALERT, GUIDE_MESSAGES } from "@renderer/constants/messages";
+
+export interface ExtendedOrderType extends OrderType {
+  _id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  __v?: number;
+}
 
 function BookmarkToolbar() {
-  const [bookmarks, setBookMarks] = useState([]);
+  const [bookmarks, setBookMarks] = useState<Array<ExtendedOrderType>>([]);
   const [isBookmarkListOpen, openBookmarkList, closeBookmarkList] = useModal();
 
   const { openInfoModal, setInfoMessage } = usePackageStore();
@@ -31,9 +38,8 @@ function BookmarkToolbar() {
     openInfoModal();
   };
 
-  const validateRequiredInputs = (inputs) => {
-    const requiredField = ["action", "executionPath"];
-    return requiredField.every((field) => inputs[field].length > 0);
+  const validateRequiredInputs = (inputs: ExtendedOrderType) => {
+    return Boolean(inputs.action && inputs.executionPath);
   };
 
   const handleAddBookmark = async () => {
@@ -71,10 +77,8 @@ function BookmarkToolbar() {
       setInfoMessage(response.data.message);
       openInfoModal();
     } catch (error) {
-      const { response } = error;
-
-      if (response) {
-        const { error: errorMessage, message } = response.data;
+      if (error instanceof AxiosError && error.response) {
+        const { error: errorMessage, message } = error.response.data;
 
         switch (errorMessage) {
           case "Token expired":
@@ -122,10 +126,8 @@ function BookmarkToolbar() {
       setBookMarks(response.data.bookmarkList);
       openBookmarkList();
     } catch (error) {
-      const { response } = error;
-
-      if (response) {
-        const { error: errorMessage, message } = response.data;
+      if (error instanceof AxiosError && error.response) {
+        const { error: errorMessage, message } = error.response.data;
 
         switch (errorMessage) {
           case "Token expired":

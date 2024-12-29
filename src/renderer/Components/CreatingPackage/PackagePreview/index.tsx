@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -6,6 +6,7 @@ import {
   PutObjectCommand,
   GetObjectCommand,
   DeleteObjectCommand,
+  ObjectCannedACL,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -19,7 +20,7 @@ import { PACKAGE_PREVIEW_ALERT } from "@renderer/constants/messages";
 
 function PackagePreview() {
   const [isLoading, setIsLoading] = useState(false);
-  const [expiredTime, setExpiredTime] = useState("");
+  const [expiredTime, setExpiredTime] = useState<Date | null>(null);
   const [serialNumber, setSerialNumber] = useState("");
 
   const [isOpen, openModal, closeModal] = useModal();
@@ -36,7 +37,7 @@ function PackagePreview() {
     },
   });
 
-  const copyToClipboard = (content) => {
+  const copyToClipboard = (content: string) => {
     navigator.clipboard.writeText(content);
   };
 
@@ -59,7 +60,7 @@ function PackagePreview() {
             Bucket: import.meta.env.VITE_AWS_BUCKET,
             Key: order.attachmentName,
             Body: order.attachmentFile,
-            ACL: "public-read",
+            ACL: ObjectCannedACL.public_read,
           };
 
           const uploadCommand = new PutObjectCommand(uploadParams);
@@ -78,7 +79,9 @@ function PackagePreview() {
         }),
       );
     } catch (error) {
-      throw new Error("AWS에 업로드중 오류 발생:", error);
+      if (error instanceof Error) {
+        throw new Error("AWS에 업로드중 오류 발생:", error);
+      }
     }
   };
 
@@ -126,12 +129,18 @@ function PackagePreview() {
       );
       setSerialNumber(response.data.serialNumber);
     } catch (error) {
-      if (error.response?.data.error === "Token expired") {
+      if (
+        error instanceof AxiosError &&
+        error.response?.data.error === "Token expired"
+      ) {
         refreshToken();
         uploadPackageToServer();
       }
       console.error("패키지 등록중 오류 발생: ", error);
-      throw new Error(error.response?.data.error);
+
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.error);
+      }
     }
   };
 
@@ -154,9 +163,17 @@ function PackagePreview() {
       openModal();
     } catch (error) {
       deleteFileToAWS();
-      console.error("패키지 업로드 과정중 오류 발생: ", error.message || error);
 
-      setInfoMessage(error.message || PACKAGE_PREVIEW_ALERT.UPLOAD_FAIL_RETRY);
+      if (error instanceof AxiosError) {
+        console.error(
+          "패키지 업로드 과정중 오류 발생: ",
+          error.message || error,
+        );
+        setInfoMessage(
+          error.message || PACKAGE_PREVIEW_ALERT.UPLOAD_FAIL_RETRY,
+        );
+      }
+
       openInfoModal();
     } finally {
       clearOrders();
