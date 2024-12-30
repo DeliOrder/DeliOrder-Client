@@ -57,13 +57,9 @@ function Login() {
         },
       );
 
-      const { deliOrderToken, deliOrderRefreshToken, userId, loginType } =
+      const { deliOrderToken, userId, loginType } =
         response.data;
       window.localStorage.setItem("deliOrderToken", deliOrderToken);
-      window.localStorage.setItem(
-        "deliOrderRefreshToken",
-        deliOrderRefreshToken,
-      );
       window.localStorage.setItem("deliOrderUserId", userId);
       window.localStorage.setItem("deliOrderAuthProvider", loginType);
 
@@ -107,13 +103,9 @@ function Login() {
         },
       );
 
-      const { deliOrderToken, deliOrderRefreshToken, userId, loginType } =
+      const { deliOrderToken, userId, loginType } =
         response.data;
       window.localStorage.setItem("deliOrderToken", deliOrderToken);
-      window.localStorage.setItem(
-        "deliOrderRefreshToken",
-        deliOrderRefreshToken,
-      );
       window.localStorage.setItem("deliOrderUserId", userId);
       window.localStorage.setItem("deliOrderAuthProvider", loginType);
 

@@ -32,7 +32,6 @@ function Home() {
         const {
           firebaseToken,
           deliOrderToken,
-          deliOrderRefreshToken,
           userId,
           loginType,
         } = response.data;
@@ -40,10 +39,6 @@ function Home() {
         await signInWithCustomToken(auth, firebaseToken);
 
         window.localStorage.setItem("deliOrderToken", deliOrderToken);
-        window.localStorage.setItem(
-          "deliOrderRefreshToken",
-          deliOrderRefreshToken,
-        );
         window.localStorage.setItem("deliOrderUserId", userId);
         window.localStorage.setItem("deliOrderAuthProvider", loginType);
 
