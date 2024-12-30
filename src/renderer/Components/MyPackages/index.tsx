@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import triangleArrowDown from "@images/triangleArrowDown.svg";
 import axios, { AxiosError } from "axios";
 import refreshToken from "@renderer/services/utils/refreshToken";
-import { OrderType } from "@renderer/store";
 import { ExtendedOrderType } from "../CreatingPackage/CreatingOrder/BookmarkToolbar";
 
 interface histroyDataTypes {
