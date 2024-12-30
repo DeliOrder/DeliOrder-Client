@@ -59,6 +59,12 @@ function Nav() {
         notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
       }
     }
+
+    try {
+      await axios.delete(`${import.meta.env.VITE_SERVER_URL}/auth/cookie`);
+    } catch (error) {
+      console.error("쿠키 삭제 실패: ", error);
+    }
   };
 
   return (

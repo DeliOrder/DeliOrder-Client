@@ -15,6 +15,8 @@ import refreshToken from "@renderer/services/utils/refreshToken";
 import InfoModal from "./Modal/InfoModal";
 import Introduction from "./Introduction";
 
+axios.defaults.withCredentials = true;
+
 function App() {
   const { setClientStatus } = usePackageStore();
 
