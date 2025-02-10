@@ -25,7 +25,7 @@ function createWindow() {
     autoHideMenuBar: true,
     resizable: true,
     backgroundColor: "#F2F2F2",
-    icon: path.join(__dirname, "../renderer/assets/images/logo.png"),
+    icon: path.join(__dirname, "../renderer/assets/icons/icon.ico"),
     roundedCorners: true,
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.cjs"),
@@ -72,7 +72,7 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
 } else {
-  app.on("second-instance", (event, commandLine, workingDirectory) => {
+  app.on("second-instance", (_, commandLine) => {
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
       mainWindow.focus();
