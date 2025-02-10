@@ -82,7 +82,14 @@ function BookmarkToolbar() {
 
         switch (errorMessage) {
           case "Token expired":
-            refreshToken();
+            const deliOrderUserId =
+              window.localStorage.getItem("deliOrderUserId");
+
+            if (!deliOrderUserId) {
+              throw "로컬스토리지에 유저Id가 없습니다.";
+            }
+
+            await refreshToken(deliOrderUserId);
             handleAddBookmark();
             break;
 
@@ -131,8 +138,19 @@ function BookmarkToolbar() {
 
         switch (errorMessage) {
           case "Token expired":
-            refreshToken();
-            handleAddBookmark();
+            try {
+              const deliOrderUserId =
+                window.localStorage.getItem("deliOrderUserId");
+
+              if (!deliOrderUserId) {
+                throw "로컬스토리지에 유저Id가 없습니다.";
+              }
+
+              await refreshToken(deliOrderUserId);
+              handleAddBookmark();
+            } catch (error) {
+              console.error("토큰 갱신중에 오류가 발생하였습니다.", error);
+            }
             break;
 
           case "Unauthorized":

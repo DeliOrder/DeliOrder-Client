@@ -133,8 +133,19 @@ function PackagePreview() {
         error instanceof AxiosError &&
         error.response?.data.error === "Token expired"
       ) {
-        refreshToken();
-        uploadPackageToServer();
+        try {
+          const deliOrderUserId =
+            window.localStorage.getItem("deliOrderUserId");
+
+          if (!deliOrderUserId) {
+            throw "로컬스토리지에 유저Id가 없습니다.";
+          }
+
+          await refreshToken(deliOrderUserId);
+          uploadPackageToServer();
+        } catch (error) {
+          console.error("토큰 갱신중에 오류가 발생하였습니다.", error);
+        }
       }
       console.error("패키지 등록중 오류 발생: ", error);
 

@@ -55,7 +55,14 @@ function App() {
         }
 
         try {
-          await refreshToken();
+          const deliOrderUserId =
+            window.localStorage.getItem("deliOrderUserId");
+
+          if (!deliOrderUserId) {
+            throw "로컬스토리지에 유저Id가 없습니다.";
+          }
+
+          await refreshToken(deliOrderUserId);
         } catch (refreshError) {
           console.error("토큰 갱신 중 오류 발생: ", refreshError);
           window.localStorage.clear();
