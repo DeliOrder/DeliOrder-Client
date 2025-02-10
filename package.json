@@ -6,7 +6,7 @@
   "main": "src/main/index.cjs",
   "preload": "src/preload/index.cjs",
   "scripts": {
-    "start": "concurrently \"vite\" \"npm run lint\" \"npm run electron\" ",
+    "dev": "concurrently \"vite\" \"npm run lint\" \"npm run electron\" ",
     "start-server": "vite",
     "build": "vite build",
     "lint": "eslint .",
@@ -14,7 +14,8 @@
     "electron": "wait-on http://localhost:5173 && electron .",
     "test": "jest",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "start": "electron-forge start"
   },
   "jest": {
     "testEnvironment": "node",
@@ -44,13 +45,14 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.5.0",
-    "@electron-forge/maker-deb": "^7.5.0",
-    "@electron-forge/maker-rpm": "^7.5.0",
-    "@electron-forge/maker-squirrel": "^7.5.0",
-    "@electron-forge/maker-zip": "^7.5.0",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.5.0",
-    "@electron-forge/plugin-fuses": "^7.5.0",
+    "@electron-forge/cli": "^7.6.1",
+    "@electron-forge/maker-deb": "^7.6.1",
+    "@electron-forge/maker-dmg": "^7.6.1",
+    "@electron-forge/maker-rpm": "^7.6.1",
+    "@electron-forge/maker-squirrel": "^7.6.1",
+    "@electron-forge/maker-zip": "^7.6.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.6.1",
+    "@electron-forge/plugin-fuses": "^7.6.1",
     "@electron/fuses": "^1.8.0",
     "@eslint/js": "^9.8.0",
     "@types/electron": "^1.4.38",
@@ -65,6 +67,7 @@
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
     "electron": "^31.3.1",
+    "electron-builder": "^25.1.8",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
