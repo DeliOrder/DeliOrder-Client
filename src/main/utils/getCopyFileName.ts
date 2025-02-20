@@ -1,4 +1,4 @@
-const getCopyFileName = (baseName) => {
+const getCopyFileName = (baseName: string): string => {
   const baseNameArray = baseName.split(".");
   const extension = baseNameArray.length >= 2 ? baseNameArray.pop() : "";
   const fileName = baseNameArray.join(".");

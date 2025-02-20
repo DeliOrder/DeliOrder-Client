@@ -1,7 +1,7 @@
-const os = require("os");
-const path = require("path");
+import os from "os";
+import path from "path";
 
-const MAC_CRITICAL_PATHS = [
+export const MAC_CRITICAL_PATHS: readonly string[] = [
   path.join(os.homedir(), "Desktop"),
   os.homedir(),
   path.join(os.homedir(), "Library"),
@@ -49,7 +49,7 @@ const MAC_CRITICAL_PATHS = [
   "/private/var/folders",
 ];
 
-const WINDOWS_CRITICAL_PATHS = [
+export const WINDOWS_CRITICAL_PATHS: readonly string[] = [
   path.join(os.homedir(), "Desktop"),
   os.homedir(),
   path.join(os.homedir(), "AppData"),
@@ -81,7 +81,7 @@ const WINDOWS_CRITICAL_PATHS = [
   "C:\\Windows\\Globalization",
   "C:\\Windows\\Web",
   "C:\\Program Files (x86)\\Microsoft SQL Server",
-  "C:\\Program FilesCommon Files\\Microsoft Shared",
+  "C:\\Program Files\\Common Files\\Microsoft Shared",
   "C:\\Windows\\System",
   "C:\\Windows\\Media",
   "C:\\Windows\\Microsoft.NET",
@@ -92,5 +92,3 @@ const WINDOWS_CRITICAL_PATHS = [
   "C:\\Windows\\Setup",
   "C:\\Windows\\servicing",
 ];
-
-module.exports = { MAC_CRITICAL_PATHS, WINDOWS_CRITICAL_PATHS };

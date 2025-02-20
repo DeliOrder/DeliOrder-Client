@@ -1,13 +1,24 @@
-const { ipcMain } = require("electron");
-const path = require("path");
-const os = require("os");
-const fs = require("fs");
-const { execSync } = require("child_process");
+import { ipcMain } from "electron";
+import path from "path";
+import os from "os";
+import fs from "fs/promises";
+import { execSync } from "child_process";
+import { convertPath } from "../utils/convertPath";
 
-const { convertPath } = require("../utils/convertPath.cjs");
+interface Order {
+  action: string;
+  executionPath: string;
+  attachmentType: "file" | "folder";
+  attachmentName?: string;
+  useVscode?: boolean;
+}
 
-const executeFile = () => {
-  ipcMain.handle("execute-file", async (event, order) => {
+interface CommandError extends Error {
+  status?: number;
+}
+
+const executeFile = (): void => {
+  ipcMain.handle("execute-file", async (_event, order: Order) => {
     if (order.action !== "실행하기") {
       return "수신받은 행동이 '실행하기'가 아닙니다.";
     }
@@ -16,16 +27,19 @@ const executeFile = () => {
     const fullPath =
       order.attachmentType === "folder"
         ? path.join(order.executionPath)
-        : path.join(order.executionPath, order.attachmentName);
+        : path.join(order.executionPath, order.attachmentName || "");
+
     const convertedFullPath = convertPath(fullPath);
 
-    if (!fs.existsSync(convertedFullPath)) {
+    try {
+      await fs.access(convertedFullPath);
+    } catch {
       return "실행 실패: 해당 위치에 요청한 파일이 없습니다.";
     }
 
     try {
       const command = order.useVscode
-        ? `code ${convertedFullPath}`
+        ? `code "${convertedFullPath}"`
         : `${platform === "win32" ? `start ""` : "open"} "${convertedFullPath}"`;
 
       execSync(command);
@@ -37,8 +51,8 @@ const executeFile = () => {
 
       console.error("execute-file main handler 에러:", error);
       if (
-        error.status === MAC_COMMAND_NOT_FOUND_STATUS ||
-        error.status === WINDOWS_COMMAND_NOT_FOUND_STATUS
+        (error as CommandError).status === MAC_COMMAND_NOT_FOUND_STATUS ||
+        (error as CommandError).status === WINDOWS_COMMAND_NOT_FOUND_STATUS
       ) {
         execSync(
           `${platform === "win32" ? `start ""` : "open"} "${convertedFullPath}"`,
@@ -52,4 +66,4 @@ const executeFile = () => {
   });
 };
 
-executeFile();
+export default executeFile;

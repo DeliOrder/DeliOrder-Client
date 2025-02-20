@@ -1,15 +1,13 @@
-const path = require("path");
+import { resolve } from "path";
 
-const setDefaultProtocolClient = (app, protocolName) => {
+export const setDefaultProtocolClient = (app, protocolName: string): void => {
   if (process.defaultApp) {
     if (process.argv.length >= 2) {
       app.setAsDefaultProtocolClient(protocolName, process.execPath, [
-        path.resolve(process.argv[1]),
+        resolve(process.argv[1]),
       ]);
     }
   } else {
     app.setAsDefaultProtocolClient(protocolName);
   }
 };
-
-module.exports = { setDefaultProtocolClient };

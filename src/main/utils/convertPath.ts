@@ -1,7 +1,7 @@
-const os = require("os");
-const path = require("path");
+import os from "os";
+import path from "path";
 
-const convertPath = (targetPath) => {
+export const convertPath = (targetPath: string): string => {
   const platform = os.platform();
   const homeDir = os.homedir();
 
@@ -11,10 +11,12 @@ const convertPath = (targetPath) => {
   if (
     (targetPath.startsWith(onlyInMacOs) && platform !== "darwin") ||
     (targetPath.startsWith(onlyInWindows) && platform !== "win32")
-  )
-    return { error: true };
+  ) {
+    throw new Error("해당 경로는 현재 운영 체제에서 사용할 수 없습니다.");
+  }
 
-  let convertedPath;
+  let convertedPath: string;
+
   switch (platform) {
     case "win32":
       if (targetPath.startsWith("../../Applications/")) {
@@ -52,14 +54,9 @@ const convertPath = (targetPath) => {
   return normalizedPath;
 };
 
-const normalizePath = (filePath) => {
+export const normalizePath = (filePath: string): string => {
   const currentOS = os.platform();
-
-  if (currentOS === "darwin") {
-    return filePath.split("\\").join("/");
-  } else {
-    return filePath.split("/").join("\\");
-  }
+  return currentOS === "darwin"
+    ? filePath.split("\\").join("/")
+    : filePath.split("/").join("\\");
 };
-
-module.exports = { convertPath };
