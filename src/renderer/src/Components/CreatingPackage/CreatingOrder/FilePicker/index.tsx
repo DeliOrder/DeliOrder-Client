@@ -17,7 +17,7 @@ function FilePicker() {
   const openFilePicker = async () => {
     try {
       const { attachmentName, fileObj, relativePath } =
-        await window.electronAPI.openFileDialog(currentOrder.action);
+        await window.api.openFileDialog(currentOrder.action);
 
       if (currentOrder.action === "생성하기" && !fileObj) {
         console.error("폴더 선택이 취소되었습니다.");

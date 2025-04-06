@@ -16,7 +16,7 @@ function FolderPicker({ isOptional }: FolderPickerProp) {
 
   useEffect(() => {
     const updateAttachmentName = async (path: string) => {
-      const attachmentName = await window.electronAPI.getAttachmentName(path);
+      const attachmentName = await window.api.getAttachmentName(path);
 
       updateOrder({ attachmentName });
     };
@@ -34,7 +34,7 @@ function FolderPicker({ isOptional }: FolderPickerProp) {
   const openFolderPicker = async () => {
     try {
       const { folderPaths, attachmentName } =
-        await window.electronAPI.openFolderDialog();
+        await window.api.openFolderDialog();
 
       if (!clientStatus.isPickFile) {
         updateOrder({ attachmentName, attachmentType: "folder" });

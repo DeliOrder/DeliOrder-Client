@@ -46,25 +46,25 @@ function ProcessConfirm({
         let result;
         switch (order.action) {
           case "생성하기":
-            result = await window.electronAPI.downloadFile(order);
+            result = await window.api.downloadFile(order);
             break;
           case "이동하기":
-            result = await window.electronAPI.moveFile(order);
+            result = await window.api.moveFile(order);
             break;
           case "복제하기":
-            result = await window.electronAPI.replicateFile(order);
+            result = await window.api.replicateFile(order);
             break;
           case "수정하기":
-            result = await window.electronAPI.editFileName(order);
+            result = await window.api.editFileName(order);
             break;
           case "실행하기":
-            result = await window.electronAPI.executeFile(order);
+            result = await window.api.executeFile(order);
             break;
           case "삭제하기":
-            result = await window.electronAPI.deleteFile(order);
+            result = await window.api.deleteFile(order);
             break;
           case "압축해제하기":
-            result = await window.electronAPI.unzipFile(order);
+            result = await window.api.unzipFile(order);
             break;
           default:
             result = "알 수 없는 작업입니다";

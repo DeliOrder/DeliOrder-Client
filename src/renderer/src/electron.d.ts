@@ -31,7 +31,7 @@ interface OpenFolderDialogTypes {
   attachmentName: string;
 }
 
-interface ElectronAPI {
+interface api {
   openFileDialog: (action: string) => Promise<AttachmentFile>;
   getAttachmentName: (path: string) => Promise<string>;
   openFolderDialog: () => Promise<OpenFolderDialogTypes>;
@@ -45,5 +45,5 @@ interface ElectronAPI {
 }
 
 interface Window {
-  electronAPI: ElectronAPI;
+  api: api;
 }
