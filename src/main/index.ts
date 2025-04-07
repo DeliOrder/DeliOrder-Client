@@ -26,12 +26,40 @@ function createWindow(): void {
     resizable: true,
     backgroundColor: "#F2F2F2",
     icon: join(__dirname, "../renderer/assets/images/logo.png"),
-    roundedCorners: true,
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       contextIsolation: true,
-      nodeIntegration: false,
     },
+  });
+
+  function createKakaoLoginWindow() {
+    const kakaoWindow = new BrowserWindow({
+      width: 500,
+      height: 700,
+      show: true,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+      },
+    });
+
+    const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${BASE_URL}&response_type=code`;
+
+    kakaoWindow.loadURL(kakaoLoginUrl);
+
+    kakaoWindow.webContents.on("will-redirect", (event, url) => {
+      const parsedUrl = new URL(url);
+      const code = parsedUrl.searchParams.get("code");
+
+      if (code) {
+        event.preventDefault();
+        mainWindow?.webContents.send("kakao-auth-code", code);
+        kakaoWindow.close();
+      }
+    });
+  }
+  ipcMain.handle("start-kakao-login", () => {
+    createKakaoLoginWindow();
   });
 
   if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {

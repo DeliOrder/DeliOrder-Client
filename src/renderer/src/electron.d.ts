@@ -42,6 +42,8 @@ interface api {
   executeFile: (order: OrderType) => Promise<string>;
   deleteFile: (order: OrderType) => Promise<string>;
   unzipFile: (order: OrderType) => Promise<string>;
+  startKakaoLogin: () => Promise<void>;
+  onKakaoAuthCode: (callback: (code: string) => void) => void;
 }
 
 interface Window {

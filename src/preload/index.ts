@@ -7,7 +7,6 @@ interface FileDialogResult {
   fileObj?: File;
 }
 
-// Custom APIs for renderer
 const api = {
   openFolderDialog: async (): Promise<FileDialogResult> => {
     try {
@@ -97,9 +96,12 @@ const api = {
       console.error("Error in get-attachmentName:", error);
     }
   },
+  onKakaoAuthCode: (callback: (code: string) => void) => {
+    ipcRenderer.on("kakao-auth-code", (_, code) => callback(code));
+  },
+  startKakaoLogin: () => ipcRenderer.invoke("start-kakao-login"),
 };
 
-// Always expose only `api` to renderer
 contextBridge.exposeInMainWorld("api", api);
 
 export type ApiType = typeof api;

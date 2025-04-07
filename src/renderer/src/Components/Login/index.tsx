@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import axios, { AxiosError } from "axios";
@@ -30,10 +30,13 @@ function Login() {
     }
   }, []);
 
-  const notifyInfoMessage = (message: string) => {
-    setInfoMessage(message);
-    openInfoModal();
-  };
+  const notifyInfoMessage = useCallback(
+    (message: string) => {
+      setInfoMessage(message);
+      openInfoModal();
+    },
+    [setInfoMessage, openInfoModal],
+  );
 
   const handleEmailLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -84,6 +87,17 @@ function Login() {
     }
   };
 
+  useEffect(() => {
+    window.api.onKakaoAuthCode((code: string) => {
+      try {
+        navigate(`/?code=${code}`);
+      } catch (error) {
+        console.error("카카오 로그인 실패:", error);
+        notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
+      }
+    });
+  }, [navigate, notifyInfoMessage]);
+
   const handleGoogleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -123,9 +137,7 @@ function Login() {
   };
   const handleKakaoLogin = async () => {
     try {
-      await window.Kakao.Auth.authorize({
-        redirectUri: `${import.meta.env.VITE_BASE_URL}`,
-      });
+      await window.api.startKakaoLogin();
     } catch (error) {
       console.error("카카오 로그인 실패: ", error);
       notifyInfoMessage(COMMON_ALERT.SERVER_ERROR_TRY_AGAIN);
