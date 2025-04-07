@@ -3,7 +3,7 @@ import axios from "axios";
 async function refreshToken(deliOrderUserId: string) {
   try {
     return await axios.post(
-      "http://localhost:8000/auth/token/refresh",
+      `${import.meta.env.VITE_SERVER_URL}/auth/token/refresh`,
       {
         deliOrderUserId,
       },
