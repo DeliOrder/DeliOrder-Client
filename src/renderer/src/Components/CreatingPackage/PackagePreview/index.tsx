@@ -1,15 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-  DeleteObjectCommand,
-  ObjectCannedACL,
-} from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-
 import Order from "./Order";
 import Modal from "../../Modal";
 
@@ -29,104 +20,37 @@ function PackagePreview() {
   const orderPackage = getOrders();
   const navigate = useNavigate();
 
-  const s3Client = new S3Client({
-    region: import.meta.env.VITE_AWS_REGION,
-    credentials: {
-      accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
-      secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY_ID,
-    },
-  });
-
   const copyToClipboard = (content: string) => {
     navigator.clipboard.writeText(content);
   };
 
-  const uploadFileToAWS = async () => {
-    const ordersToCreate = orderPackage.filter(
-      (order) => order.action === "생성하기",
-    );
-
-    if (!ordersToCreate.every((order) => order.attachmentType === "file")) {
-      setIsLoading(false);
-      setInfoMessage(PACKAGE_PREVIEW_ALERT.NO_FILE_TO_UPLOAD);
-      openInfoModal();
-      return;
-    }
-
-    try {
-      await Promise.all(
-        ordersToCreate.map(async (order) => {
-          const uploadParams = {
-            Bucket: import.meta.env.VITE_AWS_BUCKET,
-            Key: order.attachmentName,
-            Body: order.attachmentFile,
-            ACL: ObjectCannedACL.public_read,
-          };
-
-          const uploadCommand = new PutObjectCommand(uploadParams);
-          await s3Client.send(uploadCommand);
-
-          const getCommand = new GetObjectCommand({
-            Bucket: import.meta.env.VITE_AWS_BUCKET,
-            Key: order.attachmentName,
-          });
-
-          const signedUrl = await getSignedUrl(s3Client, getCommand, {
-            expiresIn: 1800,
-          });
-
-          order.attachmentUrl = signedUrl;
-        }),
-      );
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error("AWS에 업로드중 오류 발생:", error);
-      }
-    }
-  };
-
-  const deleteFileToAWS = async () => {
-    try {
-      const createOrders = orderPackage.filter(
-        (order) => order.action === "생성하기",
-      );
-
-      if (!createOrders.every((action) => action.attachmentType === "file")) {
-        setIsLoading(false);
-        return;
-      }
-
-      await Promise.all(
-        createOrders.map(async (file) => {
-          const deleteParams = {
-            Bucket: import.meta.env.VITE_AWS_BUCKET,
-            Key: file.attachmentName,
-          };
-
-          const deleteCommand = new DeleteObjectCommand(deleteParams);
-          await s3Client.send(deleteCommand);
-        }),
-      );
-    } catch (error) {
-      console.error("AWS 파일 삭제중 오류 발생:", error);
-    }
-  };
-
   const uploadPackageToServer = async () => {
     try {
+      const formData = new FormData();
       const deliOrderToken = window.localStorage.getItem("deliOrderToken");
-      const authorization = "Bearer " + deliOrderToken;
+
+      orderPackage.forEach((order) => {
+        if (order.attachmentType === "file" && order.attachmentFile) {
+          formData.append("files", order.attachmentFile, order.attachmentName);
+        }
+      });
+
+      formData.append("orders", JSON.stringify(orderPackage));
 
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/packages/new`,
-        { orders: orderPackage },
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
-            ...(deliOrderToken && { authorization }),
+            "Content-Type": "multipart/form-data",
+            ...(deliOrderToken && {
+              Authorization: `Bearer ${deliOrderToken}`,
+            }),
           },
+          withCredentials: true,
         },
       );
+
       setSerialNumber(response.data.serialNumber);
     } catch (error) {
       if (
@@ -142,12 +66,13 @@ function PackagePreview() {
           }
 
           await refreshToken(deliOrderUserId);
-          uploadPackageToServer();
-        } catch (error) {
-          console.error("토큰 갱신중에 오류가 발생하였습니다.", error);
+          await uploadPackageToServer();
+        } catch (refreshError) {
+          console.error("토큰 갱신 중 오류 발생:", refreshError);
         }
       }
-      console.error("패키지 등록중 오류 발생: ", error);
+
+      console.error("패키지 등록 중 오류 발생:", error);
 
       if (error instanceof AxiosError) {
         throw new Error(error.response?.data.error);
@@ -164,22 +89,16 @@ function PackagePreview() {
 
     try {
       setIsLoading(true);
-      await uploadFileToAWS();
       await uploadPackageToServer();
 
       const now = new Date();
-      const tenMinutesLater = new Date(now.getTime() + 30 * 60 * 1000);
-
-      setExpiredTime(tenMinutesLater);
+      const expired = new Date(now.getTime() + 30 * 60 * 1000);
+      setExpiredTime(expired);
       openModal();
     } catch (error) {
-      deleteFileToAWS();
+      console.error("업로드 실패:", error);
 
       if (error instanceof AxiosError) {
-        console.error(
-          "패키지 업로드 과정중 오류 발생: ",
-          error.message || error,
-        );
         setInfoMessage(
           error.message || PACKAGE_PREVIEW_ALERT.UPLOAD_FAIL_RETRY,
         );
