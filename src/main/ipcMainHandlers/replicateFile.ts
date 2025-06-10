@@ -58,7 +58,6 @@ const replicateFile = (): void => {
   );
 };
 
-// 비동기 파일 존재 여부 확인 함수 추가
 const fileExists = async (filePath: string): Promise<boolean> => {
   try {
     await fs.access(filePath);

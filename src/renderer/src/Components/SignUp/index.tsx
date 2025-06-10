@@ -233,7 +233,6 @@ function SignUp() {
           <button
             className="focus:shadow-outline mb-4 w-full rounded-md bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
             type="submit"
-            // onClick={openModal}
             onClick={handleEmailSignUp}
           >
             가입하기
