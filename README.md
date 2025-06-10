@@ -5,7 +5,7 @@
 </div>
 
 <div align="center">
-<a href="https://github.com/DeliOrder/DeliOrder-Client">클라이언트 </a> | <a href="https://github.com/DeliOrder/DeliOrder-Server">서버 </a> | <a href="https://www.notion.so/5be754c5d84e4491b52d52b93b2624f9?pvs=21">정리 노션 </a>
+<a href="https://github.com/DeliOrder/DeliOrder-Client">클라이언트 </a> | <a href="https://github.com/DeliOrder/DeliOrder-Server">서버 </a> | <a href="https://catnip-puppy-52c.notion.site/1ad7604d886e80d99206da13e03953cd?source=copy_link">정리 노션 </a>
 </div>
 <br>
 

@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@reference "tailwindcss";
+
+.container-small {
+  @apply relative w-2/5 bg-white px-6 pb-8 pt-10 shadow-sm ring-1 ring-gray-900/5 sm:ml-5 sm:max-w-lg sm:rounded-lg sm:px-10;
+}
+
+.container-large {
+  @apply relative w-3/5 bg-white px-6 pb-8 pt-10 shadow-sm ring-1 ring-gray-900/5 sm:mr-3 sm:max-w-full sm:rounded-lg sm:px-10;
+}
+
+.label-large {
+  @apply mb-2 block text-xl font-bold text-gray-700;
+}
+
+.label-small {
+  @apply mb-2 block text-base font-semibold text-gray-500;
+}
+
+.input-base {
+  @apply block w-full appearance-none rounded border border-gray-300 bg-white px-4 py-3 pr-8 leading-tight text-gray-400 hover:border-gray-300 hover:bg-gray-100 focus:cursor-pointer focus:outline-none;
+}
+
+.input-text {
+  @apply block w-full rounded border border-gray-300 bg-white px-4 py-3 pr-8 leading-tight text-gray-700 placeholder:text-center hover:bg-gray-100 focus:cursor-pointer focus:outline-none;
+}
+
+.button-base-blue {
+  @apply my-3 w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700;
+}
+
+.button-gray-light {
+  @apply my-3 w-full rounded border border-gray-300 bg-gray-light px-4 py-2 font-bold text-black hover:bg-yellow-bright;
+}
+
+.button-green-bright {
+  @apply inline-flex h-10 w-10 items-center justify-center rounded-full border-none bg-green-bright text-black outline-none hover:bg-blue-700 active:bg-blue-600;
+}
+
+.button-yellow-square {
+  @apply inline-flex h-10 w-10 items-center justify-center rounded border-none bg-yellow-400 outline-none hover:bg-yellow-600 active:bg-yellow-500;
+}
+
+.button-white-border {
+  @apply mt-4 inline-block rounded border border-white px-4 py-2 text-sm leading-none text-white hover:border-transparent hover:bg-white hover:text-teal-500 lg:mt-0;
+}
+
+.button-slate-round {
+  @apply m-5 w-1/3 transform rounded-full bg-slate-200 p-5 text-3xl shadow-lg transition duration-300 hover:scale-105;
+}
+
+.file-input {
+  @apply w-full cursor-pointer rounded border bg-white text-sm font-semibold text-gray-400 file:mr-4 file:cursor-pointer file:border-0 file:px-4 file:py-3 file:text-gray-500 file:hover:bg-gray-200;
+}
+
+.text-xs-gray {
+  @apply mt-2 text-xs text-gray-400;
+}
+
+.text-xs-red {
+  @apply mt-2 text-xs text-red-400;
+}
+
+.text-sm-gray-centered {
+  @apply block content-center px-3 text-sm text-gray-500;
+}
+
+.text-base-gray {
+  @apply block justify-items-start text-base text-gray-500;
+}
+
+.text-block-blue {
+  @apply min-h-10 min-w-8 rounded bg-sky-300 px-4 py-2 text-sm;
+}
+
+.text-teal-hover-white {
+  @apply mt-4 block text-teal-200 hover:text-white lg:mt-0 lg:inline-block;
+}
