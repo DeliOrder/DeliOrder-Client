@@ -5,7 +5,7 @@
 </div>
 
 <div align="center">
-<a href="https://github.com/Farmer15/DeliOrder-Client">클라이언트 </a> | <a href="https://github.com/Farmer15/deliorder-server">서버 </a> | <a href="https://www.notion.so/5be754c5d84e4491b52d52b93b2624f9?pvs=21">정리 노션 </a>
+<a href="https://github.com/DeliOrder/DeliOrder-Client">클라이언트 </a> | <a href="https://github.com/DeliOrder/DeliOrder-Server">서버 </a> | <a href="https://catnip-puppy-52c.notion.site/1ad7604d886e80d99206da13e03953cd?source=copy_link">정리 노션 </a>
 </div>
 <br>
 
@@ -167,7 +167,7 @@ Node.js 에서 제공되는 파일 시스템 모듈을 활용하여 조작이 �
 
 ### **파일 선택기 구현을 통한 문제 해결**
 
-브라우저에서 제공하는 파일 선택기를 사용해서 app 확장자 파일에 접근할 경ㄴ우 폴더로 인식하여서 하위 폴더로 진입하는 문제가 발생하였습니다. 이렇게 app 확장자를 폴더로 인식하는 문제를 해결하기 위해 Electron에서 파일 선택기를 구현하는 방법을 택하였습니다.
+브라우저에서 제공하는 파일 선택기를 사용해서 app 확장자 파일에 접근할 경우 폴더로 인식하여서 하위 폴더로 진입하는 문제가 발생하였습니다. 이렇게 app 확장자를 폴더로 인식하는 문제를 해결하기 위해 Electron에서 파일 선택기를 구현하는 방법을 택하였습니다.
 
 ```jsx
 const result = await dialog.showOpenDialog({
